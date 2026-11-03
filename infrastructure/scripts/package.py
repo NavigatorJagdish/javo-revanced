@@ -4,14 +4,22 @@ import zipfile,hashlib,json,os
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'deliverables';OUT.mkdir(exist_ok=True)
-SKIP_DIRS={'tools','build','node_modules','.gradle','.git','__pycache__','deliverables','dist','.agents','.codex','.aws'}
+ROOT_ONLY_DIRS={'tools','deliverables','.agents','.codex','.aws'}
+CACHE_DIRS={'node_modules','.gradle','.git','__pycache__','.cxx'}
 SKIP_NAMES={'local.properties','.env','.env.local','key.properties','source-inventory.json'}
 SKIP_EXT={'.jks','.keystore','.p12','.key'}
-def source_files():
-    for directory,dirs,names in os.walk(ROOT):
-        dirs[:]=sorted(d for d in dirs if d not in SKIP_DIRS and not (Path(directory)/d).is_symlink())
+def source_files(root=ROOT):
+    for directory,dirs,names in os.walk(root):
+        parent=Path(directory).relative_to(root)
+        def included(d):
+            if d in CACHE_DIRS or (Path(directory)/d).is_symlink():return False
+            if parent==Path('.') and d in ROOT_ONLY_DIRS:return False
+            # Java/Kotlin packages can legitimately be called tools or build.
+            if d in {'build','dist'} and 'src' not in parent.parts:return False
+            return True
+        dirs[:]=sorted(d for d in dirs if included(d))
         for name in sorted(names):
-            p=Path(directory)/name;rel=p.relative_to(ROOT)
+            p=Path(directory)/name;rel=p.relative_to(root)
             if name in SKIP_NAMES or p.suffix.lower() in SKIP_EXT or p.is_symlink():continue
             # Downloaded third-party binaries are inspection inputs, not redistributed deliverables.
             if rel.parts[0]=='inputs' and name!='MASTER_PROMPT.txt':continue

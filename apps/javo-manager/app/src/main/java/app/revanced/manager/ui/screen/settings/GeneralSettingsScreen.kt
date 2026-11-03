@@ -41,6 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -205,6 +206,7 @@ private fun LanguagePicker(
     onSelect: (Locale?) -> Unit
 ) {
     val systemDefaultString = stringResource(R.string.language_system_default)
+    val configurationLocale = LocalConfiguration.current.locales[0]
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
     val languageListState = rememberLazyListState()
@@ -214,12 +216,12 @@ private fun LanguagePicker(
         }
     }
 
-    val filteredLocales = remember(searchQuery, supportedLocales, currentLocale) {
+    val filteredLocales = remember(searchQuery, supportedLocales, currentLocale, configurationLocale) {
         if (searchQuery.isEmpty()) {
             supportedLocales
         } else {
             supportedLocales.filter { locale ->
-                val currentAppLocale = currentLocale ?: Locale.getDefault()
+                val currentAppLocale = currentLocale ?: configurationLocale
                 val localizedName = locale.getDisplayName(currentAppLocale)
                 val nativeName = locale.getDisplayName(locale)
 
@@ -269,7 +271,7 @@ private fun LanguagePicker(
                         contentPadding = PaddingValues(vertical = 8.dp)
                     ) {
                         items(filteredLocales) { locale ->
-                            val currentAppLocale = currentLocale ?: Locale.getDefault()
+                            val currentAppLocale = currentLocale ?: configurationLocale
                             val localizedName = locale.getDisplayName(currentAppLocale)
                             val nativeName = locale.getDisplayName(locale)
 
@@ -362,7 +364,7 @@ private fun LanguagePicker(
                     }
 
                     items(supportedLocales) { locale ->
-                        val currentAppLocale = currentLocale ?: Locale.getDefault()
+                        val currentAppLocale = currentLocale ?: configurationLocale
                         val localizedName = locale.getDisplayName(currentAppLocale)
                         val nativeName = locale.getDisplayName(locale)
 

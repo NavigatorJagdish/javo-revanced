@@ -238,6 +238,9 @@ android {
     android {
         lint {
             disable.add("ExtraTranslation")
+            // Upstream regional translations are incomplete; Android falls back to English.
+            // Keep every missing translation visible without blocking functional checks.
+            warning.add("MissingTranslation")
         }
     }
 

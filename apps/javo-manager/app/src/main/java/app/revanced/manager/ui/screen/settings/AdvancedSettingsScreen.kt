@@ -96,10 +96,10 @@ fun AdvancedSettingsScreen(
         if (developerTaps < 10) return@LaunchedEffect
 
         if (showDeveloperSettings) {
-            context.toast(context.getString(R.string.developer_options_already_enabled))
+            context.toast(resources.getString(R.string.developer_options_already_enabled))
         } else {
             viewModel.prefs.showDeveloperSettings.update(true)
-            context.toast(context.getString(R.string.developer_options_enabled))
+            context.toast(resources.getString(R.string.developer_options_enabled))
         }
         developerTaps = 0
     }

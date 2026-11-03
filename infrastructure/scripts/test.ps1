@@ -5,7 +5,7 @@ try {
     New-Item -ItemType Directory -Force evidence | Out-Null
     node --test tests/*.test.mjs *> evidence/node-tests.log
     if ($LASTEXITCODE -ne 0) { throw 'Website/release tests failed' }
-    python -m unittest discover -s tests -p test_runtime_evidence.py -v *> evidence/runtime-evidence-tests.log
+    python -m unittest discover -s tests -p 'test_*.py' -v *> evidence/runtime-evidence-tests.log
     if ($LASTEXITCODE -ne 0) { throw 'Runtime evidence regression tests failed' }
     $taskClasses=Join-Path $taskRoot 'tools/java-tests'
     New-Item -ItemType Directory -Force $taskClasses | Out-Null
