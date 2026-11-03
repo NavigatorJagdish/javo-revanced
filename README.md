@@ -6,9 +6,9 @@ Independent Android ecosystem regenerated on 2026-11-03 from the owner's master 
 
 ## Included
 
-- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. The local Android build is blocked by GitHub Packages authentication; these Android changes have not been compiled or runtime-tested.
+- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager, and its exact APK installed/launched on Android API29 and API35. See the current report for subsequent UI and patch integration results.
 - `apps/javo-core`: complete real ReVanced GmsCore source with Javo branding while retaining `app.revanced.android.gms` and service contracts. See evidence for the actual build result.
-- `patches/javo-branding`: opt-in Video/Music label and icon resource patch source. Java resource transformations are tested; an Android-loadable bundle and end-to-end APK patch execution are not yet verified.
+- `patches/javo-branding`: opt-in Video/Music label and icon resource patch source. The Kotlin bundle and DEX archive compile. Resource transformations and external-entity rejection were checked on Android; end-to-end fixture results are tracked separately.
 - `apps/javo-website`: 17 static pages, responsive navigation, persisted theme, honest artifact inventory, documentation and security information. No installation dependencies are required.
 - `assets`: all four original reference images, scalable Javo logos and Android vector/monochrome icons.
 - `infrastructure`: real APK verification, release envelope signing, artifact packaging, CI and smoke-test scripts.

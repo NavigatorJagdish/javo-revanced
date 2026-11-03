@@ -13,16 +13,29 @@ def main():
     if len(devices)!=1:raise RuntimeError('Exactly one emulator is required')
     def run(*parts):return invoke('-s',devices[0],*parts)
     evidence=ROOT/'evidence';evidence.mkdir(exist_ok=True)
+    path=evidence/'manager-patch-integration.json'
+    path.write_text(json.dumps({'success':False,'status':'started'})+'\n')
     test_apks=list((ROOT/'apps/javo-manager/app/build/outputs/apk/androidTest/debug').glob('*.apk'))
     if len(test_apks)!=1:raise RuntimeError('Expected one Android instrumentation APK')
     run('install','-t','-r',test_apks[0])
+    # Never accept a result left by an earlier instrumentation invocation.
+    run('shell','run-as','app.javo.manager','rm','-f','files/integration/result.json')
     output=run('shell','am','instrument','-w','app.javo.manager.test/app.javo.integration.PatchIntegrationInstrumentation')
     (evidence/'manager-patch-instrumentation.log').write_bytes(output)
     report=json.loads(run('exec-out','run-as','app.javo.manager','cat','files/integration/result.json'))
+    instrumentation_success=report.get('success') is True
+    report['instrumentationSuccess']=instrumentation_success
+    report['success']=False
     report['device']=devices[0]
-    path=evidence/'manager-patch-integration.json'
+    report['androidApi']=int(run('shell','getprop','ro.build.version.sdk').decode().strip())
+    report['architecture']=run('shell','getprop','ro.product.cpu.abi').decode().strip()
     path.write_text(json.dumps(report,indent=2)+'\n')
-    if report.get('success') is not True:raise RuntimeError(report.get('failure','Instrumentation did not pass'))
+    if not instrumentation_success:raise RuntimeError(report.get('failure','Instrumentation did not pass'))
+    if not re.search(rb'INSTRUMENTATION_CODE:\s*-1\b',output):raise RuntimeError('Instrumentation did not finish successfully')
+    manager_apks=list((ROOT/'deliverables/apks').glob('javo-manager-*.apk'))
+    if len(manager_apks)!=1:raise RuntimeError('Expected exactly one verified Manager APK')
+    with manager_apks[0].open('rb') as stream:manager_digest=hashlib.file_digest(stream,'sha256').hexdigest()
+    if report.get('managerApkSha256')!=manager_digest:raise RuntimeError('Instrumentation ran against a different Manager APK')
     for product in report['products']:
         identifier=product['id'];package=product['packageName']
         fixture=ROOT/f'tools/integration-fixture/{identifier}-patched-signed.apk';fixture.parent.mkdir(parents=True,exist_ok=True)

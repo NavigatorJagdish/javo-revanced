@@ -2,12 +2,17 @@
 package app.javo.branding;
 import java.io.*;
 import java.nio.file.*;
-import javax.xml.XMLConstants;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.CodingErrorAction;
+import java.util.Locale;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /** Changes only the label and launcher icon of an already-decoded compatible APK. */
 public final class BrandingResources {
@@ -16,12 +21,22 @@ public final class BrandingResources {
     public static void apply(Path decoded, String packageId, String displayName, InputStream icon) throws Exception {
         if (!displayName.matches("Javo (Video|Music)")) throw new IllegalArgumentException("Unknown Javo product");
         var factory=DocumentBuilderFactory.newInstance();factory.setNamespaceAware(true);
-        factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
-        factory.setFeature("http://xml.org/sax/features/external-general-entities",false);
-        factory.setFeature("http://xml.org/sax/features/external-parameter-entities",false);
-        factory.setXIncludeAware(false);factory.setExpandEntityReferences(false);
+        factory.setExpandEntityReferences(false);
         Path manifest=decoded.resolve("AndroidManifest.xml");
-        var doc=factory.newDocumentBuilder().parse(manifest.toFile());
+        // Android's XML factory does not implement the desktop Xerces security flags.
+        // Parse exactly the UTF-8 text inspected here, so encoding declarations cannot
+        // hide a DTD from this check. Decoded Apktool manifests are UTF-8.
+        if(Files.size(manifest)>16*1024*1024)throw new IOException("Manifest exceeds size limit");
+        byte[] bytes=Files.readAllBytes(manifest);
+        if(bytes.length>16*1024*1024)throw new IOException("Manifest exceeds size limit");
+        String xml=StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
+            .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();
+        String markup=xml.toUpperCase(Locale.ROOT);
+        if(markup.contains("<!DOCTYPE") || markup.contains("<!ENTITY") || xml.indexOf('\0')>=0)
+            throw new SecurityException("Document types and entity declarations are forbidden");
+        var builder=factory.newDocumentBuilder();
+        builder.setEntityResolver((publicId,systemId)->{throw new SAXException("External XML entities are forbidden");});
+        var doc=builder.parse(new InputSource(new StringReader(xml)));
         String current=doc.getDocumentElement().getAttribute("package");
         // The trusted GmsCore-support patch can already have renamed the manifest.
         String renamed=switch(packageId){
@@ -50,7 +65,7 @@ public final class BrandingResources {
         if(Files.exists(drawable))throw new IOException("javo_brand_icon already exists");
         try(var in=icon){Files.copy(in,drawable);}
         var transformerFactory=TransformerFactory.newInstance();
-        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING,true);
+        // Identity transformation of the guarded DOM; no stylesheet or URL is loaded.
         var temp=Files.createTempFile(decoded,"javo-manifest-", ".xml");
         try{transformerFactory.newTransformer().transform(new DOMSource(doc),new StreamResult(temp.toFile()));Files.move(temp,manifest,StandardCopyOption.REPLACE_EXISTING);}finally{Files.deleteIfExists(temp);}
     }

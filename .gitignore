@@ -1,4 +1,4 @@
-tools/
+/tools/
 inputs/*-upstream.zip
 **/.gradle/
 **/build/
@@ -9,5 +9,11 @@ inputs/*-upstream.zip
 **/*.keystore
 **/.env
 __pycache__/
-deliverables/
-apks/
+/deliverables/
+/apks/
+
+**/.kotlin/
+**/.cxx/
+# Preserve legitimate source packages named build.
+!**/src/**/build/
+!**/src/**/build/**

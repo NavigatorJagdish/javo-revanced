@@ -1,3 +1,8 @@
+test_changed_bundle_rejected (test_patch_evidence.PatchEvidenceTests.test_changed_bundle_rejected) ... ok
+test_failed_check_is_rejected (test_patch_evidence.PatchEvidenceTests.test_failed_check_is_rejected) ... ok
+test_instrumentation_without_fixture_launch_is_rejected (test_patch_evidence.PatchEvidenceTests.test_instrumentation_without_fixture_launch_is_rejected) ... ok
+test_matching_complete_result_accepted (test_patch_evidence.PatchEvidenceTests.test_matching_complete_result_accepted) ... ok
+test_new_manager_cannot_inherit_prior_integration (test_patch_evidence.PatchEvidenceTests.test_new_manager_cannot_inherit_prior_integration) ... ok
 test_crashed_process_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_crashed_process_is_rejected) ... ok
 test_matching_installed_apk_is_accepted (test_runtime_evidence.RuntimeEvidenceTests.test_matching_installed_apk_is_accepted) ... ok
 test_missing_hash_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_missing_hash_is_rejected) ... ok
@@ -5,8 +10,10 @@ test_older_apk_result_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.te
 test_other_package_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_other_package_is_rejected) ... ok
 test_stopped_process_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_stopped_process_is_rejected) ... ok
 test_unconfirmed_installed_bytes_are_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_unconfirmed_installed_bytes_are_rejected) ... ok
+test_real_core_ui_helper_is_packaged (test_source_package.SourcePackageTests.test_real_core_ui_helper_is_packaged) ... ok
+test_source_packages_survive_and_generated_files_do_not (test_source_package.SourcePackageTests.test_source_packages_survive_and_generated_files_do_not) ... ok
 
 ----------------------------------------------------------------------
-Ran 7 tests in 0.001s
+Ran 14 tests in 3.764s
 
 OK

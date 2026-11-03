@@ -1,6 +1,7 @@
 PASS labels/icons changed while preserving package, permission and service
 PASS wrong package rejected without modifying manifest
 PASS prior GmsCore package rename remains compatible and preserved
-[Fatal Error] AndroidManifest.xml:1:10: DOCTYPE is disallowed when the feature "http://apache.org/xml/features/disallow-doctype-decl" set to true.
 PASS XML external entities rejected
-4 branding resource checks passed; APK patch execution not covered
+PASS alternate-encoding DTD rejected
+PASS external document type rejected before network resolution
+6 branding resource checks passed; APK patch execution not covered

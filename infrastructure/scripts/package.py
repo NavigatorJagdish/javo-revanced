@@ -24,6 +24,18 @@ def source_files(root=ROOT):
             # Downloaded third-party binaries are inspection inputs, not redistributed deliverables.
             if rel.parts[0]=='inputs' and name!='MASTER_PROMPT.txt':continue
             yield p,rel.as_posix()
+def verify_branding_evidence(bundle,integration,catalog):
+    if integration.get('success') is not True or integration.get('bundleSha256')!=hashlib.sha256(bundle.read_bytes()).hexdigest():
+        raise ValueError('Branding bundle lacks matching Android integration evidence')
+    manager=next((a for a in catalog['artifacts'] if a['id']=='manager'),None)
+    if manager is None or integration.get('managerApkSha256')!=manager['sha256']:
+        raise ValueError('Patch integration evidence belongs to a different Manager APK')
+    products=integration.get('products',[])
+    if {p.get('id') for p in products}!={'video','music'} or any(
+        p.get('success') is not True or p.get('patchedFixtureInstalled') is not True or
+        p.get('fixtureProcessRunning') is not True or p.get('fixtureCrashObserved') is not False for p in products
+    ):raise ValueError('Both patched fixtures must pass installation and launch')
+
 def package():
     files=list(source_files())
     for p in sorted((ROOT/'apps/javo-website/dist').rglob('*')):
@@ -37,8 +49,7 @@ def package():
     bundle=ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp'
     if bundle.exists():
         integration=json.loads((ROOT/'evidence/manager-patch-integration.json').read_text())
-        if integration.get('success') is not True or integration.get('bundleSha256')!=hashlib.sha256(bundle.read_bytes()).hexdigest():
-            raise ValueError('Branding bundle lacks matching Android integration evidence')
+        verify_branding_evidence(bundle,integration,catalog)
         files.append((bundle,'bundles/'+bundle.name))
     manifest={name:hashlib.sha256(p.read_bytes()).hexdigest() for p,name in files}
     (ROOT/'evidence/source-inventory.json').write_text(json.dumps(manifest,indent=2)+'\n')

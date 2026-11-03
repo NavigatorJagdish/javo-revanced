@@ -48,4 +48,12 @@ The verifier runs official apksigner and aapt2, checks package identity, extract
 
 Run infrastructure/scripts/test.ps1 with JAVA_HOME configured on Windows, or run the commands in the CI host-test job. Then build the website and run `python infrastructure/scripts/package.py`. The source archive excludes toolchains, caches, keystores and local settings. It includes source, evidence, website output and any APKs already verified against the inventory. ZIP contents are rehashed and tested before delivery.
 
-CI workflows are supplied as executable configuration. They were not run on GitHub during this session; local results are reported separately. Production signing, release publishing and hosted update keys require an owner-controlled release process and are not configured here.
+CI has been run in the owner-approved private NavigatorJagdish/javo-revanced repository. Build, lint, runtime and packaging results are tracked separately in RESUMED_BUILD.md and the final report. Production signing, release publishing and hosted update keys require an owner-controlled release process and are not configured here.
+
+## Credential-free continuation cache
+The private CI exports only resolved app.revanced Maven POM/module/JAR/AAR files and SHA-256 inventory as resolved-revanced-maven-cache. It does not contain tokens. After verifying/extracting that artifact, set JAVO_MAVEN_CACHE to its absolute directory. Settings preserve original Gradle module metadata so multiplatform Android variants resolve correctly. SDK toolchains and this binary cache remain outside the distributed source ZIP.
+
+## First-party Android integration
+Build patches/javo-branding, convert its JAR with D8, and run build-integration-fixture.py with --sdk. Then build :app:assembleDebugAndroidTest and install the matching Manager APK on an isolated emulator. android-integration.py loads both resource definitions through the production loader, patches/rebuilds each first-party fixture using Session, signs each APK, verifies labels/package identities, and installs/launches the exact signed outputs. Test results are tied to the Manager and RVP hashes. No proprietary application code or account is needed for this limited check.
+
+The official catalog diagnostic pins the checksum of the previously signature-inspected snapshot; it reports metadata loading separately from patch execution. If that mutable upstream endpoint changes or is unavailable, the diagnostic records the limitation instead of silently trusting new bytes.

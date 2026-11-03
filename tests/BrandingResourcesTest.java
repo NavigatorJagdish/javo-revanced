@@ -26,9 +26,15 @@ public class BrandingResourcesTest {
             if(!Files.readString(file).contains("app.revanced.android.youtube"))throw new AssertionError("GmsCore package was overwritten");
             System.out.println("PASS prior GmsCore package rename remains compatible and preserved");
             Files.writeString(file,"<!DOCTYPE manifest [<!ENTITY injected SYSTEM 'file:///nonexistent'>]><manifest package=\"com.google.android.youtube\"><application/></manifest>");
-            failed=false;try{BrandingResources.apply(folder,"com.google.android.youtube","Javo Video",new ByteArrayInputStream(new byte[0]));}catch(org.xml.sax.SAXParseException e){failed=true;}if(!failed)throw new AssertionError("DTD accepted");
+            failed=false;try{BrandingResources.apply(folder,"com.google.android.youtube","Javo Video",new ByteArrayInputStream(new byte[0]));}catch(SecurityException e){failed=true;}if(!failed)throw new AssertionError("DTD accepted");
             System.out.println("PASS XML external entities rejected");
+            Files.write(file,("<?xml version=\"1.0\" encoding=\"UTF-16\"?><!DOCTYPE manifest SYSTEM 'https://example.invalid/dtd'><manifest/>").getBytes(java.nio.charset.StandardCharsets.UTF_16));
+            failed=false;try{BrandingResources.apply(folder,"com.google.android.youtube","Javo Video",new ByteArrayInputStream(new byte[0]));}catch(java.nio.charset.CharacterCodingException|SecurityException e){failed=true;}if(!failed)throw new AssertionError("Encoding-obscured DTD accepted");
+            System.out.println("PASS alternate-encoding DTD rejected");
+            Files.writeString(file,"<!DOCTYPE manifest SYSTEM 'https://example.invalid/dtd'><manifest/>");
+            failed=false;try{BrandingResources.apply(folder,"com.google.android.youtube","Javo Video",new ByteArrayInputStream(new byte[0]));}catch(SecurityException e){failed=true;}if(!failed)throw new AssertionError("External DTD accepted");
+            System.out.println("PASS external document type rejected before network resolution");
         }finally{try(var paths=Files.walk(folder)){for(var p:paths.sorted(java.util.Comparator.reverseOrder()).toList())Files.deleteIfExists(p);}}
-        System.out.println("4 branding resource checks passed; APK patch execution not covered");
+        System.out.println("6 branding resource checks passed; APK patch execution not covered");
     }
 }

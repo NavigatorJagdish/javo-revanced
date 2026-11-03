@@ -15,6 +15,12 @@ if cache.exists():
                     target=out/module.name/version.name/file.name
                     target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(file,target)
                     inventory[target.relative_to(out.parent.parent).as_posix()]=hashlib.sha256(file.read_bytes()).hexdigest()
+                    # Gradle caches transformed AAR names (library.aar / patcher.aar).
+                    # Maven local resolution requires the published coordinate filename.
+                    if file.suffix=='.aar':
+                        alias=target.with_name(f'{module.name}-{version.name}.aar')
+                        shutil.copyfile(file,alias)
+                        inventory[alias.relative_to(out.parent.parent).as_posix()]=hashlib.sha256(alias.read_bytes()).hexdigest()
 (ROOT/'tools/revanced-maven').mkdir(parents=True,exist_ok=True)
 (ROOT/'tools/revanced-maven/inventory.json').write_text(json.dumps(inventory,indent=2)+'\n')
 print('Exported',len(inventory),'resolved Maven files; no authentication data included.')

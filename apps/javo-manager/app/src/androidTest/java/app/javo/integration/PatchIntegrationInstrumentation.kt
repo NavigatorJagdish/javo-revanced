@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.pm.PackageManager
 import android.os.Bundle
+import app.javo.security.UpdateSecurity
 import app.revanced.library.ApkUtils
 import app.revanced.manager.patcher.Session
 import app.revanced.manager.patcher.aapt.Aapt
@@ -24,6 +25,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             .put("playback", "not-tested").put("accountLogin", "not-tested")
         val folder = File(targetContext.filesDir, "integration").also { it.mkdirs() }
         try {
+            report.put("managerApkSha256",UpdateSecurity.sha256(File(targetContext.applicationInfo.sourceDir)))
             fun asset(name: String) = File(folder, name).also { file ->
                 if (file.exists()) { file.setWritable(true); check(file.delete()) }
                 context.assets.open(name).use { input -> file.outputStream().use { input.copyTo(it) } }
@@ -73,7 +75,8 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             val app = checkNotNull(info.applicationInfo).apply { sourceDir=signed.absolutePath; publicSourceDir=signed.absolutePath }
             check(app.loadLabel(targetContext.packageManager).toString() == label)
             check(!info.signatures.isNullOrEmpty()) { "Signed fixture has no signer" }
-            products.put(JSONObject().put("id",id).put("packageName",packageName).put("brandingLabelVerified", true).put("signedOutput", true)
+            products.put(JSONObject().put("id",id).put("packageName",packageName).put("sourceApkSha256",UpdateSecurity.sha256(fixture))
+                .put("brandingLabelVerified", true).put("signedOutput", true)
                 .put("signedApkSha256",MessageDigest.getInstance("SHA-256").digest(signed.readBytes()).joinToString("") { "%02x".format(it) })
                 .put("success",true))
             key.delete()

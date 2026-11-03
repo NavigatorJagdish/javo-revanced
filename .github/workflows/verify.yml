@@ -15,42 +15,13 @@ defaults:
 jobs:
   sources:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       commit: ${{ steps.import.outputs.commit }}
     steps:
       - uses: actions/checkout@v4
-      - name: Import the approved source bundle when bootstrapping the repository
+      - name: Pin the source commit for all verification jobs
         id: import
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -f apps/javo-manager/settings.gradle.kts ]; then
-            sha256sum --check javo-ci-source.zip.sha256
-            python - <<'PYCODE'
-          from pathlib import Path, PurePosixPath
-          import zipfile
-          root=Path.cwd().resolve()
-          with zipfile.ZipFile('javo-ci-source.zip') as z:
-              for item in z.infolist():
-                  rel=PurePosixPath(item.filename)
-                  if rel.is_absolute() or '..' in rel.parts or any(part in {'.git','.github'} for part in rel.parts):
-                      if '.github' in rel.parts: continue
-                      raise ValueError('Unsafe source archive entry')
-                  target=(root/str(rel)).resolve()
-                  if not target.is_relative_to(root): raise ValueError('Archive escaped checkout')
-                  if item.is_dir(): target.mkdir(parents=True,exist_ok=True); continue
-                  target.parent.mkdir(parents=True,exist_ok=True)
-                  target.write_bytes(z.read(item))
-          PYCODE
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add apps assets docs evidence infrastructure packages patches tests upstream inputs/MASTER_PROMPT.txt README.md LICENSE CONTRIBUTING.md SECURITY.md CHANGELOG.md package.json .gitignore
-            git commit -m 'Import owner-approved Javo development sources'
-            git push origin HEAD:main
-          fi
-          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        run: echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   web-and-security:
     needs: sources
     runs-on: ubuntu-latest
@@ -81,7 +52,10 @@ jobs:
           name: website-and-host-test-evidence
           path: |
             apps/javo-website/dist
-            evidence
+            evidence/node-tests.log
+            evidence/java-security-tests.log
+            evidence/java-branding-tests.log
+            evidence/runtime-evidence-tests.log
   manager:
     needs: sources
     runs-on: ubuntu-latest
@@ -137,6 +111,8 @@ jobs:
           sdkmanager 'platforms;android-35'
           python ../../infrastructure/scripts/build-integration-fixture.py --sdk "$ANDROID_HOME"
           ./gradlew :app:assembleDebugAndroidTest --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-instrumentation-build.log
+      - name: Free temporary runner disk after all APK compilation
+        run: python infrastructure/scripts/release-emulator-space.py
       - name: Allow the runner user to use hardware emulation
         run: if [ -e /dev/kvm ]; then sudo chown "$(id -u):$(id -g)" /dev/kvm; fi
       - name: Manager emulator installation and launch smoke check
@@ -156,9 +132,11 @@ jobs:
           name: manager-development-and-evidence
           path: |
             deliverables/apks
-            evidence
+            evidence/manager*
+            evidence/screenshots/manager*
             apps/javo-manager/app/build/reports
             apps/javo-manager/app/build/outputs/apk/debug/*.apk
+            apps/javo-manager/app/build/outputs/apk/androidTest/debug/*.apk
             patches/javo-branding/build/libs/*.rvp
   core:
     needs: sources
@@ -190,6 +168,8 @@ jobs:
           set -euo pipefail
           sdkmanager 'build-tools;34.0.0'
           python infrastructure/scripts/verify-apk.py apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/debug/*.apk --sdk "$ANDROID_HOME" --product core --signing debug
+      - name: Free temporary runner disk after all APK compilation
+        run: python infrastructure/scripts/release-emulator-space.py
       - name: Allow the runner user to use hardware emulation
         run: if [ -e /dev/kvm ]; then sudo chown "$(id -u):$(id -g)" /dev/kvm; fi
       - name: Emulator installation and launch smoke check
@@ -207,7 +187,8 @@ jobs:
           name: core-development-and-evidence
           path: |
             deliverables/apks
-            evidence
+            evidence/core*
+            evidence/screenshots/core*
             apps/javo-core/play-services-core/build/reports
             apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/debug/*.apk
   package:
@@ -232,6 +213,9 @@ jobs:
         with:
           pattern: '*-development-and-evidence'
           merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          name: website-and-host-test-evidence
       - name: Reverify every APK and package corresponding source
         run: |
           set -euo pipefail

@@ -9,6 +9,14 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        providers.environmentVariable("JAVO_MAVEN_CACHE").orNull?.let { cache ->
+            maven {
+                name = "verifiedLocalReVanced"
+                url = uri(file(cache))
+                content { includeGroup("app.revanced") }
+                metadataSources { gradleMetadata(); mavenPom() }
+            }
+        }
         mavenLocal()
         mavenCentral()
         google()

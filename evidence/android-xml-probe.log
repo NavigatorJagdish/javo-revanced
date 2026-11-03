@@ -1,0 +1,9 @@
+PASS Android runtime branding XML transformation
+PASS Android runtime rejects external entity declaration
+29
+
+Algorithm : SHA256
+Hash      : AB3BFBE827924E3F8C254127B047ED3FCF1FC7550FF457F5DC0DAB9C551C29AF
+Path      : C:\Users\Dell\Documents\ChatGPT\MicroG project\patches\javo-branding\src\main\java\app\javo\branding\BrandingResources.java
+
+
