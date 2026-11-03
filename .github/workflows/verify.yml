@@ -1,0 +1,197 @@
+name: Verify and package development builds
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: read
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      commit: ${{ steps.import.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Import the approved source bundle when bootstrapping the repository
+        id: import
+        shell: bash
+        run: |
+          if [ ! -f apps/javo-manager/settings.gradle.kts ]; then
+            sha256sum --check javo-ci-source.zip.sha256
+            python - <<'PYCODE'
+          from pathlib import Path, PurePosixPath
+          import zipfile
+          root=Path.cwd().resolve()
+          with zipfile.ZipFile('javo-ci-source.zip') as z:
+              for item in z.infolist():
+                  rel=PurePosixPath(item.filename)
+                  if rel.is_absolute() or '..' in rel.parts or any(part in {'.git','.github'} for part in rel.parts):
+                      if '.github' in rel.parts: continue
+                      raise ValueError('Unsafe source archive entry')
+                  target=(root/str(rel)).resolve()
+                  if not target.is_relative_to(root): raise ValueError('Archive escaped checkout')
+                  if item.is_dir(): target.mkdir(parents=True,exist_ok=True); continue
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  target.write_bytes(z.read(item))
+          PYCODE
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add apps assets docs evidence infrastructure packages patches tests upstream inputs/MASTER_PROMPT.txt README.md LICENSE CONTRIBUTING.md SECURITY.md CHANGELOG.md package.json .gitignore
+            git commit -m 'Import owner-approved Javo development sources'
+            git push origin HEAD:main
+          fi
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  web-and-security:
+    needs: sources
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.sources.outputs.commit }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Website and release tests
+        run: |
+          mkdir -p evidence tools/java-tests
+          node --input-type=module -e "import fs from 'node:fs'; const p='infrastructure/release/catalog.json'; const c=JSON.parse(fs.readFileSync(p)); c.artifacts=[]; fs.writeFileSync(p,JSON.stringify(c,null,2));"
+          node --test tests/*.test.mjs | tee evidence/node-tests.log
+          python -m unittest discover -s tests -p test_runtime_evidence.py -v 2>&1 | tee evidence/runtime-evidence-tests.log
+          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java tests/UpdateSecurityTest.java patches/javo-branding/src/main/java/app/javo/branding/BrandingResources.java tests/BrandingResourcesTest.java
+          java -cp tools/java-tests UpdateSecurityTest | tee evidence/java-security-tests.log
+          java -cp tools/java-tests BrandingResourcesTest | tee evidence/java-branding-tests.log
+          node apps/javo-website/build.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website-and-host-test-evidence
+          path: |
+            apps/javo-website/dist
+            evidence
+  manager:
+    needs: sources
+    runs-on: ubuntu-latest
+    env:
+      ORG_GRADLE_PROJECT_githubPackagesUsername: ${{ github.actor }}
+      ORG_GRADLE_PROJECT_githubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.sources.outputs.commit }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Compile, unit test and lint Manager
+        working-directory: apps/javo-manager
+        run: |
+          chmod +x gradlew
+          mkdir -p ../../evidence
+          ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-build.log
+      - name: Build opt-in branding bundle
+        working-directory: apps/javo-manager
+        run: |
+          sdkmanager 'build-tools;34.0.0'
+          ./gradlew -p ../../patches/javo-branding jar --no-daemon
+          mkdir -p ../../patches/javo-branding/build/dex
+          "$ANDROID_HOME/build-tools/34.0.0/d8" --min-api 26 --output ../../patches/javo-branding/build/dex ../../patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.jar
+          python ../../infrastructure/scripts/dex-bundle.py ../../patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.jar ../../patches/javo-branding/build/dex/classes.dex
+      - name: Verify Manager APK
+        run: |
+          sdkmanager 'build-tools;34.0.0'
+          python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/debug/*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
+      - name: Manager emulator installation and launch smoke check
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          disable-animations: true
+          script: python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-development-and-evidence
+          path: |
+            deliverables/apks
+            evidence
+            apps/javo-manager/app/build/reports
+            patches/javo-branding/build/libs/*.rvp
+  core:
+    needs: sources
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_MICROG_VERSION_WITHOUT_GIT: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.sources.outputs.commit }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Build real GmsCore fork
+        working-directory: apps/javo-core
+        run: |
+          chmod +x gradlew
+          mkdir -p ../../evidence
+          ./gradlew :play-services-core:assembleVtmDefaultDebug :play-services-core:testVtmDefaultDebugUnitTest :play-services-core:lintVtmDefaultDebug --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
+      - name: Verify Core APK
+        run: |
+          sdkmanager 'build-tools;34.0.0'
+          python infrastructure/scripts/verify-apk.py apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/debug/*.apk --sdk "$ANDROID_HOME" --product core --signing debug
+      - name: Emulator installation and launch smoke check
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          disable-animations: true
+          script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: core-development-and-evidence
+          path: |
+            deliverables/apks
+            evidence
+            apps/javo-core/play-services-core/build/reports
+  package:
+    needs: [sources, web-and-security, manager, core]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.sources.outputs.commit }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '*-development-and-evidence'
+          merge-multiple: true
+      - name: Reverify every APK and package corresponding source
+        run: |
+          sdkmanager 'build-tools;34.0.0'
+          python infrastructure/scripts/verify-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
+          python infrastructure/scripts/verify-apk.py deliverables/apks/javo-core-*.apk --sdk "$ANDROID_HOME" --product core --signing debug
+          node --test tests/*.test.mjs
+          python infrastructure/scripts/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: javo-verified-development-package
+          path: |
+            deliverables/javo-revanced-development.zip
+            deliverables/SHA256SUMS
+
