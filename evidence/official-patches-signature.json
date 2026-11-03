@@ -1,0 +1,16 @@
+{
+  "source": "https://api.revanced.app/v5/patches.rvp",
+  "version": "6.2.1",
+  "sha256": "50f41e4656b7374a1c8fe5579fd107f697f86d7f13fc6cd194cf3821761dc4b4",
+  "signatureValid": true,
+  "keyFingerprint": "A7835DFCACA14BDA3CD6EDD3633C6920FBE6A2FF",
+  "keySource": "https://api.revanced.app/keys",
+  "trustLimit": "Public key retrieved from official HTTPS endpoint; no independent out-of-band fingerprint authentication.",
+  "warnings": [
+    "TODO: Self-sigs verification is not yet working because self-sigs are not parsed!!!",
+    "TODO: Revocation checks are not yet implemented!!!",
+    "TODO: Flags (s.a. `disabled`) checks are not yet implemented!!!"
+  ],
+  "executedInPatcher": false,
+  "redistributedInPackage": false
+}

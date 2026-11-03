@@ -1,0 +1,9 @@
+Collecting resvg-py
+  Downloading resvg_py-0.5.0-cp310-abi3-win_amd64.whl.metadata (1.9 kB)
+Collecting PyYAML
+  Using cached pyyaml-6.0.3-cp311-cp311-win_amd64.whl.metadata (2.4 kB)
+Downloading resvg_py-0.5.0-cp310-abi3-win_amd64.whl (1.2 MB)
+   ---------------------------------------- 1.2/1.2 MB 8.7 MB/s eta 0:00:00
+Using cached pyyaml-6.0.3-cp311-cp311-win_amd64.whl (158 kB)
+Installing collected packages: resvg-py, PyYAML
+Successfully installed PyYAML-6.0.3 resvg-py-0.5.0

@@ -1,0 +1,10 @@
+import { readFile, writeFile } from 'node:fs/promises';
+import { createPrivateKey, sign } from 'node:crypto';
+import { validateRelease } from '../../packages/release-schema/validate.mjs';
+const [input,output]=process.argv.slice(2);
+if(!input||!output||!process.env.JAVO_MANIFEST_KEY_FILE)throw Error('Provide input JSON, output envelope path and JAVO_MANIFEST_KEY_FILE environment variable. Keep the private key outside the repository.');
+const bytes=await readFile(input);validateRelease(JSON.parse(bytes));
+const key=createPrivateKey(await readFile(process.env.JAVO_MANIFEST_KEY_FILE));
+if(key.asymmetricKeyType!=='ec'||key.asymmetricKeyDetails.namedCurve!=='prime256v1')throw Error('P-256 EC signing key required');
+await writeFile(output,JSON.stringify({payload:bytes.toString('base64'),signature:sign('sha256',bytes,key).toString('base64')},null,2)+'\n');
+console.log('Signed release envelope written. No publication performed.');

@@ -1,0 +1,12 @@
+test_crashed_process_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_crashed_process_is_rejected) ... ok
+test_matching_installed_apk_is_accepted (test_runtime_evidence.RuntimeEvidenceTests.test_matching_installed_apk_is_accepted) ... ok
+test_missing_hash_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_missing_hash_is_rejected) ... ok
+test_older_apk_result_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_older_apk_result_is_rejected) ... ok
+test_other_package_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_other_package_is_rejected) ... ok
+test_stopped_process_is_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_stopped_process_is_rejected) ... ok
+test_unconfirmed_installed_bytes_are_rejected (test_runtime_evidence.RuntimeEvidenceTests.test_unconfirmed_installed_bytes_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.001s
+
+OK

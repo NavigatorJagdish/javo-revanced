@@ -1,0 +1,8 @@
+project\tools\android-sdk\emulator\emulator-check.exe:
+100
+Unknown argument
+project\tools\android-sdk\emulator\emulator-check.exe
+accel:
+0
+WHPX(10.0.26300) is installed and usable.
+accel

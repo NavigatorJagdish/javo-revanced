@@ -1,0 +1,15 @@
+  bash arg: -p
+  bash arg: app.revanced.android.gms
+  bash arg: -c
+  bash arg: android.intent.category.LAUNCHER
+  bash arg: 1
+Events injected: 1
+## Network stats: elapsed time=673ms (0ms mobile, 0ms wifi, 673ms not connected)
+args: [-p, app.revanced.android.gms, -c, android.intent.category.LAUNCHER, 1]
+ arg: "-p"
+ arg: "app.revanced.android.gms"
+ arg: "-c"
+ arg: "android.intent.category.LAUNCHER"
+ arg: "1"
+data="app.revanced.android.gms"
+data="android.intent.category.LAUNCHER"

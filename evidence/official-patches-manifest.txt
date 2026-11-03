@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Name: ReVanced Patches
+Description: Patches for ReVanced
+Version: 6.2.1
+Timestamp: 1780410830232
+Source: git@gitlab.com:revanced/revanced-patches.git
+Author: ReVanced
+Contact: patches@revanced.app
+Website: https://revanced.app
+License: GNU General Public License v3.0
+

@@ -1,0 +1,13 @@
+tools/
+inputs/*-upstream.zip
+**/.gradle/
+**/build/
+**/local.properties
+**/node_modules/
+**/dist/
+**/*.jks
+**/*.keystore
+**/.env
+__pycache__/
+deliverables/
+apks/

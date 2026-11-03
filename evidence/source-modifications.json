@@ -1,0 +1,902 @@
+[
+  {
+    "file": "apps/javo-manager/app/build.gradle.kts",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "dc3cc9640d2fd2ce9103b0bedbadfa532ad718de5fd0437ccfafdc37ff93b990",
+    "javoSha256": "1209de59b382b442d71ea55c7a26d1f9fa0faf08123b608dda18d679b1714e66"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/manager/PreferencesManager.kt",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9ebee34b76b0f46ae920b3b5c19f1fa49217364195f61503250bfb8be7bd7726",
+    "javoSha256": "4cc5fbafee085d7d9083ab02716778b5ce688c95434ace0ccae4276d9736b1a2"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/ChangelogsRepository.kt",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ac02a8a33366fc4dfd0588a3d50b9e68dec2fe2e7ce52cda14836f9c4f436add",
+    "javoSha256": "a696dba5a7ad1d44da765c3db09dc3dd3cabdfdd288598fce395f1c6e319c3c0"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/ManagerUpdateRepository.kt",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0289c2e77dc51bf616a1fd592a13a06afc6cc4d481db84a437b206de0b99b304",
+    "javoSha256": "9638ff3dba50ad4a7fa2d2bbb014c303221b49d5be7905842e0b8a3094e4a556"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/theme/Color.kt",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "00a26d9b8713dec4f3eb530f189d51494e2137dfe7dddf07caa090fa3ca5f436",
+    "javoSha256": "177e079222466be4d2ee7bea6528bd3455e8ccbbada7a291c2e31f3209813064"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/viewmodel/UpdateViewModel.kt",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3256c31280de6319d8ca61a41520c8d9d63b18da6505113445f24ac5dd600fc1",
+    "javoSha256": "b699fa29de43e868826cf1e25fbb8b109aa1f118f889e22259fd993787757c6a"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/drawable/ic_launcher_foreground.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "31f65760c084addbc6953384f28fe08b1c0150274d73a82bf0e1a9c80ae33a26",
+    "javoSha256": "0fb0f0a670a30a4907b830a5cf29cb9b6b745e038b54926cdb8dae1faff55551"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/drawable/ic_launcher_monochrome.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "efc581609d2820a14c0a9d772b25d2cc341fcc828dd90fdc41f975815c55463b",
+    "javoSha256": "98c5466ac853e7d9941ca92e96682f97cf8b85bfd340e52e9c30ff41ca5aa446"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/drawable/ic_launcher_splash_screen.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "1ef8cba2179db786bd2935167b4a3271bb6e970803b207f852e96c6bdb647f35",
+    "javoSha256": "0fb0f0a670a30a4907b830a5cf29cb9b6b745e038b54926cdb8dae1faff55551"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/drawable/ic_logo_ring.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0a9d8d9ef4ea851cc3ceabcdea3f11777d3fab7bd4014773ffc9ea9bdeff3076",
+    "javoSha256": "0fb0f0a670a30a4907b830a5cf29cb9b6b745e038b54926cdb8dae1faff55551"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-af-rZA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "1db7bc725c6ea284633e0f36f4c7c891e40737f6446d6eab6dcb747e4f75b3b4",
+    "javoSha256": "f3ccee1acb526c806702197c59ab321732acf69648d252e2232d234dd4c2b210"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-am-rET/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0263f040c049b890adb9eb104b32bbdac4dc6bede4a4e8acd64218fd2bcc759c",
+    "javoSha256": "e69a8c5c7aad6a974363fa3635be6ff1621a79f06d5301cf1d5a6479057adb08"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ar-rSA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "11644695ff349f9a338db3cb5826b8e76d8251107018dc6dd7df3844d165e801",
+    "javoSha256": "3d3f571cc7919af683dfcd4aa6bc13641c51439a5aed98f1553aa5ffc7d39e16"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-as-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9b9a47f6b121ce4f40e3bdb3af2510c42730750765563109b39588c47e4963cc",
+    "javoSha256": "1f3927fc57f78f724d278d84578a5b84133684030729c6d7368f5e7bd4ba7ee9"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-az-rAZ/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "633d04126f954347611b7aa8af0af79e66e67839708f5dec53a4f279e7b39ca9",
+    "javoSha256": "e0cbab72dc6747cdf9682a1df7071f659fa52a4b377ee871fd94ea5dd9fd5ebe"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-be-rBY/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "930f5b8d9375c680b71ce183a2290a43344b33d18b5a0b7835a113db3da91824",
+    "javoSha256": "fb0e5f9743ea33cd94c0866acc3b26a60d6802906cb4db5ee8490923965a4554"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-bg-rBG/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "4df5894f376be0bc672f01978b98bd14782af7e98b8ff85243522c0b197fe743",
+    "javoSha256": "81b84c3ba4be65a2ed2b31a7fc09d373a98b15f58e2fbb78cdff08b0a6a7a667"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-bn-rBD/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f4c7c328f937f8c80772aae79f90d3e96c456518b5a889fa6f247866931f7bdb",
+    "javoSha256": "a2deef1536e28eae55f280c47f95c91dba4ede64ce268ca7ad904e7a24f9ad7f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-bs-rBA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f8bf8f76c9cced756197c74c21dd419911b7625ec38ffc9657bf03f037b2a901",
+    "javoSha256": "c9c3da68bf9518d9d0fd4ef10e91215e58a5b8aa16da43f08c37ac498de2510f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ca-rES/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b7b2c7c4021136caa8d52660fe9fce12bc66d96c6d594da1f1442fec417fa954",
+    "javoSha256": "2fdb3cdd436dec4bca1588cb16b311628f34408aa7f0cfe3822cca05bde9fb2f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-cs-rCZ/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "52b89f1447acddac6ef91db3d4d74a84e604935ebad15661f4168614ff59c6f3",
+    "javoSha256": "bdd9a3d67d825b5c144c2be10bccec67e84dc022d29aa73edd33f791610fcb60"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-da-rDK/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ae56458598b7676caba2aa747cdc6c73270b23438d49ab3a4cdc365572833187",
+    "javoSha256": "09972233956c0396cdcd4459a4d71133693848a9ad48618b9538cfc648d3ebf7"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-de-rDE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0f0460f36d03fa2d4b51191b4496cd067c0ea3f72938c679a54b2c8c9f8e6dca",
+    "javoSha256": "63fdbe0864e33b5729e05c708c8cb6f1c2e3e3e71e77a7f099e02fcf6e4eb33c"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-el-rGR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3d06c504fcf7da8ac057fe9c5cd4e9ebc1c322ee117bbf8fc439c0348eebb398",
+    "javoSha256": "d66d048f9101ddc56faf28cae6cab303161c0aac95cda1d75a45e1ed13e21337"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-es-rES/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "cf3d75557eecd8000c2374488eae17dc9ae9c0ac8fc9c865e2ec80311b98cab5",
+    "javoSha256": "5e3567a0054d7f1581608d2a80dd88e03f7792fe70b210d0a52ccfd005659b7c"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-et-rEE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e05078bd5a7e1abdbd6926eb592fc2860488e117e8ef6e78f3374bf9af9b042e",
+    "javoSha256": "46b11478a8d55f6ae433a1872d6bef76905e587c13ca3f33628759711d1b8d99"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-eu-rES/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "d73cfc3b34f4a65cbacd01dda1b64018cc6bb301dabec4d8debfc8ae77e1e6fd",
+    "javoSha256": "8e36661a1b2392d776ad612320577967dd0fe50766c95596428487542d147cdb"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-fa-rIR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ab3c0e3b89f01e93ae120f4eb8f1349bb166c5f88f9368e78b6e731838d1fd60",
+    "javoSha256": "231db547231780413bf7b69511e487b192895be738d79525b1628cdd218f9d66"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-fi-rFI/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "c27fa0e7ee30e40b040add3680deecca0bdd01db575d2269af53b16ac457fa1f",
+    "javoSha256": "4d19d96a0973c37d364102f27e2ed48cb0a4065bce4468683c2213856c0ed638"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-fil-rPH/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "850760f80cfa9153d7526819d145573cd1d9943cd34fe201ee386004ed0514a8",
+    "javoSha256": "1cd6c24e117133efa53246564b74cd89da42f13d4e3bb415a8c76a067c774fc8"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-fr-rFR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "2da94e70e44656059e61048946758a58db83b3ba7a36781e80594e950d176c74",
+    "javoSha256": "a578503a439e45cb96769379c212a2859dbe6dd2992fdaf8ee6b4ac452781afd"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ga-rIE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "36a0e6d09411778dc3f25240258a7988bd978eed13f9edda9c6582db5153bcd6",
+    "javoSha256": "aac5a8cc7d7b4894bb9e080ed00642af8790bce35221110be3179d276be4dcf3"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-gl-rES/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "6ae42a11d417ac28adf4a5095bdbcab6a30f9addf6bc697148eb145261865385",
+    "javoSha256": "f01e08daf32e5ea02a4df8899580285c78df764cc6c4caaa64627756fa4334c2"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-gu-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "17aff84d9f3cdf67873a0ceeaddc81e5bfbb67aecd783380a7b75d7c843d453f",
+    "javoSha256": "d9e6de0c90ef6856e071b540c32ce65c38a0b9bd795e636e5c64b19d6887ba32"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-hi-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "511c6bd727b7a2620c6f06a90586307fa702253d0fcfd6ee41118070b995b928",
+    "javoSha256": "295611bf74c855bb512abd078cf3938cd5c2a0a2c05d473a112247f0d014ff98"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-hr-rHR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "685555591cfcc334b79c4c1cebd1ddd6214bfd438a8cd1eb73b3aa2007619fc5",
+    "javoSha256": "80a31efb1d4954335ca746c517d0933ce158fa2b20e345b1ccdc568440dc2634"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-hu-rHU/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "d32ddab0f34232b05620f3209f221fe375f6036668401cfa958579fc8338e08d",
+    "javoSha256": "cd11a66038264313ba63dea46f3be0351f72b31cd14646d8aac4d121f2808ed2"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-hy-rAM/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f5d19c5eeb30b9d0f29b6b69e73255fe2e58abcfaa28a143c4c33769f178bf17",
+    "javoSha256": "fe7c418fb28c00aaf48c11766519ffc31270c872d1327b174475d2757cadcdf5"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-in-rID/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e62838043aa34769f24f508a45bce10c7bb2458275ba024b09764d47a147e7bf",
+    "javoSha256": "dd8a4659cc9bd4cd5a043e3971ea19d4312f98136148b9d64a16148849642a20"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-is-rIS/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b8a46da8ce54b35c0dadaa1a9460095cb9ea01eba75a006e171c38340469f742",
+    "javoSha256": "2251a3c8b2f6f667f89b4706b058ea31eae490a049bcab438f486d20959e9969"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-it-rIT/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "4e3765cf075dcc478b90bcf5c3025a6a01d979a838af2d410e6170ec2e5b8a54",
+    "javoSha256": "49d126b503afd31465ed034ae333e7763924bb317641419ed2d58d092438fd03"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-iw-rIL/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "8dd8ad316668b8dd4e31d0c93540a62ae8bc6a02f3e4e8307f99b15184dd340f",
+    "javoSha256": "2bb3c85dd5a2f8c6fc39842f5f702139b8d1fd4bb29aba43f601c0fc36f5676e"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ja-rJP/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "a52dc7fce86a627061a26e246d68ff5782161d85d7e8d121f63d8871db08dea9",
+    "javoSha256": "5e2ab0a5bc52f2b3f75404c4c70e108a5db620278d2b4b430d466c0e5099375c"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ka-rGE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "01ed36a4306cea27bc8e821b74e101dd829998d3e927b7db9167172f6d91b7f3",
+    "javoSha256": "6146a8863f9f6505443f3567e82579914ae4f357f80da9c8abcf1a13db1e258b"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-kk-rKZ/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "383955e15ad16589fbf635b58bb6a2d22194109b480edf6f7f378f06742c425b",
+    "javoSha256": "51fe432855df53c34eed6f23301eae3724bc6dd2f0573cb55219922fb6234cca"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-km-rKH/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "eb1c09d42431e36a356d34d5d1520b886066396bb0a1c3879dd775b2e3d21e0e",
+    "javoSha256": "968359d83e12294ce7f561dbfcf92b16f9db93f044065c66316ba411db939f0b"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-kn-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b9c78c092f87ab0cdcd1b5ceef7b92ef78a5a33f70583f11ebb5fd33a0c25df0",
+    "javoSha256": "6585a5a4d932f173e2ecbe27a3e3e31ca3ff367cbccf69f18ac15451eb21d510"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ko-rKR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ae51b9dd392c5606b88d59a742f309dd1a360ff8a5e65ee66083021f786696ab",
+    "javoSha256": "eb0bc6e1857ddf3be77ed265c0f522b8ac3c10761708bd35e2f7fdbc967644dd"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ky-rKG/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "35f49f538c8ff3c290203de67450427e27667f517c4df28560871525487a9237",
+    "javoSha256": "5a0d2f5df6fdd0a548b88e693b7e191bde0d9b94e81ced38eaa2b5d91b820a5e"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-lo-rLA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ec07ee8991014c9b82b6c3c937387c386fef0790e254a9f7e4ad12b94f3c097e",
+    "javoSha256": "9bc3c1aeb94ea8152b9c1bf3e381d9acdafe6cddcc9442a3e07ef30087c5ce74"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-lt-rLT/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "4179fa1c887ce2222483f1c21232ca15b03d330bedc7c7ae7e9f07fbb443c959",
+    "javoSha256": "4c086db64e8c55cf1956ab7a857fb528398d62dee520430a5fe8f4a979ca2650"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-lv-rLV/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e76bce5cde5555f703b84acf197b5ecca50293f3b01505904ebb3e79f73f3b78",
+    "javoSha256": "0460d03534f95644b2854cdec4b518f4d741ab21a89127d0ae6763f59c30ace6"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-mk-rMK/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "22080e455c611645d0cfd560a5bfb7d3453e41a75e3dc4598aca3da058d16a3b",
+    "javoSha256": "80b2f7d22340ef3d22aea7dfcf1822c23fabf455f77b974a828ff4af94eabeb7"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ml-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "cc9fae72b94571a704e7bfe731a509f8d8a0243e000bfac3509fa92fac065f3b",
+    "javoSha256": "0fbc9efad97c03924fe44c66bf621d20d7c9e3089b2f3fe7387e6e290a04a1c0"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-mn-rMN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "62030e8c3277351c7c62341cdcfdcddaf2f0032a8fe7c565b467dce243dbe3db",
+    "javoSha256": "6d44fded4c273391f9aa32a0b7860e6f2d0ced0e036ee8ae77edafc2513372c2"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-mr-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "8c09c41e1abcfb551eefb7ea84b70775739ab68b62ae0334909fbcbc399ea3f5",
+    "javoSha256": "c837dc26e375cfa33821a53351168f64433df41b6437601e918c5df5dd6eb089"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ms-rMY/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9dea23af361a424406bfc1214d3506cd344842bc5bfdb66d748931106aee4b90",
+    "javoSha256": "cbf4ada197320a3131c1e4a496b23b91a8f78a87dfaf8d5a961bd34a42d13a17"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-my-rMM/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3aba804475195663158a9ebce0ce689fdc72e576c5f2b23a3d352257216d30df",
+    "javoSha256": "4b3e29db2d897ede3979749ca296640462e09baed6c382d7272e851a4e266e33"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-nb-rNO/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "83b01aa14046d5bcc8b8c86783400b736de6328d12b64dbfbadcee608bb80588",
+    "javoSha256": "634c2fe2ddeca2ea036fc9621a1d002d863a7a9482ff8a554fc6c0c19cef5cd0"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ne-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "5bce8dae647c5e27837abb29720532acf282c1f95d36435f4335348cf37c5a27",
+    "javoSha256": "52ca54b4b092a332df0eb6d9b7c7dee53ed2d6a83275c54fd508c718bee92a56"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-nl-rNL/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f07abff24e0352cfb640e112f309d6d7a39aafc82d8133b65aeb1659cbb77446",
+    "javoSha256": "97da8079c5dcfa33983eba101c0aea15b76d6b65869a4977ec81cfa948a6dc04"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-or-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "15a61be95a0fedda9076fbd8a3aa3976cdb2d0db049cb1402b9abfc83116b58e",
+    "javoSha256": "562aac51ce33d425cfe0da1e8cc802a2f378ba99c22d2135cbf4c9197b18e3ac"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-pa-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "a1ba745e8521b8379692a00f6a6e788843a4ad196a1d6de7246b9833f351d3e9",
+    "javoSha256": "31046973ee55e223773926c6353dd48dd122f9018db7c4bbd89f81b45f25ed7b"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-pl-rPL/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "807ed94c87c7f7fee598738dbe6c145344485fb5c968019269e423fd6c7cf0fc",
+    "javoSha256": "569e41a0773f86edabbdf972ee56ac95b0a7d59c793328cbfa2c43684e852878"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-pt-rBR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "094c9e843a68723ca4103c681e5b38238a9301c6d4bf0223416f3c8c1e64217f",
+    "javoSha256": "be69548730287164c6ffe799f230f9f358fc81634706f3515bae7fdba559135b"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-pt-rPT/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9b421f13eb44d1ee1d7d18b640638a553b46151a3140cb797342030c647a90da",
+    "javoSha256": "7a7099d73378784e17bd83cad0af81d982584d4bcaf82456f04f962588bb50be"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ro-rRO/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "6d6a38a2f34aef96afeacdba232a022acb84abf2653e00afa70c5af88ebb2818",
+    "javoSha256": "cd43c85ae80674774d7da8449bf0520e15b6d2c1d140f30755e4c87a1caa98eb"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ru-rRU/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "d00015a48e114d008beea036dc3f5b8497b4e73f23cfd836a021194bc7c4f2bb",
+    "javoSha256": "55518e1a80813abc033b729a8ff6af3dccfd3eea4745d601ab363c0117a7bffd"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-si-rLK/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e6ccec9857d26eedbdb9dda2f2eb39d4d564eb03d1c166aa2e7896ca6955e145",
+    "javoSha256": "3b018f0d6477e5acc56bb9122578033a02b0e68654716bf0221b293b0a33f9dc"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sk-rSK/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "82285a49831499d65f5edc812b6a4aab97f48df531799113afd066ed3046317e",
+    "javoSha256": "dee47299b15dd08dd0311b0ed4d6e4b1ce30bfd67da761f7a3f4ecaa8250366f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sl-rSI/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e7197b468f0990199573180cb6e693fd8befc16d1b972f5463a1fdca8766ec5f",
+    "javoSha256": "e21fd33b3dbcdd7da432b59f17260a82c106e68ea70f57b97a2db09d9052fad4"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sq-rAL/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "034dc7cd18d673d8fc1e20a9dcf348629e80099015c717e155cf0efd55961ebc",
+    "javoSha256": "0601ca22e99d120725d8688d1a482d03337ac5e745f04ffae8251d129b066f04"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sr-rCS/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0ecb4e5eda04443f6840fe6edb489f8449b583326d4b6ce03b9beb6dc21f6ee9",
+    "javoSha256": "6244bc9edf8849ffa64c41c7c037a64ad4c5363d3c81c64a95f374e4b8fbb1e5"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sr-rSP/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "c65849424d52794723aa5918afa576b94eb0c82355301f53c0b15a76c9c86d2a",
+    "javoSha256": "ee88cdead0c73221e00e738453a4b114fa31d304f950847a9b59950a9c5fbbcc"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sv-rSE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "510b188b857aefe64e06ea623e8033f7ffea06fc350055bdb94583a1ddabe321",
+    "javoSha256": "4c506b8217c223ecb7304ae23b847bc375dffdfa7e5c713c3d0692d1bde74f09"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-sw-rKE/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "4011a369e05b04f876b354642d985b2aaf872845ae5292db1492eda9d950842e",
+    "javoSha256": "47dafe8751dfe9853284bc25a5248df99577504a8aef3c10fef6999c4634269f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ta-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3b1dbd74a0b273cd20ece12ac8c06bd410d6e0b2ee951f9a6fe72d277979f3a2",
+    "javoSha256": "17806d90e54d51eefdee32783ae690a16d7a081ae8b28dd98a81133381777734"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-te-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "84f958e7b88470f0606f302bd1bdb9b5efa1c7c97bcd0043bdfe8c64c80d2e5a",
+    "javoSha256": "1c565fb22e91740de3d5311cd6ebfd8601fd52921c789f61984063c43cc1631f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-th-rTH/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "822023db486f542f26c3f6850010489a8acaecbaf2e982ecbcb344e2ef3e6f2f",
+    "javoSha256": "1cc84f65fba661cddee23c5c2a9e7e157c0435478c5b5a2d5f4f528186938fd3"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-tr-rTR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "413fd1d6600e593ab9829334ce3049a53a74528ee95edbf0fb44dc29df596e8a",
+    "javoSha256": "11d2972f83bccf91eb0658fa9697b3049bfafdf7dba796d705b02d02eacb1d32"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-uk-rUA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "91552f83360e4fcce546d6bc657f00a0d52088f489af99a66e121d9e5726d1d4",
+    "javoSha256": "6c9201641716d1b7f33f1afdf2266bf93ad3a45e105785fec539abf98544ac40"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-ur-rIN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "c408fb86139252fc4366649fd9159cfe8ccca3931e2daf7bc6276d7d9dd9ce83",
+    "javoSha256": "81e17596b3624ef2245e7a46dda66a5dcb457c2a123c6df5227db6194c859ef1"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-uz-rUZ/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0a4ff3873c87ff25ab184bbd491e826acc4f39a85d42378fb6ef2f09ab42a49d",
+    "javoSha256": "290e9cb27cd30a90b4caceb9cfcedc38ac601d0ed534e2fb9ceda3bd48dcee48"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-vi-rVN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "82b2c63b17a22ddab44fcf8a392a1cba6100dbb5bdbf73c4a173a0118872c2f8",
+    "javoSha256": "2c53abd180be71458256465b49fcb2b8449995b222f89aa14db684e4bac9e331"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-zh-rCN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ffe6cb8ce6c86066962766aa717609a1abe59a77b6aca1b7d61181cee81aee10",
+    "javoSha256": "1732cfde8e67139f65d3b3de9c88405181775e9735a34b339e758fe1de2582b8"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-zh-rTW/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "1aa2a2b373c78d5ee9256e933b2837327a7b7e706b9b9c8ef563fef27dad0038",
+    "javoSha256": "ebbca1010edc5c45a192ad0b97897eeedc4cae52df33d47797c1f09b7077f0e1"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values-zu-rZA/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "836dde5e33a7a4bcbb50d3adf3214090ad1d7075d8f95ffb668faa075846f962",
+    "javoSha256": "a044d9a4e77d37adec385360b1607d22bc7c45ce5809ee4e1d220f6be9fe5fb6"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/values/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "dd87bcd9d51b0ef1ef3426fb970049228c34ecd51fe4abb710f1e2fc0961f2ad",
+    "javoSha256": "fecfc55e6972c51df01cb973b183d98b5fc0d449243edcfed9dcd3e6a5e6e4c3"
+  },
+  {
+    "file": "apps/javo-manager/gradle.properties",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "01b63136d3fca9f60cf86b9af39476e4368d174d092aa8e487b7ce96d10f726a",
+    "javoSha256": "3d501f144447ea47c965599ea73dead4da350d7030137a574eae4af1e4a525d9"
+  },
+  {
+    "file": "apps/javo-manager/settings.gradle.kts",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "6d8b59699b88aed4776b1fd8203435ef9aef47458f5f8e665a607a853ff99a31",
+    "javoSha256": "6456f1f47903773703aa45cc2d3636c26dc111e8682083d60d641e96e9672a84"
+  },
+  {
+    "file": "apps/javo-core/build.gradle",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "32125941b3254da24e14ba8002cb2efea369d6a50cec6f70fa8601bc4748400a",
+    "javoSha256": "af196264bc5a265085072124b20fadd44976adb03740afe0609ee05d06df8ed0"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/AndroidManifest.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "7dbdee0f0beaa5aa57e40327a7bcb8c3d487e0f6c4c3daf2fbdde947e01d7ffa",
+    "javoSha256": "e891192a063944f5ddea779596507a2cf2fdc511ec87210c472321da86822ced"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-anydpi-v26/ic_app.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "28f105dea8b3c6aad0afd9fce32468e68f63828f2feb4dfd51456462d8f3336b",
+    "javoSha256": "cd37c37c963ae631fc31f790403369639ff65074bdee4eccd67367b9a4ecfe98"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-anydpi-v26/ic_app_settings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "fefac1419b6e314fa5ae4c6c8526fb8331adf7d36f431a03c54e143c030303f9",
+    "javoSha256": "cd37c37c963ae631fc31f790403369639ff65074bdee4eccd67367b9a4ecfe98"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-hdpi/ic_app.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "2429dea1ebf6efab4ee19d39dc283dd01d97018b57e728ed3c6362f7922bbaf5",
+    "javoSha256": "8539b0ce3d6a21842351ca19e14a77990802733a0f5829eead9830737384012d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-hdpi/ic_app_settings.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e53988d87cb381885f1403fce112e41116e90030be6726e00717e40df0435691",
+    "javoSha256": "8539b0ce3d6a21842351ca19e14a77990802733a0f5829eead9830737384012d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-mdpi/ic_app.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "88cd07c4fe200b6b66ef5119a5b3349e1e7a8ab29904165078d5df582c6aa212",
+    "javoSha256": "240c82cf25634377c7c77beaa2e7ee12417e4f6e4cc568f003a060c314ed15ef"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-mdpi/ic_app_settings.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3c08fb20c4e94b6c7254bb236b6b2d82a916b53c719fdeacf3dd011c9edf7b96",
+    "javoSha256": "240c82cf25634377c7c77beaa2e7ee12417e4f6e4cc568f003a060c314ed15ef"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xhdpi/ic_app.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "3c2703e21cb4ad00c8d6706b268575324fc90cb890ee1e16868b79fb60c5e7cf",
+    "javoSha256": "a3a446ef6b6b23e720796e8661f4f1b813fd93e0e406e775f299b18cf4f76b28"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xhdpi/ic_app_settings.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "54cc076d3505912e84edffd76d418731f73e8baf2bf25d0088aa5a9aae4c99ee",
+    "javoSha256": "a3a446ef6b6b23e720796e8661f4f1b813fd93e0e406e775f299b18cf4f76b28"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xxhdpi/ic_app.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "bc3b62d81c6ab461932847b64861634f62395254cef179f17273bc5a11a69a86",
+    "javoSha256": "e5309e3bfb5e353188621c9d22ee667632e850dced5d54df09f2c52d91ac18ad"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xxhdpi/ic_app_settings.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9bbe8bfbaa4282d2c7ea8e6cba029cf49d7488de5af8a1acd433cc1e86cf96c8",
+    "javoSha256": "e5309e3bfb5e353188621c9d22ee667632e850dced5d54df09f2c52d91ac18ad"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xxxhdpi/ic_app.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b9a8981007bb7615d0d84240fcc0606cf0b89610a9a407f3eb7170d8301a9a21",
+    "javoSha256": "45217e07b1a4b6b118ad4fdfe5a41a7195ed694242bf9006e0d9dc266e120748"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/mipmap-xxxhdpi/ic_app_settings.png",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9ca19b05ba154f2e53de231aa354286722ef3614c9a02f62a7e15ec7915edf80",
+    "javoSha256": "45217e07b1a4b6b118ad4fdfe5a41a7195ed694242bf9006e0d9dc266e120748"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ar/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "778693e48e774e98933c46ff06485ea6819c30ae2308f5b74bf4c6ade8894047",
+    "javoSha256": "44d7f2095ebe17524c18be5f29bdf443d241f6dea5bab340856c5eafabbf49d6"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ast/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "1bceff8c21ef1536e48e875d905b7b2589af03d22d8cdb21597f9e04c3f2106f",
+    "javoSha256": "2b77da00cf13d3c42d4bb6f2830b0b1e4c4b3a2e23b433168b25c3596804b23d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-az/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "6b400ab2dea87727efc3fc716b2103dbf9a81caf6d0b67d58c0a9f1fa7ab09ac",
+    "javoSha256": "125f3bf0628b36f9bcde84c215b7958e2fe58e1bf8065931f6a7e506d4ccbbe1"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-be/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "28fc19c61157c041e93af0308d220ed92f2a02abf30bbf372e023499932a3c4c",
+    "javoSha256": "1e587f73e47fa06a827034e020af74daa94870975b9c958ecd1fa2b125993c33"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-bn/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0aed495e21a70cab045e3b4792a02f2c7ad68fc1687d73474a09db0b269bc041",
+    "javoSha256": "22f303091b555d902a2bde8b19d17ad87aa07b52a984a08e4d72214b0a25e54d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ca/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "2227611fb4ebad157dc7ead8cd8c3632b29c529413434aee171c2f12417d61c5",
+    "javoSha256": "0eec8e83ba36e9da422c28f7cc61d515ca8fc4486afccce0d8527e82eabc98ea"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-cs/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "645067c4bdcefda8732b4015227031fef79920a687712e888e3dee794a664f3c",
+    "javoSha256": "6b04a17cf6ef75cf5f6fd219d9e8a703145d1fc6e55a72a22620e8ca11722078"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-de/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b31fd50a52a747de9bfd1917295979041b0bb3e8d695e0857c2f0ea4a924f2d5",
+    "javoSha256": "061d69622751b917e8c91a9b587473170b8a3d23a88b43f2acbb97908fea6a2b"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-eo/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "c171c7ba06419e315f45c138e0fdef51e1748c73f8dd69fb45514e22c728d5b9",
+    "javoSha256": "8d604476a8e2a4d7b19c643c14d3ee8a1958d176efbdae258741da922e1a890f"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-es/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b2f12ef7529f1f3582471ee8f9478f1812be9954e45c377b0c6bed20e1820773",
+    "javoSha256": "a92f1f981a2df173a747c2e53eb7569e80aee1ba3971aa7693a712231fee9b39"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-fa/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0ab08c659000217cbee5d9ca2087ba7364d5f45d8196db282589461b572d68e1",
+    "javoSha256": "a0d75853d33e5efffc2dcbe7eea2ab21aad82fbe7d956589cc3e8395ffd06365"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-fi/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "add430b6e7a826ef0e27cb3f0b60076fc144d5a76419b7e1ea032288ce5c36d4",
+    "javoSha256": "bd01033c09693b78f024a19f5f2f287bef801fdf852f3e61923a7c9f4575580b"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-fil/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "20f7bf75f864e78405b603f093df6eebb687a78a586384aaf9c8929c3e70944d",
+    "javoSha256": "1ed18876a4f10514bbd9ee8d6391b6a117aa8549b19dbab7b7d6a88bd0f426f9"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-fr/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "12a457d6404d7a59d59f5a88dbbd65a4a85b87225b5b4427e98d1b2f449322f1",
+    "javoSha256": "c4b9de8a28400e74e32790731c7017a96875a0975916740798462ee9d5f94b80"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ga/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "dde4e068ad5fe0dd91cece28f76e2e31c2eb695fa566a387c327441e9bfda782",
+    "javoSha256": "d7cd2ca36324629afda30b7c39e88d81006fee20ad2a825a267e888fd8b4d7d4"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-hu/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "7b8944508b01011f13411c9af22dd9823a77f7975a0c98ed426f9e8b0642579f",
+    "javoSha256": "8214891885ae58da788f6050dff2d4b2866591d72a8b0d087e0d18345eb3df4e"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-in/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "5d60f39d3f046b735ae89672102a6d6c44adb94440fabf7440e78f8a5b011e8b",
+    "javoSha256": "e348ab49cf3676ae2cea06ebf9f338a61c7de81bcf96cfaead2f306f8e60a524"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-is/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ce9210fb34f28ac8414df9244f61ea76db6307f5f1ac637239e8169c4fb60cf0",
+    "javoSha256": "49c428a728f99bf36b20211faca721e8028cf6b07cd0a856221141b28b60907e"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-it/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "7fbd057c0dce9d6f7cc05c1dd5b7de307e8dd823457875baf901d155a18ee957",
+    "javoSha256": "6169bfe44cd3afaca87fc8b6584a700db0fc616a91391dbcd29047707572c223"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-iw/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f7df184ffaa087cb42368d267073b2ce2e0bbd761c4b662ad4847bd849c15987",
+    "javoSha256": "e940c777d5078ac4ca13f713bc24a3a17cfe77e0d77024b9801896ef27d93995"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ja/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "8cbcd6282ef8270745a1b85c770e5bf9824e23031552878b3f406e555d090184",
+    "javoSha256": "b2cec69d29237774c0f453b593dcf9db92b7ad4fad311329179688fbf4539f78"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ko/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "9a9d46103ae02009086f8f74e0cd813f5f24430a3c64a816c174575f80470924",
+    "javoSha256": "a740c960823861aebe9bd58fcac8ecd09acdb471efedd03278d421170c023c59"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-lv/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b834d8438ff17451e92fd4a677e45c2ed34f774839b3acbd232b7f7c0075215b",
+    "javoSha256": "565e1f52a8e89fcd5f024ae21770277b8902721989d338d1aa04ee27b0a409d0"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-lzh/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "20e851e09d7165c8ed7d3a2bc1ccb4abc8bc3d767e45e4214cf804a176c5329d",
+    "javoSha256": "e85037e9480e61209c34438598f52f18901cc4902489f0433094236e568e178d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ml/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "c137155974963d7a1f2dbef9528e9964b7a08cce83f09a92b7129fe2ca818b64",
+    "javoSha256": "c3136a2fc4f70a63017b535b36613af8fb9ac588a4a248324f50167ce8437ddf"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-nb-rNO/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ddb6caed1b637cdd663fe39a5bf37d00126ebd52312c8c27ae9c8339b7b3c1df",
+    "javoSha256": "16d13d1119b84d4d0ffdac98cf3a55b49e0d93b470cdd02151f33f8fbd375c16"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-nl/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e6a0735d3146af5a62e21bf9c16bce1d9abe8f230399ac94ebc8f1b6087022ef",
+    "javoSha256": "2e07ea09fec7313b2f0e6f42d7074080ad314bb9b592d9226c9b1790c7d84dcb"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-pl/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "7a78304b18d79f9f1844a20b19a9bb8855075a007a3180169c5ff51e7a744ad3",
+    "javoSha256": "28a92ad884cba96179e187152c4056b5041100dbad80eba47523834622f373d2"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-pt-rBR/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "29f558cf4e2bcfc2eb53f2e0c987d412bfaebd9b5a99956679138ac821b7bf77",
+    "javoSha256": "cc85ec9bea1688f3ad8fbf4b56c24c8ff1f43ca8ddbd7d3483efd91b7a6b9da1"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-pt/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "134555a8cd7bf72692358a6a12e957f9ae1dc9ea0f55154f2a2e3ee537a7b438",
+    "javoSha256": "a9dabc4e7a352c89a1587fa2aef7eb68a0ee79ed21bc3e8337c8147e0b3366b9"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ro/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "be2fbe783e23103832cf80113dbee1976d55982d3d6c8e1787e3151fbc90fec3",
+    "javoSha256": "61cea218e136a477c1a692dcb23a70ddffaa1f1711b4d666505698ba6aee2b43"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ru/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "ad79df58cd14c8933f3a59aaf9669e85cafefd7702a931ac0e4fc80eb561376c",
+    "javoSha256": "51e8bc6ceff5b552cc47e705aee86e2a40156a00110e1e4764bdb8d49f490e82"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-sl/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "0aed495e21a70cab045e3b4792a02f2c7ad68fc1687d73474a09db0b269bc041",
+    "javoSha256": "22f303091b555d902a2bde8b19d17ad87aa07b52a984a08e4d72214b0a25e54d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-sr/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e41f68018a84fad06582b74a1734ac6033c9e883ba19f4dc7bb9b0347eec0588",
+    "javoSha256": "f2039343361ffbb6d93f1d8285e8827f2a01a34e3b268a5ba509c57eb743b575"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-sv/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "273e77fa9fde4acd7e7ddec30c86216e3efcdaaec7f77a21c19d02cf822935a7",
+    "javoSha256": "54950ee84ade0fa9f2a4b78acd99169ffb6f88a2a1d0045737433739e790ac14"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ta/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "4bfbe69402936cb9151168f80cbc990cafa21865a33188ddb9d58c45f223d858",
+    "javoSha256": "ea90b2a7c19f53768b3a816b31019b6e25b0268e7eccade194cf2946f5787f1e"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-th/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "2fd6030f05e5cf72109e9d7b9b4ad0376dfd23adbd8290213685839e1d8ac153",
+    "javoSha256": "17ee8f60f72a779c245a5ec7753981c1b76b92f45acceba8b0b2573cd71f4ca6"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-tr/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "beb443ddf8c01b912da9b44287495276df21c742c5dacc30464e58e8e04264bf",
+    "javoSha256": "85fad866b7f1de241470b09fc34aa117079aa8b0189f9953eaeb0236f8072ec8"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-ug/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "5effe65cac33005adf6b1f6ee571e2600d76fd0ffd6c0ff8d9793c96720caf75",
+    "javoSha256": "1e7d514d9394f61ef8f958fd438194f494c0b3e2a88b992b9300c850c9f7517e"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-uk/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "e2faa696e24b6f1125588a9bed11a2153475689c7cfc0f547dafc24f3be3cf46",
+    "javoSha256": "d2536e9dc2cd6f98790fa53d3bfe600c8beb32764d1ecf0c6830be3aab75306b"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-vi/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "f63dadd985c7a7a7a5a657e8c727af0876634aa2a9a501daf97e95ff82fe2311",
+    "javoSha256": "d0e633d43fd31d7b846d805ba31e897cdf98ff1639be1fdd7dd9303c66e5602d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-zh-rCN/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "093ad83f2a343de6daf9527846f3dcdb288fdcb6288fc5c923c48ce730dd7f7c",
+    "javoSha256": "b69358d7d4cfb063266a652446681278149fc05168854884276ccc7751d55f1b"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values-zh-rTW/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "afe4cfc37d992a3892d8c48f8c52c8e848db480679c6ba961851bc568c7060cd",
+    "javoSha256": "390c44955856b93fbf21745c409d9feb7f80b92d73c5d1e7940bed32aa3048ba"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values/colors.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "aa5d5c8adcd29872d6fdccb74e2f62557a55eeca8b28b74ad4e7edc0926c5e59",
+    "javoSha256": "8dc0f0de92d5960562f20feb6da7e5642d2a06f0972694b430448249bcfc89b9"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values/strings.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "b6cca60d8845b4385099fecb4ddcc8a89ae4d1919fb881e07bd1eb8047185d55",
+    "javoSha256": "3cb23c1714ea5b2c6d796cea89b41a3abb0c9aa242b42ac5bcea21bc21b3548f"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/values/themes.xml",
+    "modifiedAt": "2026-11-03",
+    "upstreamSha256": "6599b2edf0048316651b21b96e38af883bf536f946303b479af9113e1010209b",
+    "javoSha256": "68490d0e539ffb06d3d7cbd3b5dd52fd3e74f9d462aee8a356e3412730c204c4"
+  }
+]

@@ -1,0 +1,46 @@
+> Task :play-services-threadnetwork:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-threadnetwork:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-threadnetwork:copyDebugJniLibsProjectOnly
+> Task :play-services-threadnetwork-core:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-threadnetwork-core:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-threadnetwork-core:copyDebugJniLibsProjectOnly
+> Task :play-services-vision:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-vision:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-vision:copyDebugJniLibsProjectOnly
+> Task :play-services-vision-common:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-vision-common:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-vision-common:copyDebugJniLibsProjectOnly
+> Task :play-services-vision-core:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-vision-core:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-vision-core:copyDebugJniLibsProjectOnly
+> Task :play-services-wearable:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-wearable:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-wearable:copyDebugJniLibsProjectOnly
+> Task :play-services-wearable-core:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-wearable-core:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-wearable-core:copyDebugJniLibsProjectOnly
+> Task :play-services-core:microg-ui-tools:mergeDebugJniLibFolders FROM-CACHE
+> Task :play-services-core:microg-ui-tools:mergeDebugNativeLibs NO-SOURCE
+> Task :play-services-core:microg-ui-tools:copyDebugJniLibsProjectOnly
+> Task :play-services-core:mergeVtmDefaultDebugNativeLibs
+
+> Task :play-services-core:stripVtmDefaultDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libc++_shared.so, libconscrypt_gmscore_jni.so, libcronet.102.0.5005.125.so, libimage_processing_util_jni.so, libopencv_java4.so, libvtm-jni.so.
+
+> Task :play-services-core:validateSigningVtmDefaultDebug
+> Task :play-services-core:writeVtmDefaultDebugAppMetadata
+> Task :play-services-core:writeVtmDefaultDebugSigningConfigVersions
+> Task :play-services-core:packageVtmDefaultDebug
+> Task :play-services-core:createVtmDefaultDebugApkListingFileRedirect
+> Task :play-services-core:assembleVtmDefaultDebug
+[Incubating] Problems report is available at: file:///C:/Users/Dell/Documents/ChatGPT/MicroG%20project/apps/javo-core/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 27m 14s
+1557 actionable tasks: 934 executed, 623 from cache
+

@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-03",
+  "result": "No unverified source substitution was made.",
+  "apktool": {
+    "commit": "b80eb55dcb09251c62c53901798ffe07ccfd73ae",
+    "declaredBaseVersion": "3.0.3",
+    "requestedArtifact": "2.10.1.1",
+    "apiMismatchObserved": true
+  },
+  "jadb": {
+    "commit": "53d8e8cf31e60a53453139a1a4030e05cd365826",
+    "declaredVersion": "1.2.1.1"
+  },
+  "multidexlib2": {
+    "commit": "6db4dc4c959945f5c5422ab876ef5109bbaf257c",
+    "tag": "v3.0.3.r3"
+  },
+  "selectedRoute": "Owner-approved private GitHub Actions build using temporary packages:read token."
+}

@@ -1,0 +1,13 @@
+{
+  "name": "javo-revanced-workspace",
+  "private": true,
+  "version": "0.1.0-alpha.1",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build": "node apps/javo-website/build.mjs",
+    "start": "node apps/javo-website/server.mjs",
+    "package": "python infrastructure/scripts/package.py"
+  },
+  "engines": { "node": ">=20" }
+}

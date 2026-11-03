@@ -1,0 +1,9 @@
+{
+  "yamlSyntaxValid": [
+    ".github\\dependabot.yml",
+    ".github\\workflows\\dependency-review.yml",
+    ".github\\workflows\\verify.yml"
+  ],
+  "pythonScriptSyntax": "passed",
+  "note": "Syntax validation is not evidence of hosted CI execution."
+}

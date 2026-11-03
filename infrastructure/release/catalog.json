@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "status": "development-prototype",
+  "generatedAt": "2026-11-03",
+  "artifacts": [
+    {
+      "id": "core",
+      "displayName": "Javo Core",
+      "applicationId": "app.revanced.android.gms",
+      "version": "0.3.13.2.250932",
+      "versionCode": 250932004,
+      "minSdk": 19,
+      "channel": "development",
+      "signing": "debug",
+      "verification": "signature-and-package-verified",
+      "sha256": "f589479fc818f7bb24119f67c3f60c7604a3a0427ce37c7b37d811efdece441a",
+      "signerSha256": "313decf4e4c008d4b2e55e8ef11eab566f0abd10d705c8fdff3cdaf7411a1e46",
+      "size": 104089027,
+      "path": "/downloads/files/javo-core-0.3.13.2.250932-debug.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5556",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "package": "app.revanced.android.gms",
+        "processRunning": true,
+        "crashObserved": false,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested"
+      }
+    }
+  ],
+  "limitations": [
+    "Javo Manager has not compiled locally: official GitHub Packages dependencies require credentials.",
+    "Official API patch bundle 6.2.1 is downloadable and its detached signature was checked; compatibility and patch execution remain unverified.",
+    "Playback, Google account authentication and physical-device compatibility have not been verified.",
+    "No production signing identity or published Javo update feed is configured."
+  ]
+}

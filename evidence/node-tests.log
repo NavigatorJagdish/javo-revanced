@@ -1,0 +1,39 @@
+✔ accepts a valid newer release (2.2063ms)
+✔ rejects wrong package (0.7325ms)
+✔ rejects downgrade (0.2923ms)
+✔ rejects expired metadata (0.3593ms)
+✔ rejects future release (0.3904ms)
+✔ rejects invalid timestamp (0.2681ms)
+✔ rejects unsigned checksum (0.3478ms)
+✔ rejects missing signer (0.2963ms)
+✔ rejects HTTP artifact (0.3924ms)
+✔ rejects credential URL (0.6091ms)
+✔ rejects invalid ABI (0.267ms)
+✔ rejects missing architecture (0.2485ms)
+✔ rejects schema mismatch (0.268ms)
+✔ rejects fractional version (0.1909ms)
+✔ authenticates signed metadata (2.9838ms)
+✔ rejects tampered signed payload (0.9354ms)
+✔ rejects signature from a different key (1.7374ms)
+✔ rejects oversized metadata before parsing (0.3246ms)
+✔ checksum catches altered bytes (0.7377ms)
+✔ rejects unsafe update URL file:///tmp/a.apk (0.1623ms)
+✔ rejects unsafe update URL javascript:alert(1) (0.088ms)
+✔ rejects unsafe update URL https://example.org:8080/a.apk (0.1162ms)
+✔ rejects unsafe update URL https://example.org/a.apk#fragment (0.0862ms)
+✔ empty catalog is valid without fake artifacts (0.198ms)
+✔ rejects a catalog with unverified downloads (0.1464ms)
+✔ builds all 16 requested pages plus a not-found page (2.1433ms)
+✔ every internal link and asset resolves (173.4999ms)
+✔ every page has accessibility and SEO foundations (14.3649ms)
+✔ generated website contains no legacy brand (12.1373ms)
+✔ downloads never invent an APK URL (3.944ms)
+✔ reduced-motion and small-screen styles are included (13.2683ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 905.8914

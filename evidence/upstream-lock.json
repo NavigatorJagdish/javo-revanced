@@ -1,0 +1,37 @@
+{
+  "manager": {
+    "repository": "ReVanced/revanced-manager",
+    "commit": "aed92b22d3efa91bf46ec6b9d7a8d470b22abeee",
+    "tag": "v2.6.0",
+    "local": "apps/javo-manager",
+    "sourceArchiveSha256": "07836d4f86ed7faf1f01e26fbba3650a86e0be9e7202ed4bba4ea2cd324e0003"
+  },
+  "core": {
+    "repository": "ReVanced/GmsCore",
+    "commit": "80bfe22cfaf0de84b6c1e96fe3435877d3b9e08c",
+    "tag": "v0.3.13.2.250932",
+    "local": "apps/javo-core",
+    "sourceArchiveSha256": "8673b23e4c617a853c6761940f1f4bc54edccd90e0edb439f5a5ad5c1f4507fa"
+  },
+  "patcher": {
+    "repository": "ReVanced/revanced-patcher",
+    "commit": "d7f12ab77c205f9223169393714e751c85ad5e76",
+    "tag": "v22.0.2-dev.1",
+    "local": "upstream/patcher",
+    "sourceArchiveSha256": "dff24e5334a38fd5f0733901af195b263555c6404eec8f8b410aa28c0540e2b9"
+  },
+  "library": {
+    "repository": "ReVanced/revanced-library",
+    "commit": "299c63399c77f207291042a1abc3ba55374a2c64",
+    "tag": "v4.0.0",
+    "local": "upstream/library",
+    "sourceArchiveSha256": "d3e4df89c6fcfbcc60d3fe0ca3a1ceecc3079e5adc00e7d753cd004902bbcef2"
+  },
+  "patches": {
+    "repository": "https://gitlab.com/ReVanced/revanced-patches",
+    "commit": "015fe10a23ea5b919a3fda6e7da2c176517ae75d",
+    "declaredVersion": "6.1.0",
+    "local": "upstream/patches",
+    "sourceArchiveSha256": "068258fa675c3ed95499ce268250d2093d62f32e767e6cd8100b3eef2e2d64cb"
+  }
+}

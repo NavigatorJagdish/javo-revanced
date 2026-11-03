@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Strings with new lines must be raw strings, where the string is wrapped in double quotes and new lines are regular line breaks and not \n
+    Raw strings still require escaping embedded double quotes, but single quote characters can be escaped or used as-is.
+
+    Raw strings are required because Crowdin AI translations regularly gets confused and
+    replace \n with an encoded new line character.
+
+    Bad:
+        <string name="summary_key">First \'item\' text\nSecond \"item\" text</string>
+    Good:
+        <string name="summary_key">"First 'item' text
+Second \"item\" text"</string>
+
+-->
+<resources>
+  <string name="patcher">កម្មវិធីបំណះ</string>
+  <string name="onboarding_welcome_to">សូមស្វាគមន៍មកកាន់</string>
+  <string name="onboarding_welcome_back">សួស្តី! នេះគឺជាថ្មី</string>
+  <string name="onboarding_apps_subtitle">អ្នកអាចជ្រើសរើសកម្មវិធីដើម្បីបំណះឥឡូវនេះ ឬធ្វើវានៅពេលក្រោយ</string>
+  <string name="onboarding_updates_subtitle">កំណត់រចនាសម្ព័ន្ធការអាប់ដេតដោយស្វ័យប្រវត្តិដើម្បីរក្សា Javo ReVanced Manager និងបំណះឱ្យទាន់សម័យ</string>
+  <string name="onboarding_updates_note">Javo ReVanced Manager នឹងភ្ជាប់ទៅ %s ដើម្បីទាញយកកំណែដំបូង ប្រសិនបើឧបករណ៍របស់អ្នកភ្ជាប់អ៊ីនធឺណិត។</string>
+  <string name="retry">ព្យាយាមម្ដងទៀត</string>
+  <string name="onboarding_skip">រំលងសម្រាប់ពេលនេះ</string>
+  <string name="onboarding_recommended_version">កំណែដែលបានណែនាំ: %s</string>
+  <string name="onboarding_permissions_skip_title">រំលងសិទ្ធិអនុញ្ញាតទេ?</string>
+  <string name="onboarding_permissions_skip_description">ដោយគ្មានសិទ្ធិអនុញ្ញាតដែលបានទាមទារ មុខងារមួយចំនួនប្រហែលជាមិនដំណើរការត្រឹមត្រូវទេ។ អ្នកអាចផ្ដល់សិទ្ធិទាំងនោះនៅពេលក្រោយក្នុងការកំណត់កម្មវិធី។</string>
+  <string name="onboarding_permissions_skip_anyway">រំលងយ៉ាងណាក៏ដោយ</string>
+  <string name="onboarding_permissions_subtitle">Javo ReVanced Manager ត្រូវការសិទ្ធិអនុញ្ញាតមួយចំនួនដើម្បីដំណើរការបានត្រឹមត្រូវ</string>
+  <string name="permission_install_apps">ដំឡើងកម្មវិធីដែលមិនស្គាល់</string>
+  <string name="permission_install_apps_description">ទាមទារដើម្បីដំឡើងកម្មវិធីដែលបានកែច្នៃ</string>
+  <string name="permission_notifications">ការជូនដំណឹង</string>
+  <string name="permission_battery">បង្កើនប្រសិទ្ធភាពថ្ម</string>
+  <string name="permission_battery_description">ការពារការកែច្នៃមិនឱ្យរំខាននៅផ្ទៃខាងក្រោយ</string>
+  <string name="permission_grant">ផ្ដល់សិទ្ធិ</string>
+  <string name="downloader_host_permission_label">ម៉ាស៊ីន​ទាញ​យក Javo ReVanced Manager</string>
+  <string name="downloader_host_permission_description">ប្រើ​សម្រាប់​គ្រប់គ្រង​សិទ្ធិ​ចូល​ប្រើ​ប្រាស់​កម្មវិធី​ទាញ​យក Javo ReVanced Manager។ មាន​តែ Javo ReVanced Manager ប៉ុណ្ណោះ​ដែល​មាន​នេះ។</string>
+  <string name="fab_patch_app">កែច្នៃកម្មវិធី</string>
+  <string name="fab_add_patches">បន្ថែម patches</string>
+  <string name="new_downloader_notification">មាន downloader(s) ថ្មី។ ចុចទីនេះដើម្បីកំណត់រចនាសម្ព័ន្ធពួកវា។</string>
+  <string name="patches_not_downloaded">បំណះ​មិន​ត្រូវ​បាន​ទាញ​យក​ទេ។</string>
+  <string name="app_source_dialog_option_auto_description">ប្រើកម្មវិធីដែលបានដំឡើង បន្ទាប់មក APK ដែលបានទាញយក បន្ទាប់មកឧបករណ៍ទាញយកដែលមាន</string>
+  <string name="app_source_dialog_option_auto_unavailable">មិនមានកម្មវិធី ឬកម្មវិធីទាញយកដែលត្រូវគ្នាអាចប្រើបានទេ</string>
+  <string name="app_source_dialog_option_installed_no_root">កម្មវិធីដែលបានភ្ជាប់មិនអាចកែប្រែបានទៀតទេបើគ្មានសិទ្ធិចូលប្រើជា root</string>
+  <string name="patch_selector_item">ជ្រើសរើស patches</string>
+  <string name="patch_selector_item_description">បានជ្រើសរើស patches %d</string>
+  <string name="patch_selection_changed_warning">ជម្រើស​បំណះ​ត្រូវ​បាន​ផ្លាស់ប្ដូរ</string>
+  <string name="apk_source_selector_item">ជ្រើសរើសប្រភព APK</string>
+  <string name="apk_source_auto">ស្វ័យប្រវត្តិ</string>
+  <string name="apk_source_auto_installed">ស្វ័យប្រវត្តិ · កំពុងប្រើ APK ដែលបានដំឡើង</string>
+  <string name="apk_source_auto_downloaded">ស្វ័យប្រវត្តិ · កំពុងប្រើ APK ដែលបានទាញយក</string>
+  <string name="apk_source_auto_downloader">ស្វ័យប្រវត្តិ · ប្រើកម្មវិធីទាញយកដែលមាន</string>
+  <string name="apk_source_auto_storage">ស្វ័យប្រវត្តិ · ជ្រើសរើសពីកន្លែងផ្ទុក</string>
+  <string name="apk_source_downloaded">បានទាញយករួចហើយ</string>
+  <string name="auto_updates_dialog_description">តើអ្នកចង់ឱ្យ Javo ReVanced Manager ពិនិត្យរកមើលការអាប់ដេតជាប្រចាំសម្រាប់ធាតុផ្សំខាងក្រោមនេះទេ?</string>
+  <string name="auto_updates_dialog_manager">Javo ReVanced Manager</string>
+  <string name="auto_updates_dialog_patches">ReVanced Patches</string>
+  <string name="auto_updates_dialog_downloaders">Javo ReVanced Manager: កម្មវិធីទាញយក</string>
+  <string name="auto_updates_dialog_note">ការកំណត់ទាំងនេះអាចផ្លាស់ប្តូរបាននៅពេលក្រោយ។
+
+    Javo ReVanced Manager នឹងភ្ជាប់ទៅ %s ដើម្បីទាញយកកំណែដំបូង ប្រសិនបើឧបករណ៍របស់អ្នកភ្ជាប់អ៊ីនធឺណិត។</string>
+  <string name="announcements_filter_tag">ត្រងតាមស្លាក</string>
+  <string name="announcements_show_archived">បង្ហាញឯកសារដែលបានទុកក្នុងបណ្ណសារ</string>
+  <string name="updates_description">ពិនិត្យរកមើលការអាប់ដេត និងមើលកំណត់ហេតុនៃការផ្លាស់ប្តូរ</string>
+  <string name="downloads_description">អ្នកទាញយក និង​កម្មវិធី​ដែលបាន​ទាញយក</string>
+  <string name="safeguards_toggled_warning">ការ​ការពារ​ត្រូវ​បាន​បិទ​បើក</string>
+  <string name="about_app_name">អំពី %1$s</string>
+  <string name="search_languages">ស្វែងរកភាសា…</string>
+  <string name="keystore">ឃ្លាំងកូនសោ</string>
+  <string name="patches_selections">ការជ្រើសរើស Patches</string>
+  <string name="select_bundle_for_import">ជ្រើសរើស bundle ដើម្បីនាំចូលទៅក្នុង</string>
+  <string name="select_bundle_for_export">ជ្រើសរើស bundle ដើម្បីនាំចេញពី</string>
+  <string name="patch_selection_packages">កម្មវិធីដែលមានការជ្រើសរើសដែលបានរក្សាទុក</string>
+  <string name="patch_selection_entries">ចំនួន patches ដែលបានជ្រើសរើសសរុប</string>
+  <string name="reset_configuration">កំណត់រចនាសម្ព័ន្ធឡើងវិញ</string>
+  <string name="reset_patch_selection">ការជ្រើសរើស Patch</string>
+  <string name="reset_patch_options">ជម្រើស Patch</string>
+  <string name="downloaders">អ្នកទាញយក</string>
+  <string name="downloader_prereleases">ប្រើកំណែមុនចេញផ្សាយ</string>
+  <string name="downloader_prereleases_description">ប្រើកំណែមុនចេញផ្សាយរបស់កម្មវិធីទាញយកមេ</string>
+  <string name="downloader_state_loaded">បានផ្ទុក</string>
+  <string name="downloader_state_failed">បរាជ័យ​ក្នុងការ​ផ្ទុក។ ចុច​សម្រាប់​ព័ត៌មាន​លម្អិត​បន្ថែម</string>
+  <string name="downloader_state_missing">បាត់</string>
+  <string name="downloader_delete_apps_title">លុប​កម្មវិធី​ដែលបាន​ជ្រើសរើស</string>
+  <string name="downloader_delete_apps_description">តើ​អ្នក​ប្រាកដ​ទេ​ថា​អ្នក​ចង់​លុប​កម្មវិធី​ដែលបាន​ជ្រើសរើស?</string>
+  <string name="downloader_delete_single_description">តើអ្នកប្រាកដថាអ្នកចង់លុប \"%s\" ទេ?</string>
+  <string name="downloader_settings_no_apps_description">កម្មវិធីដែលបានទាញយកតាមរយៈ Javo ReVanced Manager នឹងបង្ហាញនៅទីនេះ។</string>
+  <string name="downloader_url">URL ឧបករណ៍ទាញយក</string>
+  <string name="downloader_add">បន្ថែមឧបករណ៍ទាញយក</string>
+  <string name="select_downloader_type_dialog_description">បន្ថែមឧបករណ៍ទាញយកថ្មីពី URL ឬឯកសារក្នុងស្រុក</string>
+  <string name="local_downloaders_description">បន្ថែមឧបករណ៍ទាញយកពីកន្លែងផ្ទុកក្នុងស្រុក។</string>
+  <string name="remote_downloaders_description">បន្ថែមឧបករណ៍ទាញយកពី URL។ អាចធ្វើបច្ចុប្បន្នភាពដោយស្វ័យប្រវត្តិ។</string>
+  <string name="install_revanced_downloaders">ដំឡើង downloaders ដើម្បីទទួលបានកម្មវិធីដោយផ្ទាល់នៅក្នុង Javo ReVanced Manager។</string>
+  <string name="install_revanced_downloader">ដំឡើង ReVanced Downloaders</string>
+  <string name="cancel_downloader_install_title">បោះបង់ការដំឡើង downloaders ទេ?</string>
+  <string name="cancel_downloader_install_description">ការដំឡើង downloaders កំពុងដំណើរការ។ ប្រសិនបើអ្នកចេញឥឡូវនេះ ការទាញយកនឹងត្រូវបានបោះបង់។</string>
+  <string name="downloader_sources_unavailable_title">ឧបករណ៍ទាញយកទាំងនេះបាត់</string>
+  <string name="downloader_sources_unavailable_description">ចុចលើប៊ូតុងធ្វើបច្ចុប្បន្នភាពដើម្បីជួសជុលវា។</string>
+  <string name="downloader_update_failed">មិនអាចធ្វើបច្ចុប្បន្នភាពឧបករណ៍ទាញយកបានទេ៖ %s</string>
+  <string name="downloader_replace_fail">មិនអាចនាំចូលឧបករណ៍ទាញយកបានទេ៖ %s</string>
+  <string name="select_from_storage_description">ជ្រើសរើសឯកសារ APK ពីឧបករណ៍ផ្ទុកដោយប្រើឧបករណ៍ជ្រើសរើសឯកសារ</string>
+  <string name="enable">បើក</string>
+  <string name="disable">បិទ</string>
+  <string name="process_runtime_memory_limit_description">ចំនួនអង្គចងចាំអតិបរមាដែលដំណើរការ Patcher អាចប្រើប្រាស់បាន</string>
+  <string name="reset_onboarding">កំណត់ onboarding ឡើងវិញ</string>
+  <string name="reset_onboarding_description">បង្ហាញអេក្រង់ onboarding នៅពេលចាប់ផ្តើមកម្មវិធីបន្ទាប់</string>
+  <string name="api_not_working_title">សេវាកម្ម API កំពុងមានបញ្ហា</string>
+  <string name="api_not_working_description">មុខងារមួយចំនួនអាចនឹងរងផលប៉ះពាល់។ សូមពិនិត្យមើលការតភ្ជាប់របស់អ្នក ឬ URL API នៅក្នុងការកំណត់។</string>
+  <string name="no_patched_apps_found">មិនឃើញកម្មវិធីដែលបានកែច្នៃទេ</string>
+  <string name="no_patched_apps_description">បច្ចុប្បន្ននេះ អ្នកមិនមានកម្មវិធីដែលបានកែច្នៃណាមួយដែលយើងដឹងនោះទេ។ ផ្លាស់ប្តូរវាដោយកែច្នៃកម្មវិធីដំបូងរបស់អ្នក!</string>
+  <string name="patched_apps_section_title">កម្មវិធីដែលបានកែប្រែ</string>
+  <string name="patchable_apps_section_title">កម្មវិធីដែលអាចកែប្រែបាន</string>
+  <string name="no_patches_found">មិនឃើញ patches ទេ</string>
+  <string name="no_patches_description">អ្នកមិនទាន់មាន patches ណាមួយនៅឡើយទេ។ បន្ថែម patches ដោយប៉ះប៊ូតុងខាងក្រោម!</string>
+  <string name="split_apk_not_supported">APK ដែលបំបែកមិនអាចកែប្រែបានទេ</string>
+  <string name="no_downloaders_installed">មិនមាន app downloaders ត្រូវបានដំឡើងទេ!</string>
+  <string name="no_downloaders_trusted">មិនមាន app downloaders ត្រូវបានទុកចិត្តទេ! សូមពិនិត្យមើលការកំណត់របស់អ្នក។</string>
+  <string name="patch_selector_sheet_filter_packages_title">កញ្ចប់</string>
+  <string name="patch_selector_sheet_actions_title">សកម្មភាព</string>
+  <string name="restore_default_selection">ស្ដារការជ្រើសរើសលំនាំដើម</string>
+  <string name="deselect_all">ឈប់ជ្រើសរើសទាំងអស់</string>
+  <string name="invert_selection">ប្ដូរការជ្រើសរើស</string>
+  <string name="deselect_all_except">ដោះធីកទាំងអស់ លើកលែងតែ %s</string>
+  <string name="scope_dialog_title">អនុវត្តទៅ</string>
+  <string name="scope_all_patches">បំណះទាំងអស់</string>
+  <string name="scope_bundle_patches">%s តែប៉ុណ្ណោះ</string>
+  <string name="save_as_file">រក្សាទុកទៅឯកសារ</string>
+  <string name="export_patcher_logs">នាំចេញកំណត់ហេតុ patcher</string>
+  <string name="save_logs_success">បានរក្សាទុកកំណត់ហេតុ</string>
+  <string name="downloader_activity_dialog_body">ត្រូវការ​ការ​អន្តរកម្ម​ពី​អ្នកប្រើប្រាស់ ដើម្បី​បន្ត​ជាមួយ​អ្នកទាញយក​នេះ។</string>
+  <string name="patcher_step_unpack">រៀបចំ Patcher</string>
+  <string name="view_announcement">មើលសេចក្ដីប្រកាស</string>
+  <string name="license">អាជ្ញាប័ណ្ណ</string>
+  <string name="source">ប្រភព</string>
+  <string name="repository">Repository</string>
+  <string name="bundle_information_by_author">ដោយ %1$s</string>
+  <string name="version_compatibility_warning">កំណែដែលបានជ្រើសរើសប្រហែលជាមិនត្រូវគ្នាជាមួយកម្មវិធីបំណះដែលបានជ្រើសរើសទេ</string>
+  <string name="announcements">សេចក្ដីប្រកាស</string>
+  <string name="archive">បណ្ណសារ</string>
+  <string name="view_update">មើលការអាប់ដេត</string>
+  <string name="update_checking_downloader">ពិនិត្យរកមើលការអាប់ដេត ReVanced Downloaders នៅពេលចាប់ផ្ដើម</string>
+  <string name="update_checking_downloader_description">ពិនិត្យរកមើលការអាប់ដេតទៅ ReVanced Downloaders ដែលបានដំឡើងនៅពេលកម្មវិធីចាប់ផ្ដើម</string>
+  <string name="prereleases_warning">កំណែមុនចេញផ្សាយអាចនឹងមិនស្ថិតស្ថេរ និងមានកំហុស។ អ្នកអាចជួបប្រទះការគាំង ការបាត់បង់ទិន្នន័យ ឬបញ្ហាដែលមិនបានរំពឹងទុកផ្សេងទៀត។ បើកដំណើរការនេះលុះត្រាតែអ្នកពេញចិត្តនឹងហានិភ័យទាំងនេះ។</string>
+  <string name="changelog">មើលកំណត់ហេតុនៃការផ្លាស់ប្តូរ</string>
+  <string name="no_announcements_found">មិនមានសេចក្ដីប្រកាសណាមួយទេ</string>
+  <string name="new_announcement">សេចក្ដីប្រកាសថ្មី:
+%s</string>
+  <plurals name="patch_count">
+    <item quantity="other">%d បំណះ</item>
+  </plurals>
+  <plurals name="patches_executed">
+    <item quantity="other">អនុវត្ត %d បំណះ</item>
+  </plurals>
+  <plurals name="selected_count">
+    <item quantity="other">%d បានជ្រើសរើស</item>
+  </plurals>
+</resources>

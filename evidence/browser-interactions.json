@@ -1,0 +1,21 @@
+{
+  "mobileMenuExpanded": true,
+  "mobileDownloadLinkVisible": true,
+  "coreFilter": [
+    {
+      "category": "core",
+      "hidden": false
+    },
+    {
+      "category": "website",
+      "hidden": true
+    },
+    {
+      "category": "website",
+      "hidden": true
+    }
+  ],
+  "lightboxOpened": true,
+  "themeChanged": true,
+  "themePersistedAcrossReload": true
+}

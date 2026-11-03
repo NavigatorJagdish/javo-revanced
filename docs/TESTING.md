@@ -1,0 +1,9 @@
+# Verification scope
+
+Executed host checks are recorded in evidence/node-tests.log, evidence/java-security-tests.log and evidence/java-branding-tests.log. They cover release rejection/tamper cases, real signature primitives, SHA-256 vectors and files, XML package preservation/XXE rejection, website routes/assets, accessibility foundations and truthful downloads.
+
+Browser evidence includes the actual generated homepage and mobile navigation. Five widths were inspected through the in-app browser: 320, 375, 768, 1024 and 1440 pixels; recorded horizontal overflow was false. Screenshots are under evidence/screenshots, and measured results are in evidence/responsive-browser.json. These checks do not constitute a full accessibility audit or proof of Android UI fidelity.
+
+No authorized account, proprietary test APK or physical Android device is connected. A portable Android 10/API29 x86_64 emulator was installed and booted using WHPX. An initial Windows processor query reported virtualization disabled, but the actual emulator acceleration check and successful boot demonstrated usable WHPX. Core installation, launcher resolution and process launch passed, with an empty crash buffer at observation. Real UI screenshots and machine-readable smoke results are included. No Google account was entered. The UI's registration/messaging toggles are settings state, not proof of successful registration or message delivery. CI's separate emulator job has not been run in this session.
+
+Never infer sign-in, playback, notification delivery, GMS registration, patch compatibility, update installation or Android 16 ARM64 behavior from these host tests. Android build, APK signature/package inspection, runtime launch and authenticated integration are separate verification layers and must be reported independently.
