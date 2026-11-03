@@ -16,7 +16,7 @@ The source-only archive uploaded successfully and was checksum-verified by the s
 - Added Android lint to Core's hosted checks.
 - The first hosted source-import and web/security jobs passed. Android jobs failed before compilation because the setup action requested the removed SDK package `tools`. Corrected the action to install `platform-tools` and restarted the build.
 
-Current restarted build: https://github.com/NavigatorJagdish/javo-revanced/actions/runs/41617473242
+Current source-restoration build: https://github.com/NavigatorJagdish/javo-revanced/actions/runs/41620062898
 
 The restarted Android jobs are in progress as this note is written. No new Manager APK or patch-execution success is claimed. The initial Core APK and initial package remain available as the earlier verified snapshot. Account authentication, playback and proprietary source-APK testing still require real authorized inputs.
 
@@ -24,3 +24,15 @@ The restarted Android jobs are in progress as this note is written. No new Manag
 The first authenticated Manager build compiled an APK; lint found 405 missing regional translations and four locale/resource access errors. Compose reads now use observable configuration/resources. MissingTranslation is explicitly a warning because upstream regional translations are incomplete and Android uses English fallback; no translations are claimed complete. Other lint errors still fail the build.
 
 The source packager incorrectly excluded every directory called tools/build, including 46 legitimate Java/Kotlin sources. Filtering is now root-aware and preserves source packages. Regression checks cover helper inclusion and cache/key exclusion. Hosted pipelines use pipefail and preserve raw APKs even on validation failure. The branding compiler uses the same experimental features as its pinned Patcher dependency.
+
+## Additional verification prepared
+57 host checks passed after adding package completeness regressions. All original source files from the five pinned upstream archives are present in the corrected package selection (evidence/upstream-source-completeness.json).
+
+The next build includes a first-party Android integration fixture for each branding target. The instrumentation uses the production bundle loader, Session resource rebuild, and APK signer, then checks package/label/signature metadata. The host harness extracts the signed outputs, compares exact hashes, installs and launches them on an emulator. These fixtures contain no YouTube/Music code and are not distributed as working Video/Music applications. A separate diagnostic attempts Android metadata loading of the signature-inspected official catalog; it does not execute official patches.
+
+The Manager dashboard now displays a real loaded-patch count and a reference-based workspace card. Patching displays circular progress derived from completed production steps, retaining stage logs and cancellation/install actions. These changes remain subject to the next compile/lint check.
+
+## Source-restoration build result
+Run 41620062898 at commit d0a5dcb8a53c1e721b6c53996a16066f2f21302f: Manager assemble/lint and branding JAR/DEX conversion passed. Manager lint reported 0 errors and 685 warnings (including regional translations). Manager installed and launched on Android API35 x86_64, with the installed hash matching 78a607a56c00aed994d46b06eb88d83b443e8b170791de4863cfd86eef6cd5fd; process alive and no observed crash. This run did not yet contain the first-party patch/sign integration test or newer dashboard/progress additions.
+
+Core compiled and passed lint in the same run. Its hosted emulator failed before testing: 6956.75MB available versus the default 7372.80MB userdata requirement. The next workflow explicitly requests a 2048MB userdata partition and grants the runner user access to its existing KVM device. The packaging job correctly remained skipped. Raw APK artifacts were retained and their downloaded ZIP hashes match GitHub's artifact digests.

@@ -1,0 +1,22 @@
+{
+  "repository": "NavigatorJagdish/javo-revanced",
+  "private": true,
+  "run": 41620062898,
+  "commit": "d0a5dcb8a53c1e721b6c53996a16066f2f21302f",
+  "manager": "success",
+  "managerLint": {
+    "errors": 0,
+    "warnings": 685
+  },
+  "managerRuntime": {
+    "api": 35,
+    "abi": "x86_64",
+    "installedHashMatches": true,
+    "processRunning": true,
+    "crashObserved": false
+  },
+  "coreBuildAndLint": "passed",
+  "coreHostedEmulator": "failed-before-boot-insufficient-runner-disk",
+  "package": "skipped",
+  "next": "pending-integration-and-ui-build"
+}

@@ -144,6 +144,7 @@ fun DashboardScreen(
         }
     }
     val hasUpdate by vm.hasUpdate.collectAsStateWithLifecycle()
+    val loadedPatches by vm.availablePatches.collectAsStateWithLifecycle(initialValue = null)
     val updateVersion by vm.updateVersion.collectAsStateWithLifecycle()
     val androidContext = LocalContext.current
     val resources = LocalResources.current
@@ -419,6 +420,22 @@ fun DashboardScreen(
                 }
             ) { paddingValues ->
                 Column(Modifier.padding(paddingValues)) {
+                    AnimatedVisibility(!appsSearchExpanded) {
+                        Surface(
+                            shape = MaterialTheme.shapes.large,
+                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f),
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {
+                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(stringResource(R.string.javo_workspace), style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary)
+                                Text(stringResource(R.string.javo_slogan), style = MaterialTheme.typography.titleMedium)
+                                Text(loadedPatches?.let { stringResource(R.string.javo_loaded_patches, it) }
+                                    ?: stringResource(R.string.javo_loading_patches), style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                    }
                     PillTabBar(
                         pagerState = pagerState,
                         modifier = Modifier

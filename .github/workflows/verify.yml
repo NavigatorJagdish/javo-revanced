@@ -100,6 +100,7 @@ jobs:
         with:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@v4
       - name: Compile, unit test and lint Manager
         working-directory: apps/javo-manager
         run: |
@@ -121,13 +122,34 @@ jobs:
           mkdir -p ../../patches/javo-branding/build/dex
           "$ANDROID_HOME/build-tools/34.0.0/d8" --min-api 26 --output ../../patches/javo-branding/build/dex ../../patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.jar
           python ../../infrastructure/scripts/dex-bundle.py ../../patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.jar ../../patches/javo-branding/build/dex/classes.dex
+      - name: Export resolved ReVanced build artifacts without credentials
+        if: always()
+        run: python infrastructure/scripts/export-revanced-dependencies.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resolved-revanced-maven-cache
+          path: tools/revanced-maven
+      - name: Prepare first-party patch integration fixtures
+        working-directory: apps/javo-manager
+        run: |
+          set -euo pipefail
+          sdkmanager 'platforms;android-35'
+          python ../../infrastructure/scripts/build-integration-fixture.py --sdk "$ANDROID_HOME"
+          ./gradlew :app:assembleDebugAndroidTest --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-instrumentation-build.log
+      - name: Allow the runner user to use hardware emulation
+        run: if [ -e /dev/kvm ]; then sudo chown "$(id -u):$(id -g)" /dev/kvm; fi
       - name: Manager emulator installation and launch smoke check
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
           arch: x86_64
+          disk-size: 2048M
+          ram-size: 2048M
           disable-animations: true
-          script: python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+          script: |
+            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+            python infrastructure/scripts/android-integration.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -155,6 +177,7 @@ jobs:
         with:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@v4
       - name: Build real GmsCore fork
         working-directory: apps/javo-core
         run: |
@@ -167,11 +190,15 @@ jobs:
           set -euo pipefail
           sdkmanager 'build-tools;34.0.0'
           python infrastructure/scripts/verify-apk.py apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/debug/*.apk --sdk "$ANDROID_HOME" --product core --signing debug
+      - name: Allow the runner user to use hardware emulation
+        run: if [ -e /dev/kvm ]; then sudo chown "$(id -u):$(id -g)" /dev/kvm; fi
       - name: Emulator installation and launch smoke check
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
           arch: x86_64
+          disk-size: 2048M
+          ram-size: 2048M
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
       - uses: actions/upload-artifact@v4
@@ -212,6 +239,7 @@ jobs:
           python infrastructure/scripts/verify-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
           python infrastructure/scripts/verify-apk.py deliverables/apks/javo-core-*.apk --sdk "$ANDROID_HOME" --product core --signing debug
           node --test tests/*.test.mjs
+          node apps/javo-website/build.mjs
           python infrastructure/scripts/package.py
       - uses: actions/upload-artifact@v4
         with:

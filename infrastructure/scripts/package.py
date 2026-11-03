@@ -5,8 +5,8 @@ import zipfile,hashlib,json,os
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'deliverables';OUT.mkdir(exist_ok=True)
 ROOT_ONLY_DIRS={'tools','deliverables','.agents','.codex','.aws'}
-CACHE_DIRS={'node_modules','.gradle','.git','__pycache__','.cxx'}
-SKIP_NAMES={'local.properties','.env','.env.local','key.properties','source-inventory.json'}
+CACHE_DIRS={'node_modules','.gradle','.git','__pycache__','.cxx','.kotlin'}
+SKIP_NAMES={'local.properties','.env','.env.local','key.properties','source-inventory.json','javo-ci-source.zip','javo-ci-source.zip.sha256'}
 SKIP_EXT={'.jks','.keystore','.p12','.key'}
 def source_files(root=ROOT):
     for directory,dirs,names in os.walk(root):
@@ -34,6 +34,12 @@ def package():
         digest=hashlib.sha256(p.read_bytes()).hexdigest()
         if digest!=a['sha256']:raise ValueError('Verified APK changed after validation')
         files.append((p,'apks/'+p.name))
+    bundle=ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp'
+    if bundle.exists():
+        integration=json.loads((ROOT/'evidence/manager-patch-integration.json').read_text())
+        if integration.get('success') is not True or integration.get('bundleSha256')!=hashlib.sha256(bundle.read_bytes()).hexdigest():
+            raise ValueError('Branding bundle lacks matching Android integration evidence')
+        files.append((bundle,'bundles/'+bundle.name))
     manifest={name:hashlib.sha256(p.read_bytes()).hexdigest() for p,name in files}
     (ROOT/'evidence/source-inventory.json').write_text(json.dumps(manifest,indent=2)+'\n')
     archive=OUT/'javo-revanced-development.zip'

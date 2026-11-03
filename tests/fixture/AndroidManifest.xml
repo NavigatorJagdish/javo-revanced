@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.android.youtube" android:versionCode="1" android:versionName="fixture-1">
+    <!-- First-party integration fixture only. Contains no YouTube code or services. -->
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28" />
+    <application android:label="@string/app_name" android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity android:name="app.javo.fixture.MainActivity" android:exported="true">
+            <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
+        </activity>
+    </application>
+</manifest>

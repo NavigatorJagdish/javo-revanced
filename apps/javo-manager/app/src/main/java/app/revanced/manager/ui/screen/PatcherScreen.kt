@@ -12,6 +12,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +34,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearWavyProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -277,10 +282,24 @@ fun PatcherScreen(
                 label = "patcherProgress"
             )
 
-            LinearWavyProgressIndicator(
-                progress = { patcherProgress },
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp), verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.size(88.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator(progress = { patcherProgress.coerceIn(0f, 1f) },
+                        modifier = Modifier.fillMaxSize(), strokeWidth = 5.dp)
+                    Text(stringResource(R.string.javo_percent, (patcherProgress.coerceIn(0f, 1f) * 100).toInt()),
+                        style = MaterialTheme.typography.titleLarge)
+                }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(when (patcherSucceeded) {
+                        true -> R.string.javo_complete
+                        false -> R.string.javo_stopped
+                        null -> R.string.javo_applying
+                    }), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.javo_progress_description), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),

@@ -141,6 +141,7 @@ android {
 
     defaultConfig {
         applicationId = "app.javo.manager"
+        testInstrumentationRunner = "app.javo.integration.PatchIntegrationInstrumentation"
 
         minSdk {
             version = release(26)
@@ -230,6 +231,8 @@ android {
         aidl = true
         buildConfig = true
     }
+
+    sourceSets.getByName("androidTest").assets.srcDir(layout.buildDirectory.dir("integration-assets"))
 
     androidResources {
         generateLocaleConfig = true

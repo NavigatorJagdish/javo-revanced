@@ -33,6 +33,7 @@ def main():
     certificate=re.search(r'Signer #1 certificate SHA-256 digest: ([a-fA-F0-9]+)',sig)
     if not certificate or not min_sdk:raise RuntimeError('Missing signing or compatibility metadata')
     label='Javo Manager' if a.product=='manager' else 'Javo Core'
+    if a.product=='manager' and "application-label:'Javo ReVanced Manager'" not in badging:raise RuntimeError('Javo Manager application label not applied')
     if a.product=='core' and "application-label:'Javo Core'" not in badging:raise RuntimeError('Javo Core application label not applied')
     if a.signing=='production' and ('Android Debug' in sig or 'androiddebugkey' in sig.lower()):raise RuntimeError('Debug key cannot be labeled production')
     with apk.open('rb') as f:digest=hashlib.file_digest(f,'sha256').hexdigest()

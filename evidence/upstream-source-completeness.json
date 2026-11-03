@@ -1,0 +1,22 @@
+{
+  "core": {
+    "upstreamFiles": 4954,
+    "missingFromSourceArchive": []
+  },
+  "manager": {
+    "upstreamFiles": 401,
+    "missingFromSourceArchive": []
+  },
+  "patcher": {
+    "upstreamFiles": 99,
+    "missingFromSourceArchive": []
+  },
+  "library": {
+    "upstreamFiles": 62,
+    "missingFromSourceArchive": []
+  },
+  "patches": {
+    "upstreamFiles": 1460,
+    "missingFromSourceArchive": []
+  }
+}

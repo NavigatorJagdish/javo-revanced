@@ -1,0 +1,11 @@
+<resources>
+    <string name="javo_workspace">YOUR PATCHING WORKSPACE</string>
+    <string name="javo_slogan" translatable="false">Patch. Manage. Customize. Control.</string>
+    <string name="javo_loaded_patches">%1$d patches loaded</string>
+    <string name="javo_loading_patches">Loading patch catalog…</string>
+    <string name="javo_applying">Patching your app</string>
+    <string name="javo_complete">Patching complete</string>
+    <string name="javo_stopped">Patching stopped</string>
+    <string name="javo_progress_description">Progress follows completed patching steps.</string>
+    <string name="javo_percent">%1$d%%</string>
+</resources>
