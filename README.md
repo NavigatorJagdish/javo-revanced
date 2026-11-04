@@ -2,6 +2,8 @@
 
 Get the complete ZIP, Manager APK, Core APK, and branding bundle from the [private GitHub Releases page](https://github.com/NavigatorJagdish/javo-revanced/releases). Sign in with an account that has access to this repository.
 
+Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, import the branding bundle, and troubleshoot common setup issues.
+
 **Patch. Manage. Customize. Control.**
 
 Independent Android ecosystem regenerated on 2026-11-03 from the owner's master prompt and four design references. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
