@@ -1,0 +1,77 @@
+name: Publish verified private alpha
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/publish-alpha.yml]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: publish-private-alpha
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'NavigatorJagdish/javo-revanced' && github.event.repository.private && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      RELEASE_TAG: v0.1.0-alpha.1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: '41637751030'
+          name: javo-verified-development-package
+          path: deliverables/verified-input
+      - name: Stage and package verified Android outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python infrastructure/scripts/stage-github-alpha.py deliverables/verified-input/javo-revanced-development.zip
+          node --test tests/*.test.mjs
+          node apps/javo-website/build.mjs
+          python infrastructure/scripts/package.py
+          (cd deliverables && sha256sum --check SHA256SUMS)
+      - name: Upload and verify assets, then publish private prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .private)" = true
+          assets=(
+            deliverables/javo-revanced-development.zip
+            deliverables/apks/javo-manager-0.1.0-alpha.1-debug.apk
+            deliverables/apks/javo-core-0.3.13.2.250932-debug.apk
+            deliverables/bundles/javo-branding-0.1.0-alpha.1.rvp
+          )
+          for asset in "${assets[@]}"; do
+            (cd "$(dirname "$asset")" && sha256sum "$(basename "$asset")")
+          done > deliverables/SHA256SUMS
+          assets+=(deliverables/SHA256SUMS)
+          if gh release view "$RELEASE_TAG" --json isDraft,targetCommitish > "$RUNNER_TEMP/release-state.json"; then
+            jq -e --arg sha "$GITHUB_SHA" '.isDraft and .targetCommitish == $sha' "$RUNNER_TEMP/release-state.json"
+          else
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease \
+              --title 'Javo ReVanced 0.1.0-alpha.1' --notes-file docs/GITHUB_RELEASE.md
+          fi
+          gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
+          release_id="$(gh release view "$RELEASE_TAG" --json databaseId --jq .databaseId)"
+          gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > "$RUNNER_TEMP/release-assets.json"
+          for asset in "${assets[@]}"; do
+            digest="sha256:$(sha256sum "$asset" | cut -d ' ' -f 1)"
+            jq -e --arg name "$(basename "$asset")" --arg digest "$digest" \
+              '.assets | any(.name == $name and .state == "uploaded" and .digest == $digest)' \
+              "$RUNNER_TEMP/release-assets.json"
+          done
+          gh release edit "$RELEASE_TAG" --draft=false
