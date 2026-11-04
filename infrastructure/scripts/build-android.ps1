@@ -6,11 +6,12 @@ New-Item -ItemType Directory -Force (Join-Path $taskRoot 'evidence') | Out-Null
 foreach ($taskProduct in @('manager','core')) {
     if ($Product -ne 'all' -and $Product -ne $taskProduct) { continue }
     $taskApp=Join-Path $taskRoot "apps/javo-$taskProduct"
-    ('sdk.dir='+$env:ANDROID_HOME.Replace('\','/')+"`n") | Set-Content (Join-Path $taskApp 'local.properties')
+    $sdkProperty = $env:ANDROID_HOME.Replace('\','/').Replace(':','\:')
+    [System.IO.File]::WriteAllText((Join-Path $taskApp 'local.properties'), ('sdk.dir='+$sdkProperty+[Environment]::NewLine))
     Push-Location $taskApp
     try {
         if ($taskProduct -eq 'manager') {
-            if (-not $env:ORG_GRADLE_PROJECT_githubPackagesUsername -or -not $env:ORG_GRADLE_PROJECT_githubPackagesPassword) { throw 'Official Manager dependencies require GitHub Packages read access. Configure environment credentials locally or use the CI workflow.' }
+            if (-not $env:JAVO_MAVEN_CACHE -and (-not $env:ORG_GRADLE_PROJECT_githubPackagesUsername -or -not $env:ORG_GRADLE_PROJECT_githubPackagesPassword)) { throw 'Configure the verified local Maven cache or GitHub Packages read access.' }
             & .\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug --no-daemon --console=plain *> (Join-Path $taskRoot 'evidence/manager-build.log')
         } else {
             $env:GRADLE_MICROG_VERSION_WITHOUT_GIT='1'

@@ -1,0 +1,46 @@
+{
+  "fixture": "first-party; no YouTube code",
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerApkSha256": "96041d7de29aef3fadc35ab11ed5d60793c95123e31a06bf0b6369d87f69659a",
+  "bundleSha256": "629aa5aadf241c980492204e9c6ca067c3ba3605ec703e9c8dca3801dec5ccd9",
+  "officialCatalog": {
+    "patchExecution": "not-tested",
+    "metadataLoadedOnAndroid": true,
+    "patchCount": 294,
+    "sha256": "50f41e4656b7374a1c8fe5579fd107f697f86d7f13fc6cd194cf3821761dc4b4"
+  },
+  "products": [
+    {
+      "id": "video",
+      "packageName": "com.google.android.youtube",
+      "sourceApkSha256": "f2178dbcfc0e300129357141369efb637345fe7e45f421c2655b74c5f5e80377",
+      "brandingLabelVerified": true,
+      "signedOutput": true,
+      "signedApkSha256": "651d846aaa1338b80062f1a3a107048035da169f683e6ec9663317a1b1926545",
+      "success": true,
+      "patchedFixtureInstalled": true,
+      "fixtureProcessRunning": true,
+      "fixtureCrashObserved": false
+    },
+    {
+      "id": "music",
+      "packageName": "com.google.android.apps.youtube.music",
+      "sourceApkSha256": "315f194a49adfb7721a983f978fdadd16384fae2a82b32faee4e98dd5c35b974",
+      "brandingLabelVerified": true,
+      "signedOutput": true,
+      "signedApkSha256": "11eac3c47def32c7c70bc1870a8c7ea9cc1d56fe388ecd4bc2cf29f2882dcd0b",
+      "success": true,
+      "patchedFixtureInstalled": true,
+      "fixtureProcessRunning": true,
+      "fixtureCrashObserved": false
+    }
+  ],
+  "androidBundleLoading": true,
+  "productionSessionPatchedFixture": true,
+  "success": true,
+  "instrumentationSuccess": true,
+  "device": "emulator-5554",
+  "androidApi": 35,
+  "architecture": "x86_64"
+}

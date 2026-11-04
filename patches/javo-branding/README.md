@@ -1,7 +1,7 @@
 # Javo resource branding
 
-Two opt-in Patcher resource definitions set the application name and launcher icon for the original YouTube and YouTube Music package IDs. They do not rename packages, add playback functionality, change service identifiers or claim compatible app versions. Avoid selecting another branding patch simultaneously: this bundle has no upstream conflict metadata system.
+The opt-in Video and Music definitions change app names and launcher icons. Select the Javo definition for the target app and leave other branding patches deselected. Original and recognized GmsCore-renamed package identities are preserved.
 
-The API was inspected in the pinned official Patcher source. Resource transformations are tested on decoded fixture manifests. Building the Kotlin bundle requires GitHub Packages access. APK rebuild, Android DEX bundle loading, and playback integration have not been verified. A plain JVM JAR is not claimed Android-loadable: it must contain classes.dex before Manager can load it. The CI build creates a D8 RVP archive for subsequent device testing.
+Private CI verified the Android RVP loader and used the production Manager patching and signing code to rebuild two first-party fixtures. Both signed test APKs installed and launched. See `evidence/manager-patch-integration.json` for the exact Manager and bundle hashes. Compatibility with actual YouTube and YouTube Music APKs remains unverified.
 
-Build: run the Manager Gradle wrapper with `-p ../../patches/javo-branding jar` from apps/javo-manager. Use the matching Patcher dependency and environment credentials documented in docs/BUILDING.md. Package via infrastructure/scripts/dex-bundle.ps1. Import only after the resulting bundle passes verification on a test device.
+Build the Kotlin JAR with the Manager Gradle wrapper and `-p ../../patches/javo-branding jar`. The workflow converts the JAR with D8 and includes `classes.dex` in the RVP. See `docs/BUILDING.md` for dependency access and emulator test instructions.

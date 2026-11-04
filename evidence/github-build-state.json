@@ -1,22 +1,18 @@
 {
   "repository": "NavigatorJagdish/javo-revanced",
   "private": true,
-  "run": 41620062898,
-  "commit": "d0a5dcb8a53c1e721b6c53996a16066f2f21302f",
-  "manager": "success",
-  "managerLint": {
-    "errors": 0,
-    "warnings": 685
+  "run": 41637751030,
+  "verifiedBuildCommit": "9c8cdc283dc64a95a6fd9bf62d45a71babd14f46",
+  "jobs": {
+    "sources": "success",
+    "manager": "success",
+    "core": "success",
+    "web-and-security": "success",
+    "package": "success"
   },
-  "managerRuntime": {
-    "api": 35,
-    "abi": "x86_64",
-    "installedHashMatches": true,
-    "processRunning": true,
-    "crashObserved": false
-  },
-  "coreBuildAndLint": "passed",
-  "coreHostedEmulator": "failed-before-boot-insufficient-runner-disk",
-  "package": "skipped",
-  "next": "pending-integration-and-ui-build"
+  "hostChecksPassed": 64,
+  "officialMetadataEntriesLoaded": 294,
+  "firstPartyBrandingFixtures": "both passed patch, sign, install and launch",
+  "workflowArtifactSha256": "9d2017ed94771cc334c19eb1bbaaa4a0f259cca6c16ac368e4f3b620e50c7090",
+  "originalWorkflowZipSha256": "bf35bc03a2ae47cef318276f49603ecb2bb78022482a20be5933315d841f4e69"
 }

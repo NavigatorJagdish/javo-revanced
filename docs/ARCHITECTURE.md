@@ -2,7 +2,7 @@
 
 ## Manager
 
-Javo retains the complete upstream source architecture: real APK selection, loaded patch metadata, selectable patch options, compatibility guards, Room activity/install history, managed signing identity, WorkManager-driven patching, actual event progress, log export, backup/preferences and Android package installation. The Javo changes are visual identity, package/deep-link identity, palette defaults, and isolated update source/security checks. Inherited code is not equivalent to newly verified behavior: no Manager APK has been built locally due to package access.
+Javo retains the complete upstream source architecture: real APK selection, loaded patch metadata, selectable patch options, compatibility guards, Room activity/install history, managed signing identity, WorkManager-driven patching, actual event progress, log export, backup/preferences and Android package installation. The Javo changes are visual identity, package/deep-link identity, palette defaults, and isolated update source/security checks. The private workflow built Manager and exercised its production patching and signing code on two first-party fixtures.
 
 Javo's updater separates its manifest URL/public key from the configurable upstream patch API. A signed release payload is verified before metadata is trusted; downloaded APKs are checked again before an installer session is created. Production feeds default to disabled. The current design rejects certificate rotation: only the same single signing certificate as the installed build is accepted.
 
@@ -20,4 +20,4 @@ Dependency-free static generation is used instead of Next.js because every page 
 
 ## Release infrastructure
 
-Official Android tools verify APK structure, package identity and signatures. The packaging script checks APK hashes, archives full source/evidence/static output and rehashes ZIP contents. CI adds compile/lint/test and emulator-launch jobs; those jobs remain unexecuted until hosted in an authorized repository. No public deployment, remote release or external account modification has been performed.
+Official Android tools verify APK structure, package identity and signatures. The packaging script checks APK hashes, archives full source/evidence/static output and rehashes ZIP contents. The owner-approved private repository ran the compile, lint, test, emulator and packaging jobs. Build artifacts remain private.

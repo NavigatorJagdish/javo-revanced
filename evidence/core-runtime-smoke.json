@@ -1,14 +1,14 @@
 {
-  "device": "emulator-5556",
-  "androidApi": 29,
-  "architecture": "x86_64",
-  "bootCompleted": true,
+  "device": "emulator-5554",
   "package": "app.revanced.android.gms",
   "processRunning": true,
   "crashObserved": false,
+  "installedArtifactMatchesDeliverable": true,
   "authentication": "not-tested",
   "pushDelivery": "not-tested",
   "playback": "not-tested",
-  "installedApkSha256": "f589479fc818f7bb24119f67c3f60c7604a3a0427ce37c7b37d811efdece441a",
-  "installedArtifactMatchesDeliverable": true
+  "androidApi": 29,
+  "architecture": "x86_64",
+  "bootCompleted": true,
+  "installedApkSha256": "07eeaf00757e778e7d155bfad977a20efdb873905051712b91905a9817155449"
 }

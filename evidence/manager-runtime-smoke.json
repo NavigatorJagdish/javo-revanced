@@ -1,0 +1,14 @@
+{
+  "device": "emulator-5554",
+  "package": "app.javo.manager",
+  "processRunning": true,
+  "crashObserved": false,
+  "installedArtifactMatchesDeliverable": true,
+  "authentication": "not-tested",
+  "pushDelivery": "not-tested",
+  "playback": "not-tested",
+  "androidApi": 35,
+  "architecture": "x86_64",
+  "bootCompleted": true,
+  "installedApkSha256": "96041d7de29aef3fadc35ab11ed5d60793c95123e31a06bf0b6369d87f69659a"
+}

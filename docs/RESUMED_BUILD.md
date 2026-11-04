@@ -41,3 +41,8 @@ Core compiled and passed lint in the same run. Its hosted emulator failed before
 A standalone DEX diagnostic on Android API29 reproduced ParserConfigurationException for the desktop Xerces disallow-doctype feature. BrandingResources now strictly decodes and size-bounds the actual UTF-8 text, rejects DTD/entity declarations and NULs before parsing, and supplies a rejecting entity resolver. It performs only an identity transformation of the guarded DOM. Both real transformation and external-entity rejection passed on Android (evidence/android-xml-probe.log). Host branding coverage increased from four to six checks; the host total is 59.
 
 The next workflow retires source bootstrapping and its repository write permission. The repository is now ordinary complete source. Root-only Git ignore rules preserve legitimate nested tools/build packages.
+
+
+## Successful delivery run
+
+Run 41637751030 completed all five jobs at source commit 9c8cdc283dc64a95a6fd9bf62d45a71babd14f46. Removing the build-only NDKs after compilation freed the temporary runner disk for its emulator. Manager and Core passed launch checks. Manager processed both first-party fixtures and loaded 294 entries from the official catalog. See FINAL_REPORT.md and the packaged evidence for the verification boundaries.

@@ -29,6 +29,12 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
         prop_override.cpp)
 
+# CMake on Windows can invoke clang++ through an 8.3 executable name, which
+# loses the ++ suffix used by Clang to select C++ runtime linkage.
+if(CMAKE_HOST_WIN32)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE "--driver-mode=g++")
+endif()
+
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.

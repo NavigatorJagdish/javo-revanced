@@ -27,7 +27,7 @@ export const pages = {
     ['Is this an official ReVanced project?', 'No. Javo is an independent branded fork. It is not affiliated with Google, YouTube, ReVanced or microG. Upstream credits and licenses remain in the source.'],
     ['Are Video and Music APKs included?', 'No. Proprietary applications are not redistributed. You supply a compatible APK and create your own patched result when a compatible trusted patch bundle is available.'],
     ['Is sign-in verified?', 'Core installation and launch were checked on an Android 10 emulator. Account authentication, playback and push delivery were not tested. A settings screen is not proof of a working account workflow.'],
-    ['Can I install a production release?', 'Only artifacts with actual build, checksum and signing evidence may appear in Downloads. The current project status is a development prototype.']
+    ['Can I install a production release?', 'Only artifacts with actual build, checksum and signing evidence may appear in Downloads. The current project status is a functional alpha.']
   ]],
   '/about/': ['More freedom. Clear foundations.', 'Javo ReVanced is an independent open-source Android project.', [
     ['Patch. Manage. Customize. Control.', 'Javo brings a unified visual identity to Manager, Video, Music and Core. The implementation builds on proven open-source components rather than recreating service and patching engines.'],
