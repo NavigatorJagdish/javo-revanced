@@ -122,7 +122,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
 
         if (!AuthConstants.SCOPE_GET_ACCOUNT_ID.equals(scope))
-            Log.d(TAG, "getToken: account:" + account.name + " scope:" + scope + " extras:" + extras + ", notify: " + notify);
+            Log.d(TAG, "getToken called");
 
         scope = Objects.equals(AuthConstants.SCOPE_OAUTH2, scope) ? AuthConstants.SCOPE_EM_OP_PRO : scope;
 
@@ -261,7 +261,7 @@ public class AuthManagerServiceImpl extends IAuthManagerService.Stub {
         if (packageName == null) packageName = extras.getString(KEY_CLIENT_PACKAGE_NAME);
         packageName = PackageUtils.getAndCheckCallingPackage(context, packageName, extras.getInt(KEY_CALLER_UID, 0), extras.getInt(KEY_CALLER_PID, 0));
 
-        Log.d(TAG, "clearToken: token:" + token + " extras:" + extras);
+        Log.d(TAG, "clearToken called");
         AccountManager.get(context).invalidateAuthToken(AuthConstants.DEFAULT_ACCOUNT_TYPE, token);
 
         Bundle res = new Bundle();

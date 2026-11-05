@@ -30,9 +30,9 @@ internal suspend fun checkDownloads(context: Context, fixture: File, bundle: Fil
         override val dataDir = folder
     }
     fun fake(block: suspend OutputDownloadScope.(Package, OutputStream) -> Unit): LoadedDownloader {
-        val plugin = Downloader<Package>(R.string.app_name) {
+        val plugin = Downloader<android.os.Parcelable>(R.string.app_name) {
             get { _, _ -> null }
-            download(block)
+            download { data, output -> block(data as Package, output) }
         }.build(scope, context, context.resources)
         return LoadedDownloader(context.packageName, "fixture.Download", "Test", scope, plugin)
     }
@@ -73,9 +73,21 @@ internal suspend fun checkDownloads(context: Context, fixture: File, bundle: Fil
     @Suppress("DEPRECATION")
     val info = checkNotNull(context.packageManager.getPackageArchiveInfo(merged.absolutePath, 0))
     check(info.packageName == "com.google.android.youtube")
+    val app = checkNotNull(info.applicationInfo).apply {
+        sourceDir = merged.absolutePath
+        publicSourceDir = merged.absolutePath
+    }
+    val resources = context.packageManager.getResourcesForApplication(app)
+    val configuration = android.content.res.Configuration(resources.configuration).apply {
+        setLocale(java.util.Locale("hi"))
+    }
+    @Suppress("DEPRECATION")
+    val localized = android.content.res.Resources(resources.assets, resources.displayMetrics, configuration)
+    val marker = localized.getIdentifier("app_name", "string", info.packageName)
+    check(marker != 0 && localized.getString(marker) == "merged")
     // Use the merged output in the existing patch/sign/install integration.
     merged.copyTo(fixture, overwrite = true)
-    checks.put("two-split APKM serializes before resources close and parses as an APK")
+    checks.put("two-split APKM serializes before resources close and preserves split resources")
 
     val malicious = File(folder, "unsafe.apkm")
     ZipOutputStream(malicious.outputStream()).use {

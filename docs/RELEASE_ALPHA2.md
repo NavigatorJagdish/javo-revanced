@@ -4,7 +4,7 @@ This update addresses the reported Core installation block and APKMirror downloa
 
 ## Core
 
-The non-system companion build removes inherited SMS, overlay and ROM signature-spoofing permission requests. Account-data backup is disabled. Self-check only lists permissions declared by the installed build. The APK is built with release runtime flags and a test signing certificate. SMS retrieval and overlay-dependent features are outside this build's supported scope.
+The non-system companion build removes inherited SMS, overlay and ROM signature-spoofing permission requests. Account-data backup is disabled. Raw account, token, request and result logging is removed from the two modified authorization service entry points. Self-check only lists permissions declared by the installed build. The APK is built with release runtime flags and a test signing certificate. SMS retrieval and overlay-dependent features are outside this build's supported scope.
 
 The earlier APK requested RECEIVE_SMS. Google's guidance identifies this permission as a reason internet-sideloaded apps can be blocked in supported markets. The exact warning on the reporter's device is still needed to confirm the classification. Google controls the device verdict. [Google developer guidance](https://developers.google.com/android/play-protect/warning-dev-guidance)
 

@@ -185,6 +185,20 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+      - name: Preserve Android 10 Core evidence
+        run: |
+          cp evidence/core-runtime-smoke.json evidence/core-api29-runtime-smoke.json
+          cp evidence/screenshots/core-emulator.png evidence/screenshots/core-api29-emulator.png
+      - name: Android 15 Core installation and launch check
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          avd-name: javo-core-api35
+          disk-size: 2048M
+          ram-size: 2048M
+          disable-animations: true
+          script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
       - uses: actions/upload-artifact@v4
         if: always()
         with:

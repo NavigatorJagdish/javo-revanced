@@ -23,7 +23,10 @@ class PatchIntegrationInstrumentation : Instrumentation() {
     override fun onStart() {
         val report = JSONObject().put("fixture", "first-party; no YouTube code")
             .put("playback", "not-tested").put("accountLogin", "not-tested")
-        val folder = File(targetContext.filesDir, "integration").also { it.mkdirs() }
+        val folder = File(targetContext.filesDir, "integration").also {
+            check(!it.exists() || it.deleteRecursively())
+            check(it.mkdirs())
+        }
         try {
             report.put("managerApkSha256",UpdateSecurity.sha256(File(targetContext.applicationInfo.sourceDir)))
             fun asset(name: String) = File(folder, name).also { file ->

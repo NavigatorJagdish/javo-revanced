@@ -6,6 +6,7 @@
 package org.microg.gms.auth.credentials.identity
 
 import android.accounts.AccountManager
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
@@ -73,7 +74,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
     }
 
     override fun authorize(callback: IAuthorizationCallback?, request: AuthorizationRequest?) {
-        Log.d(TAG, "Method: authorize called, packageName:$packageName request:$request")
+        Log.d(TAG, "authorize called")
         lifecycleScope.launchWhenStarted {
             val requestAccount = request?.account
             val account = requestAccount ?: AccountUtils.get(context).getSelectedAccount(packageName)
@@ -87,7 +88,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 }
                 if (request?.serverAuthCodeRequested == true && request.serverClientId != null) requestServerAuthCode(request.serverClientId, request.forceCodeForRefreshToken)
             }.build()
-            Log.d(TAG, "authorize: account: ${account?.name}")
+            Log.d(TAG, "authorize account selected")
             val result = if (account != null) {
                 val (accessToken, signInAccount) = performSignIn(context, packageName, googleSignInOptions, account, false)
                 if (requestAccount != null) {
@@ -120,13 +121,13 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
                 )
             }
             runCatching {
-                callback?.onAuthorized(Status.SUCCESS, result.also { Log.d(TAG, "authorize: result:$it") })
+                callback?.onAuthorized(Status.SUCCESS, result)
             }
         }
     }
 
     override fun verifyWithGoogle(callback: IVerifyWithGoogleCallback?, request: VerifyWithGoogleRequest?) {
-        Log.d(TAG, "unimplemented Method: verifyWithGoogle: request:$request")
+        Log.d(TAG, "verifyWithGoogle called")
         lifecycleScope.launchWhenStarted {
             val account = AccountUtils.get(context).getSelectedAccount(packageName) ?: SignInConfigurationService.getDefaultAccount(context, packageName)
             if (account == null) {
@@ -153,7 +154,7 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
     }
 
     override fun revokeAccess(callback: IStatusCallback?, request: RevokeAccessRequest?) {
-        Log.d(TAG, "Method: revokeAccess called, request:$request")
+        Log.d(TAG, "revokeAccess called")
         lifecycleScope.launchWhenStarted {
             val authOptions = SignInConfigurationService.getAuthOptions(context, packageName)
             val authAccount = request?.account
@@ -171,8 +172,11 @@ class AuthorizationServiceImpl(val context: Context, val packageName: String, ov
         }
     }
 
+    // Legacy account permissions are declared in the manifest. The SDK annotation's
+    // version-qualified permission names trigger the same lint bug handled by AuthManager.
+    @SuppressLint("MissingPermission")
     override fun clearToken(callback: IStatusCallback?, request: ClearTokenRequest?) {
-        Log.d(TAG, "Method: clearToken called, request:$request")
+        Log.d(TAG, "clearToken called")
         request?.token?.let {
             AccountManager.get(context).invalidateAuthToken(AuthConstants.DEFAULT_ACCOUNT_TYPE, it)
         }

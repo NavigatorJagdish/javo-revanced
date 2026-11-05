@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Javo's non-system Video/Music companion does not provide SMS autofill,
          overlay UI, or ROM signature spoofing. Remove inherited requests. -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove" />
-    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" />
-    <uses-permission android:name="android.permission.SEND_SMS" tools:node="remove" />
+    <!-- Lint inspects removal markers as permission requests. The APK audit checks the merged result. -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" tools:node="remove" tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+    <uses-permission android:name="android.permission.READ_SMS" tools:node="remove" tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+    <uses-permission android:name="android.permission.SEND_SMS" tools:node="remove" tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" tools:node="remove" />
     <uses-permission android:name="android.permission.FAKE_PACKAGE_SIGNATURE" tools:node="remove" />
 </manifest>
