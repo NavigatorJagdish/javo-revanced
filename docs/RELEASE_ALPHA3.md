@@ -14,6 +14,8 @@ The workflow runs 89 host checks, a real WebView fixture, an HTTPS redirect and 
 
 A live APKMirror request from the development environment returned HTTP 403. Live YouTube download, official YouTube patch execution, playback and account behavior require device verification. The tested applications are first-party fixtures.
 
+CI packaging uses producer artifact IDs so retried jobs cannot mix an earlier APK with a later test report.
+
 ## Installation
 
 Export Manager settings and its patch-signing keystore before changing installations. Development signing certificates can differ between builds. Core uses the same verified alpha.2 APK and certificate after its source tree is matched. APKs, the source ZIP, branding RVP and checksums are attached to this private release.

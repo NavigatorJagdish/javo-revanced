@@ -23,6 +23,8 @@ jobs:
         id: import
         run: echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   web-and-security:
+    outputs:
+      artifact: ${{ steps.host_artifact.outputs.artifact-id }}
     needs: sources
     runs-on: ubuntu-latest
     steps:
@@ -50,8 +52,10 @@ jobs:
           java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log
           node apps/javo-website/build.mjs
       - uses: actions/upload-artifact@v4
+        id: host_artifact
         with:
           name: website-and-host-test-evidence
+          overwrite: true
           path: |
             apps/javo-website/dist
             evidence/node-tests.log
@@ -61,6 +65,8 @@ jobs:
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
   manager:
+    outputs:
+      artifact: ${{ steps.manager_artifact.outputs.artifact-id }}
     needs: sources
     runs-on: ubuntu-latest
     env:
@@ -148,9 +154,11 @@ jobs:
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
       - uses: actions/upload-artifact@v4
+        id: manager_artifact
         if: always()
         with:
           name: manager-development-and-evidence
+          overwrite: true
           path: |
             deliverables/apks
             evidence/manager*
@@ -160,6 +168,8 @@ jobs:
             apps/javo-manager/app/build/outputs/apk/androidTest/debug/*.apk
             patches/javo-branding/build/libs/*.rvp
   core:
+    outputs:
+      artifact: ${{ steps.core_artifact.outputs.artifact-id }}
     needs: sources
     runs-on: ubuntu-latest
     env:
@@ -229,9 +239,11 @@ jobs:
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
       - uses: actions/upload-artifact@v4
+        id: core_artifact
         if: always()
         with:
           name: core-development-and-evidence
+          overwrite: true
           path: |
             deliverables/apks
             evidence/core*
@@ -239,6 +251,8 @@ jobs:
             apps/javo-core/play-services-core/build/reports
             apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/release/*.apk
   package:
+    outputs:
+      artifact: ${{ steps.package_artifact.outputs.artifact-id }}
     needs: [sources, web-and-security, manager, core]
     runs-on: ubuntu-latest
     steps:
@@ -258,11 +272,11 @@ jobs:
           log-accepted-android-sdk-licenses: false
       - uses: actions/download-artifact@v4
         with:
-          pattern: '*-development-and-evidence'
+          artifact-ids: ${{ needs.manager.outputs.artifact }},${{ needs.core.outputs.artifact }}
           merge-multiple: true
       - uses: actions/download-artifact@v4
         with:
-          name: website-and-host-test-evidence
+          artifact-ids: ${{ needs['web-and-security'].outputs.artifact }}
       - name: Reverify every APK and package corresponding source
         run: |
           set -euo pipefail
@@ -276,8 +290,10 @@ jobs:
           python infrastructure/scripts/report-alpha2.py
           python infrastructure/scripts/package.py
       - uses: actions/upload-artifact@v4
+        id: package_artifact
         with:
           name: javo-verified-development-package
+          overwrite: true
           path: |
             deliverables/javo-revanced-development.zip
             deliverables/SHA256SUMS
@@ -300,7 +316,7 @@ jobs:
           persist-credentials: false
       - uses: actions/download-artifact@v4
         with:
-          name: javo-verified-development-package
+          artifact-ids: ${{ needs.package.outputs.artifact }}
           path: tools/release-input
       - name: Publish the verified alpha update
         run: |
