@@ -18,7 +18,21 @@ plugins {
 
 val outputApkFileName = "${rootProject.name}-$version.apk"
 
+// ARSCLib embeds platform/XML interfaces already supplied by Android and Apktool.
+val arsclibSource by configurations.creating {
+    isTransitive = false
+    isCanBeConsumed = false
+}
+val arsclibAndroid by tasks.registering(Jar::class) {
+    archiveFileName.set("arsclib-android.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("android-libraries"))
+    from(provider { zipTree(arsclibSource.singleFile) })
+    exclude("android/**", "org/xmlpull/**")
+}
+
 dependencies {
+    arsclibSource("io.github.reandroid:ARSCLib:1.3.8")
+    implementation(files(arsclibAndroid.flatMap { it.archiveFile }))
     // AndroidX Core
     implementation(libs.androidx.ktx)
     implementation(libs.runtime.ktx)

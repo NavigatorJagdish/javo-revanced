@@ -31,6 +31,9 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 context.assets.open(name).use { input -> file.outputStream().use { input.copyTo(it) } }
             }
             val bundle = asset("javo-branding.rvp").also { check(it.setReadOnly()) }
+            val videoFixture = asset("fixture-video.apk")
+            val apkmFixture = asset("fixture-video.apkm")
+            report.put("downloadRegressions", runBlocking { checkDownloads(targetContext, videoFixture, apkmFixture, folder) })
             report.put("bundleSha256", MessageDigest.getInstance("SHA-256").digest(bundle.readBytes()).joinToString("") { "%02x".format(it) })
             val official = JSONObject().put("patchExecution", "not-tested")
             report.put("officialCatalog", official)
@@ -50,7 +53,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 Triple("video", "com.google.android.youtube", "Javo Video"),
                 Triple("music", "com.google.android.apps.youtube.music", "Javo Music")
             )) {
-            val fixture = asset("fixture-$id.apk")
+            val fixture = if (id == "video") videoFixture else asset("fixture-$id.apk")
             val patches = PatchBundle.Loader.patches(listOf(PatchBundle(bundle.absolutePath)), packageName)
                 .values.flatten()
             check(patches.map { it.name }.toSet() == setOf("$label branding")) { "Unexpected compatible patches: $patches" }

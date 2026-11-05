@@ -26,6 +26,18 @@ def main():
         apk=out/('fixture-'+product+'.apk')
         run(build/('aapt2'+suffix),'link','-I',android,'--manifest',manifest,'-o',apk,resources)
         with zipfile.ZipFile(apk,'a') as z:z.write(work/'classes.dex','classes.dex')
+    config_res=work/'config-res/values'
+    config_res.mkdir(parents=True,exist_ok=True)
+    (config_res/'strings.xml').write_text('<resources><string name="javo_split_marker">merged</string></resources>',encoding='utf-8')
+    config_resources=work/'config-resources.zip'
+    run(build/('aapt2'+suffix),'compile','--dir',config_res.parent,'-o',config_resources)
+    config_manifest=work/'config-manifest.xml'
+    config_manifest.write_text('<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.android.youtube" split="config.javo" android:versionCode="1" android:versionName="fixture-1"><uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28"/><application android:hasCode="false"/></manifest>',encoding='utf-8')
+    config_apk=work/'config.javo.apk'
+    run(build/('aapt2'+suffix),'link','-I',android,'--manifest',config_manifest,'-o',config_apk,config_resources)
+    with zipfile.ZipFile(out/'fixture-video.apkm','w') as bundle:
+        bundle.write(out/'fixture-video.apk','base.apk')
+        bundle.write(config_apk,'config.javo.apk')
     if args.fixture_only:
         print('Built first-party Video/Music test fixtures. No patches executed.');return
     shutil.copyfile(ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp',out/'javo-branding.rvp')

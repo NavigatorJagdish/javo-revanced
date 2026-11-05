@@ -121,8 +121,8 @@ android {
     defaultConfig {
         applicationId = "app.revanced.android.gms"
 
-        versionName version
-        versionCode appVersionCode
+        versionName "${version}-javo.2"
+        versionCode appVersionCode + 1
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk
@@ -161,6 +161,10 @@ android {
 
     buildTypes {
         release {
+            // Test distribution keeps release runtime protections, without claiming
+            // an owner-configured production signing identity.
+            signingConfig signingConfigs.debug
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

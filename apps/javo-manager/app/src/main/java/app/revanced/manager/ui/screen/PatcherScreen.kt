@@ -220,7 +220,7 @@ fun PatcherScreen(
                             showLogExportSheet = true
                         },
                         tooltip = stringResource(id = R.string.save_logs),
-                        enabled = patcherSucceeded != null,
+                        enabled = true,
                     ) { contentDescription ->
                         Icon(Icons.Outlined.PostAdd, contentDescription)
                     }

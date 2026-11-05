@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.1** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. APKs debug-signed hain aur Manager aur Core ka install aur launch emulator par verify hua hai.
+Ye guide **v0.1.0-alpha.2** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. APKs debug-signed hain aur Manager aur Core ka install aur launch emulator par verify hua hai.
 
 ## 1. GitHub se files download karein
 
@@ -49,14 +49,23 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.1-debug.apk, .\javo-core-0.3.13.2.250932-debug.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.2-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.1
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.1/javo-manager-0.1.0-alpha.1-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.1/javo-core-0.3.13.2.250932-debug.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.1/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.1/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.1/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.2
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-manager-0.1.0-alpha.2-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-core-0.3.13.2.250932-javo.2-test.apk
+[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-branding-0.1.0-alpha.1.rvp
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/SHA256SUMS
+
+
+## Alpha 2 ke changes
+
+Core ka consumer build SMS, overlay aur ROM signature-spoofing permissions request nahi karta. SMS autofill ab is build mein supported nahi hai. Core release runtime flags aur test signing certificate ke saath distribute hota hai.
+
+APKMirror downloader se bundle lene par Manager download, merge aur write ki alag stages dikhata hai. Manual **Select from storage** input ke liye ab bhi standalone APK chahiye. Download fail ho to **Save logs** patching ke dauraan bhi available hai.
+
+Play Protect ka exact verdict device aur Google ki classification par depend karta hai. Agar naya Core bhi block ho, exact warning text, Android version aur release filename record karein. Is update ki verification report mein permission audit aur emulator results dekhein.

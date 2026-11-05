@@ -201,9 +201,8 @@
         org.opencv"
         />
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:forceQueryable="true"
-        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_app"
         android:roundIcon="@mipmap/ic_app"
         android:label="${appLabel}"

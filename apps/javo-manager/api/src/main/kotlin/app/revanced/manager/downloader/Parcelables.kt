@@ -2,8 +2,6 @@ package app.revanced.manager.downloader
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.net.HttpURLConnection
-import java.net.URI
 
 /**
  * A simple parcelable data class for storing a package name and version.
@@ -26,14 +24,8 @@ data class DownloadUrl(val url: String, val headers: Map<String, String> = empty
     /**
      * Converts this into a [DownloadResult].
      */
-    fun toDownloadResult(): DownloadResult = with(URI.create(url).toURL().openConnection() as HttpURLConnection) {
-        useCaches = false
-        allowUserInteraction = false
-        headers.forEach(::setRequestProperty)
-
-        connectTimeout = 10_000
-        connect()
-
-        inputStream to getHeaderField("Content-Length").toLong()
+    fun toDownloadResult(): DownloadResult {
+        val connection = DownloadConnection.connect(url, headers)
+        return DownloadConnection.stream(connection) to DownloadConnection.contentLength(connection)
     }
 }

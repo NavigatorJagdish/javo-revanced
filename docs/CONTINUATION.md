@@ -1,20 +1,5 @@
 # Continuation state
 
-```json
-{
-  "updatedAt": "2026-11-04",
-  "readiness": "functional-alpha",
-  "repo": "NavigatorJagdish/javo-revanced",
-  "verificationRun": 41637751030,
-  "verifiedBuildCommit": "9c8cdc283dc64a95a6fd9bf62d45a71babd14f46",
-  "privateCi": "passed",
-  "hostChecksPassed": 64,
-  "officialCatalogMetadataEntries": 294,
-  "brandingFixturePatchSignInstallLaunch": "passed-for-video-and-music",
-  "realAppIntegration": "unverified",
-  "productionSigning": "unconfigured",
-  "productionUpdateFeed": "unconfigured"
-}
-```
+The alpha.2 source update removes consumer Core SMS, overlay and signature-spoofing requests and disables backup and debugging. Manager now owns APKMirror streaming and split merging and adds timeout, progress, session and archive checks.
 
-Use FINAL_REPORT.md for hashes and limits. See BUILDING.md for the private CI dependency cache and Android fixture test. Keep real-app integration distinct from the first-party fixture results.
+Run the private verification workflow to establish this commit's build status. The downloadable ZIP receives a FINAL_REPORT.md generated from matching APK and runtime evidence. The previous alpha.1 verification run was 41637751030. Physical-device Play Protect classification and real-app integration remain unverified. Production signing and the production update feed require owner-managed keys.

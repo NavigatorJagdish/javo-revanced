@@ -43,6 +43,10 @@ import org.microg.tools.ui.AbstractSettingsActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Collections;
 
 import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -64,6 +68,7 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
         }
         checks.add(new InstalledPackagesChecks());
         if (SDK_INT >= 23) {
+            final Set<String> declaredPermissions = getDeclaredPermissions(context);
             List<String> permissions = new ArrayList<>();
             permissions.add(ACCESS_COARSE_LOCATION);
             permissions.add(ACCESS_FINE_LOCATION);
@@ -78,13 +83,14 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             }
             permissions.add(READ_PHONE_STATE);
             permissions.add(RECEIVE_SMS);
+            permissions.retainAll(declaredPermissions);
             checks.add(new PermissionCheckGroup(permissions.toArray(new String[0])) {
                 @Override
                 public void doChecks(Context context, ResultCollector collector) {
                     super.doChecks(context, collector);
                     PackageManager pm = context.getPackageManager();
                     // Add SYSTEM_ALERT_WINDOW appops permission
-                    try {
+                    if (declaredPermissions.contains("android.permission.SYSTEM_ALERT_WINDOW")) try {
                         PermissionInfo info = pm.getPermissionInfo("android.permission.SYSTEM_ALERT_WINDOW", 0);
                         CharSequence permLabel = info.loadLabel(pm);
                         collector.addResult(
@@ -128,6 +134,16 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         reset(LayoutInflater.from(getContext()));
+    }
+
+    private static Set<String> getDeclaredPermissions(Context context) {
+        try {
+            String[] permissions = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS).requestedPermissions;
+            return permissions == null ? Collections.emptySet() : new HashSet<>(Arrays.asList(permissions));
+        } catch (PackageManager.NameNotFoundException e) {
+            return Collections.emptySet();
+        }
     }
 
     @Override

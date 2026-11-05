@@ -2,6 +2,7 @@ package app.revanced.manager.downloader.webview
 
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.CookieManager
 import androidx.annotation.StringRes
 import app.revanced.manager.downloader.DownloadUrl
 import app.revanced.manager.downloader.DownloaderScope
@@ -76,7 +77,13 @@ class WebViewScope<T> internal constructor(
 
     private val callbackScope = object : WebViewCallbackScope<T>, Scope by scopeImpl {
         override suspend fun finish(result: T) {
-            setResult(result)
+            // Preserve the browser session for sites that protect download links.
+            @Suppress("UNCHECKED_CAST")
+            val finalResult = if (result is DownloadUrl && !result.headers.keys.any { it.equals("Cookie", true) }) {
+                val cookie = withContext(Dispatchers.Main) { CookieManager.getInstance().getCookie(result.url) }
+                result.copy(headers = result.headers + if (cookie.isNullOrBlank()) emptyMap() else mapOf("Cookie" to cookie)) as T
+            } else result
+            setResult(finalResult)
             // Tell the WebViewActivity to finish
             webView.let { withContext(Dispatchers.IO) { it.finish() } }
         }

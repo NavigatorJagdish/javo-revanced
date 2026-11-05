@@ -7,6 +7,16 @@ import app.revanced.manager.data.room.AppDatabase
 import app.revanced.manager.data.room.AppDatabase.Companion.generateUid
 import app.revanced.manager.data.room.apps.downloaded.DownloadedApp
 import app.revanced.manager.downloader.DownloaderHostApi
+import app.revanced.manager.network.downloader.ApkMirrorTransfer
+import app.revanced.manager.network.downloader.ApkDownloadStage
+import app.revanced.manager.downloader.DownloadUrl
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.TimeoutCancellationException
+import java.io.IOException
 import app.revanced.manager.network.downloader.LoadedDownloader
 import app.revanced.manager.downloader.OutputDownloadScope
 import app.revanced.manager.downloader.Scope
@@ -61,54 +71,74 @@ class DownloadedAppRepository(
         appCompatibilityCheck: Boolean,
         patchesCompatibilityCheck: Boolean,
         onDownload: suspend (downloadProgress: Pair<Long, Long?>) -> Unit,
+        onStage: suspend (ApkDownloadStage) -> Unit = {},
+        timeoutMillis: Long = 15 * 60 * 1000L,
     ): File {
         // Converted integers cannot contain / or .. unlike the package name or version, so they are safer to use here.
         val relativePath = File(generateUid().toString())
         val saveDir = dir.resolve(relativePath).also { it.mkdirs() }
         val targetFile = saveDir.resolve("base.apk").toPath()
 
+        var committed = false
         try {
             val downloadSize = AtomicLong(0)
             val downloadedBytes = AtomicLong(0)
 
-            channelFlow {
-                val scope = object : OutputDownloadScope, Scope by downloader.scopeImpl {
-                    override suspend fun reportSize(size: Long) {
-                        require(size > 0) { "Size must be greater than zero" }
-                        require(
-                            downloadSize.compareAndSet(
-                                0,
-                                size
-                            )
-                        ) { "Download size has already been set" }
-                        send(downloadedBytes.get() to size)
-                    }
-                }
-
-                fun emitProgress(bytes: Long) {
-                    val newValue = downloadedBytes.addAndGet(bytes)
-                    val totalSize = downloadSize.get()
-                    if (totalSize < 1) return
-                    trySend(newValue to totalSize).getOrThrow()
-                }
-
-                targetFile.outputStream(StandardOpenOption.CREATE_NEW).buffered().use {
-                    val stream = object : FilterOutputStream(it) {
-                        override fun write(b: Int) = out.write(b).also { emitProgress(1) }
-
-                        override fun write(b: ByteArray?, off: Int, len: Int) =
-                            out.write(b, off, len).also {
-                                emitProgress(
-                                    (len - off).toLong()
-                                )
+            try {
+                withTimeout(timeoutMillis) {
+                    channelFlow {
+                        val scope = object : OutputDownloadScope, Scope by downloader.scopeImpl {
+                            override suspend fun reportSize(size: Long) {
+                                require(size > 0) { "Size must be greater than zero" }
+                                require(
+                                    downloadSize.compareAndSet(
+                                        0,
+                                        size
+                                    )
+                                ) { "Download size has already been set" }
+                                send(downloadedBytes.get() to size)
                             }
+                        }
+
+                        val downloadContext = currentCoroutineContext()
+                        val managedMirror = data is DownloadUrl && downloader.className.contains(".apkmirror.")
+
+                        fun emitProgress(bytes: Long) {
+                            downloadContext.ensureActive()
+                            val newValue = downloadedBytes.addAndGet(bytes)
+                            val totalSize = downloadSize.get()
+                            if (!managedMirror) trySend(newValue to totalSize.takeIf { it > 0 })
+                        }
+
+                        targetFile.outputStream(StandardOpenOption.CREATE_NEW).buffered().use {
+                            val stream = object : FilterOutputStream(it) {
+                                override fun write(b: Int) = out.write(b).also { emitProgress(1) }
+
+                                override fun write(b: ByteArray?, off: Int, len: Int) =
+                                    out.write(b, off, len).also {
+                                        emitProgress(
+                                            len.toLong()
+                                        )
+                                    }
+                            }
+                            if (managedMirror) {
+                                ApkMirrorTransfer.download(data as DownloadUrl, stream,
+                                    onProgress = { send(it) }, onStage = onStage)
+                            } else {
+                                onStage(ApkDownloadStage.DOWNLOADING)
+                                downloader.impl.download(scope, data, stream)
+                            }
+                        }
+                        if (!managedMirror) send(downloadedBytes.get() to downloadSize.get().takeIf { it > 0 })
                     }
-                    downloader.impl.download(scope, data, stream)
+                        .conflate()
+                        .flowOn(Dispatchers.IO)
+                        .collect { (downloaded, size) -> onDownload(downloaded to size) }
                 }
+            } catch (error: TimeoutCancellationException) {
+                currentCoroutineContext().ensureActive()
+                throw IOException("Download or split merging timed out. Retry, or select a standalone APK from storage.", error)
             }
-                .conflate()
-                .flowOn(Dispatchers.IO)
-                .collect { (downloaded, size) -> onDownload(downloaded to size) }
 
             if (downloadedBytes.get() < 1) error("Downloader did not download anything.")
             val pkgInfo =
@@ -121,21 +151,21 @@ class DownloadedAppRepository(
                 ) error("The selected app version ($pkgInfo.versionName) doesn't match the suggested version. Please use the suggested version ($expectedVersion), or adjust your settings by disabling \"Require suggested app version\" and enabling \"Disable version compatibility check\".")
             }
 
-            // Delete the previous copy (if present).
-            dao.get(pkgInfo.packageName, pkgInfo.versionName!!)?.directory?.let {
-                if (!dir.resolve(it)
-                        .deleteRecursively()
-                ) throw Exception("Failed to delete existing directory")
-            }
-            dao.upsert(
-                DownloadedApp(
-                    packageName = pkgInfo.packageName,
-                    version = pkgInfo.versionName!!,
-                    directory = relativePath,
+            val previousDirectory = dao.get(pkgInfo.packageName, pkgInfo.versionName!!)?.directory
+            withContext(NonCancellable) {
+                dao.upsert(
+                    DownloadedApp(
+                        packageName = pkgInfo.packageName,
+                        version = pkgInfo.versionName!!,
+                        directory = relativePath,
+                    )
                 )
-            )
+                committed = true
+            }
+            // Commit the replacement before retiring the previous valid APK.
+            previousDirectory?.let { dir.resolve(it).deleteRecursively() }
         } catch (e: Exception) {
-            saveDir.deleteRecursively()
+            if (!committed) saveDir.deleteRecursively()
             throw e
         }
 

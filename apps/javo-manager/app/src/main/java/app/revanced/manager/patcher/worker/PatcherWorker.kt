@@ -29,6 +29,7 @@ import app.revanced.manager.domain.repository.InstalledAppRepository
 import app.revanced.manager.domain.worker.Worker
 import app.revanced.manager.domain.worker.WorkerRepository
 import app.revanced.manager.network.downloader.LoadedDownloader
+import app.revanced.manager.network.downloader.ApkDownloadStage
 import app.revanced.manager.patcher.ProgressEvent
 import app.revanced.manager.patcher.StepId
 import app.revanced.manager.patcher.logger.Logger
@@ -160,6 +161,17 @@ class PatcherWorker(
                     args.input.version,
                     prefs.suggestedVersionSafeguard.get(),
                     !prefs.disablePatchVersionCompatCheck.get(),
+                    onStage = { stage ->
+                        val text = when (stage) {
+                            ApkDownloadStage.DOWNLOADING -> R.string.javo_download_transfer
+                            ApkDownloadStage.MERGING -> R.string.javo_download_merge
+                            ApkDownloadStage.WRITING -> R.string.javo_download_write
+                        }
+                        args.onEvent(ProgressEvent.Progress(
+                            stepId = StepId.DownloadAPK, current = 0, total = null,
+                            message = applicationContext.getString(text)
+                        ))
+                    },
                     onDownload = { progress ->
                         args.onEvent(
                             ProgressEvent.Progress(

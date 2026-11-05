@@ -1,0 +1,9 @@
+{
+  "repository": "ReVanced/revanced-manager-downloaders",
+  "commit": "41b9ab3aa39135e2f76ef76f1cd50cb3f4dd4e97",
+  "files": [
+    "src/main/kotlin/app/revanced/manager/downloaders/apkmirror/APKMirrorDownloader.kt",
+    "src/main/kotlin/app/revanced/manager/downloaders/shared/Merger.kt"
+  ],
+  "changes": "Host-managed streaming and resource lifetime, bounded safe split extraction"
+}
