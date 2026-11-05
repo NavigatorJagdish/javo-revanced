@@ -49,6 +49,7 @@ class WebViewScope<T> internal constructor(
     private val dispatcher = Dispatchers.Default.limitedParallelism(1)
     private lateinit var webView: IWebView
     internal lateinit var initialUrl: String
+    private var lastPageUrl: String? = null
 
     internal val binder = object : IWebViewEvents.Stub() {
         override fun ready(iface: IWebView?) {
@@ -60,7 +61,10 @@ class WebViewScope<T> internal constructor(
         }
 
         override fun pageLoad(url: String?) {
-            coroutineScope.launch(dispatcher) { onPageLoadCallback(callbackScope, url!!) }
+            coroutineScope.launch(dispatcher) {
+                lastPageUrl = url
+                onPageLoadCallback(callbackScope, url!!)
+            }
         }
 
         override fun download(url: String?, mimetype: String?, userAgent: String?) {
@@ -79,9 +83,16 @@ class WebViewScope<T> internal constructor(
         override suspend fun finish(result: T) {
             // Preserve the browser session for sites that protect download links.
             @Suppress("UNCHECKED_CAST")
-            val finalResult = if (result is DownloadUrl && !result.headers.keys.any { it.equals("Cookie", true) }) {
-                val cookie = withContext(Dispatchers.Main) { CookieManager.getInstance().getCookie(result.url) }
-                result.copy(headers = result.headers + if (cookie.isNullOrBlank()) emptyMap() else mapOf("Cookie" to cookie)) as T
+            val finalResult = if (result is DownloadUrl) {
+                val cookie = if (result.headers.keys.none { it.equals("Cookie", true) }) {
+                    withContext(Dispatchers.Main) { CookieManager.getInstance().getCookie(result.url) }
+                } else null
+                val headers = result.headers.toMutableMap()
+                if (!cookie.isNullOrBlank()) headers["Cookie"] = cookie
+                lastPageUrl?.takeIf { ApkMirrorPolicy.isMirror(it) && ApkMirrorPolicy.isMirror(result.url) }?.let {
+                    if (headers.keys.none { key -> key.equals("Referer", true) }) headers["Referer"] = it
+                }
+                result.copy(headers = headers) as T
             } else result
             setResult(finalResult)
             // Tell the WebViewActivity to finish

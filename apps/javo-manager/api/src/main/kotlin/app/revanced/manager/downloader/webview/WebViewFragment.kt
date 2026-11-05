@@ -165,7 +165,6 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
 internal class WebViewModel : ViewModel() {
     init {
         CookieManager.getInstance().apply {
-            removeAllCookies(null)
             setAcceptCookie(true)
         }
     }

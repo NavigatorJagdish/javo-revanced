@@ -27,7 +27,10 @@ public final class DownloadConnection {
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 boolean sameOrigin = original.getHost().equalsIgnoreCase(url.getHost())
                         && original.getPort() == url.getPort();
-                if (sameOrigin || header.getKey().equalsIgnoreCase("User-Agent")) {
+                boolean mirrorReferer = header.getKey().equalsIgnoreCase("Referer")
+                        && app.revanced.manager.downloader.webview.ApkMirrorPolicy.isMirror(original.toExternalForm())
+                        && app.revanced.manager.downloader.webview.ApkMirrorPolicy.isMirror(url.toExternalForm());
+                if (sameOrigin || mirrorReferer || header.getKey().equalsIgnoreCase("User-Agent")) {
                     connection.setRequestProperty(header.getKey(), header.getValue());
                 }
             }

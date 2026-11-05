@@ -52,7 +52,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 
 ## Tests from this build
 
-- 87 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 11 Java download, 12 Java browser policy and 14 Python checks.
+- 89 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 13 Java download, 12 Java browser policy and 14 Python checks.
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.

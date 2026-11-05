@@ -66,6 +66,13 @@ public final class DownloadConnectionTest {
         DownloadConnection.connect("https://first.test/apk", Map.of("Cookie", "private", "Authorization", "private", "User-Agent", "test"));
         check(second.getRequestProperty("Cookie") == null && second.getRequestProperty("Authorization") == null, "credentials omitted on redirected request");
         check("test".equals(second.getRequestProperty("User-Agent")), "user agent preserved");
+        var mirror = response("www.apkmirror.com");
+        mirror.status(302);
+        mirror.fields.put("Location", "https://downloadr2.apkmirror.com/apk");
+        var cdn = response("downloadr2.apkmirror.com");
+        DownloadConnection.connect("https://www.apkmirror.com/apk", Map.of("Referer", "https://www.apkmirror.com/apk/youtube/", "Cookie", "session"));
+        check("https://www.apkmirror.com/apk/youtube/".equals(cdn.getRequestProperty("Referer")), "APKMirror CDN retains source page");
+        check(cdn.getRequestProperty("Cookie") == null, "cross-host cookies remain private");
         var downgrade = response("downgrade.test");
         downgrade.status(302);
         downgrade.fields.put("Location", "http://plain.test/apk");
