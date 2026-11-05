@@ -362,7 +362,7 @@
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/DownloadRegressionChecks.kt",
     "upstreamSha256": null,
-    "javoSha256": "dc66a957851cc13a2926924c254d137068b65d1d5d3fefab5a6e24f3599e8105"
+    "javoSha256": "eaaa7995161d87499bc728e85af03058cdcb6b6925200cba19b30d16ac18e19e"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/PatchIntegrationInstrumentation.kt",

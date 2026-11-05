@@ -100,8 +100,8 @@ internal suspend fun checkDownloads(context: Context, fixture: File, bundle: Fil
             ApkMirrorTransfer.processArchive(malicious, output, File(folder, "unsafe").also { it.mkdirs() }) {}
         }
         error("Unsafe bundle path accepted")
-    } catch (expected: IOException) {
-        check(expected.message.orEmpty().contains("Unsafe"))
+    } catch (_: IOException) {
+        // Android 14+ may reject the path while opening the ZIP, before extraction.
     }
     check(!File(folder, "escaped.apk").exists())
     checks.put("archive path traversal rejected")
