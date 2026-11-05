@@ -1,0 +1,43 @@
+{
+  "release": "v0.1.0-alpha.2",
+  "verifiedBuildCommit": "624a2ae8974c9c9e93af76300e187694e6174eca",
+  "verificationRun": 42006539702,
+  "sourceEntriesVerified": 7206,
+  "sourceZipSha256": "258b44552a485fb2792b2f53571781affe27f4a0e89576b4e12a4b23722aca25",
+  "releaseAssets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "sha256": "4ba70690528125fab4b0501109b3faf5b48e196c0039170487547bd2b6df306c",
+      "size": 7352
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "sha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+      "size": 92219219
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.2-debug.apk",
+      "sha256": "82f8434081250f1fd98994768903ea3f116e437ef7913b0bceba267e2dd5b28a",
+      "size": 62575024
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "sha256": "258b44552a485fb2792b2f53571781affe27f4a0e89576b4e12a4b23722aca25",
+      "size": 318079116
+    },
+    {
+      "name": "SHA256SUMS",
+      "sha256": "8bb48920b469336b38249539ded30e9f427880706cda4579058ce3f5de36b196",
+      "size": 405
+    }
+  ],
+  "hostChecksPassed": 75,
+  "downloadRegressionGroupsPassed": 4,
+  "managerAndroidApi": 35,
+  "coreAndroidApis": [
+    29,
+    35
+  ],
+  "playProtectVerdict": "pending-device-verification",
+  "realYouTubeIntegration": "pending-device-verification"
+}

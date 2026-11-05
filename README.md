@@ -6,11 +6,13 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated on 2026-11-03 from the owner's master prompt and four design references. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.2 fixes verified on 2026-11-05. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+
+Alpha.2 removes consumer Core SMS, overlay and ROM signature-spoofing permission requests, disables backup and debugging, and repairs APKMirror streaming and split merging. The physical-device Play Protect verdict and real-app download/playback verification remain pending.
 
 ## Included
 
-- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager, and its exact APK installed/launched on Android API29 and API35. The final delivered Manager passed the API35 integration run.
+- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager. The packaged alpha.2 APK passed installation, launch, four download regression groups, and first-party patch/sign/install integration on Android API35.
 - `apps/javo-core`: complete real ReVanced GmsCore source with Javo branding while retaining `app.revanced.android.gms` and service contracts. See evidence for the actual build result.
 - `patches/javo-branding`: opt-in Video/Music label and icon resource patch source. The Kotlin bundle and DEX archive compile. Resource transformations and external-entity rejection were checked on Android; both first-party fixtures passed patching, signing, installation and launch.
 - `apps/javo-website`: 17 static pages, responsive navigation, persisted theme, honest artifact inventory, documentation and security information. No installation dependencies are required.
@@ -34,7 +36,7 @@ Open http://127.0.0.1:4173 locally. The source package includes the static build
 
 Read [BUILDING.md](docs/BUILDING.md), [upstream compatibility](docs/UPSTREAM_COMPATIBILITY.md), and [verification limits](docs/FINAL_REPORT.md). Never label a debug-signed APK as a production release. No proprietary Video or Music APK is included.
 
-GitHub blocks the original patches repository, but the official API serves bundle 6.2.1 and links to a public GitLab source repository. The bundle signature was checked; 294 catalog entries loaded on Android. Real-app patch execution and playback remain unverified. A pinned GitLab source snapshot is included separately and is not claimed to match that bundle byte-for-byte. Core was installed and launched without an observed crash on an API29 x86_64 emulator. Google account authentication, streaming playback, notifications and physical-device compatibility remain unverified.
+GitHub blocks the original patches repository, but the official API serves bundle 6.2.1 and links to a public GitLab source repository. The bundle signature was checked; 294 catalog entries loaded on Android. Real-app patch execution and playback remain unverified. A pinned GitLab source snapshot is included separately and is not claimed to match that bundle byte-for-byte. The exact packaged Core APK installed and launched without observed crashes on API29 and API35 x86_64 emulators. Google account authentication, streaming playback, notifications and physical-device compatibility remain unverified.
 
 ## Licenses and independence
 
