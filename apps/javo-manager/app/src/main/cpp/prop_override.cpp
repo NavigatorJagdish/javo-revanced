@@ -25,9 +25,9 @@ char *GetPropOverride(const std::string &key) {
 extern "C" int property_get(const char *key, char *value, const char *default_value) {
     auto replacement = GetPropOverride(std::string(key));
     if (replacement) {
-        int len = strnlen(replacement, PROP_VALUE_MAX);
-
-        strncpy(value, replacement, len);
+        const int len = strnlen(replacement, PROP_VALUE_MAX - 1);
+        memcpy(value, replacement, len);
+        value[len] = '\0';
         return len;
     }
 

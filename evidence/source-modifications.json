@@ -405,6 +405,11 @@
     "javoSha256": "daf9e02bac42b17c603c5ee638de3f3af91e220a4277bba912ae1660f2494599"
   },
   {
+    "file": "apps/javo-manager/app/src/main/cpp/prop_override.cpp",
+    "upstreamSha256": "79a50f039f1a5915163d6179acb8ef6b01929192ed94c65b31e00863867e3446",
+    "javoSha256": "54105ec66ae157772921e2ac0bea1e8f314bcd6659a1f9de02542fad0bfd17f3"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java",
     "upstreamSha256": null,
     "javoSha256": "0a9bd50f9d35c29631c9d3e03f0b00a4faefb84fde9f577843f0537d95595977"
