@@ -76,6 +76,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                         repository.bundles.first { values -> values.values.any { it.manifestAttributes?.name == "Javo resource branding" } }
                     }
                     val uid = imported.entries.first { it.value.manifestAttributes?.name == "Javo resource branding" }.key
+                    val childKilled = java.util.concurrent.atomic.AtomicBoolean(false)
                     try {
                         kotlinx.coroutines.withTimeout(20_000) {
                             app.revanced.manager.patcher.runtime.ProcessRuntime(targetContext).execute(
@@ -86,6 +87,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                                         val command = java.lang.Runtime.getRuntime().exec(arrayOf("/system/bin/pidof", "${targetContext.packageName}:Patcher"))
                                         val pid = command.inputStream.bufferedReader().readText().trim().toInt()
                                         check(pid != android.os.Process.myPid())
+                                        childKilled.set(true)
                                         android.os.Process.killProcess(pid)
                                     }
                                 }
@@ -93,7 +95,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                         }
                         error("Terminated patcher process was accepted")
                     } catch (error: Exception) {
-                        check(error.message.orEmpty().contains("stopped before completion")) { error.stackTraceToString() }
+                        check(childKilled.get() && error.message.orEmpty().contains("stopped before completion")) { error.stackTraceToString() }
                         report.put("terminatedProcessRecovery", true)
                     }
                     val events = java.util.Collections.synchronizedList(mutableListOf<app.revanced.manager.patcher.ProgressEvent>())

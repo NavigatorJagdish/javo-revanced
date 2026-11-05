@@ -387,7 +387,7 @@
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/PatchIntegrationInstrumentation.kt",
     "upstreamSha256": null,
-    "javoSha256": "0565d8f3f2969e870cb0e1a3c0c7641df92e56b770eeaeae4906cbc8022b5adf"
+    "javoSha256": "ae658300917b6d3c0fa4545ff0fea714a4950e2548141f6591892936958b7318"
   },
   {
     "file": "apps/javo-manager/app/src/main/assets/third_party/ARSCLib-LICENSE.txt",
@@ -467,7 +467,12 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/ProcessRuntime.kt",
     "upstreamSha256": "e8a13207eeda37e8dd6fb2fe31792cc9e6d9c2c2817373fd99ea458640594433",
-    "javoSha256": "3aa2713667952862a6d4b518fac6f87f93b94bf3041455b51229aaedfc81f3d6"
+    "javoSha256": "c7b64b46e83da82c42d9153b2a9f8f2fb281aa0a8dd7d094db52b0c9599c246e"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/process/PatcherProcess.kt",
+    "upstreamSha256": "4104dc500718980660a01efcd0cf2687a87a8595e75869148ed922ff52773331",
+    "javoSha256": "1fcbcb6152dfb5dccae211a1522f48b54ce32c52d81ef9c4d060941b11f90863"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/worker/PatcherWorker.kt",

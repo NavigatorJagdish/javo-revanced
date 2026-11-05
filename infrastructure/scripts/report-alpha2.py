@@ -20,6 +20,9 @@ if len(checks) < 4:
 for item in artifacts.values():
     if not item.get('runtimeSmoke'):
         raise ValueError('Matching install and launch evidence is missing')
+manager35 = json.loads((root / 'evidence/manager-api35-runtime-smoke.json').read_text())
+if manager35.get('installedApkSha256') != artifacts['manager']['sha256'] or manager35.get('processRunning') is not True or manager35.get('crashObserved') is not False:
+    raise ValueError('Matching Android 15 Manager evidence is missing')
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())
 check_list = '\n'.join('- ' + str(check) + '.' for check in checks)
@@ -54,7 +57,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 
 - 89 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 13 Java download, 12 Java browser policy and 14 Python checks.
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
-- Both delivered APKs installed and launched in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
+- Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
 - {catalog_result}
 

@@ -130,6 +130,23 @@ jobs:
           script: |
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
+      - name: Preserve Android 15 Manager evidence
+        run: |
+          cp evidence/manager-runtime-smoke.json evidence/manager-api35-runtime-smoke.json
+          cp evidence/manager-patch-integration.json evidence/manager-api35-patch-integration.json
+          cp evidence/screenshots/manager-emulator.png evidence/screenshots/manager-api35-emulator.png
+      - name: Android 10 Manager browser, transfer and patch regression check
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          arch: x86_64
+          avd-name: javo-manager-api29
+          disk-size: 2048M
+          ram-size: 2048M
+          disable-animations: true
+          script: |
+            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+            python infrastructure/scripts/android-integration.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

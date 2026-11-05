@@ -120,7 +120,7 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
             Log.d(tag, "Process finished with exit code ${result.resultCode}")
 
             if (!patching.isCompleted) {
-                patching.completeExceptionally(Exception("Patcher process stopped before completion (exit ${result.resultCode}). Check available memory and export the logs."))
+                patching.completeExceptionally(Exception("Patcher process stopped before completion (exit ${result.resultCode}). Check available memory and export the logs.\n" + result.output.takeLast(20).joinToString("\n").takeLast(4096)))
             }
         }
 
