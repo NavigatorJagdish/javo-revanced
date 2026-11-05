@@ -1,5 +1,6 @@
 package app.revanced.manager.patcher.runtime
 
+import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -82,7 +83,15 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
         // Get the location of our own Apk.
         val managerBaseApk = pm.getPackageInfo(context.packageName)!!.applicationInfo!!.sourceDir
 
-        val limit = "${prefs.patcherProcessMemoryLimit.get()}M"
+        val requested = prefs.patcherProcessMemoryLimit.get().coerceIn(128, 4096)
+        val memory = ActivityManager.MemoryInfo().also {
+            context.getSystemService(ActivityManager::class.java).getMemoryInfo(it)
+        }
+        // ART's region collector can reserve twice the configured maximum heap.
+        val deviceCap = (memory.totalMem / (4 * 1024 * 1024)).toInt().coerceAtLeast(128)
+        val limitMb = minOf(requested, deviceCap)
+        val limit = "${limitMb}M"
+        logger.info("Separate patcher heap limit $limitMb MB (requested $requested MB, device RAM ${memory.totalMem / (1024 * 1024)} MB)")
         val propOverride = resolvePropOverride(context)?.absolutePath
             ?: throw Exception("Couldn't find prop override library")
 
