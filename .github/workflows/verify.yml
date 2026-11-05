@@ -14,6 +14,7 @@ defaults:
     shell: bash
 jobs:
   sources:
+    if: "!contains(github.event.head_commit.message, '[publish verified]')"
     runs-on: ubuntu-latest
     outputs:
       commit: ${{ steps.import.outputs.commit }}
@@ -318,6 +319,7 @@ jobs:
         with:
           artifact-ids: ${{ needs.package.outputs.artifact }}
           path: tools/release-input
+          merge-multiple: true
       - name: Publish the verified alpha update
         run: |
           set -euo pipefail
@@ -342,3 +344,50 @@ jobs:
             jq -e --arg name "$(basename "$asset")" --arg digest "$digest" '.assets | any(.name == $name and .state == "uploaded" and .digest == $digest)' "$RUNNER_TEMP/asset-info.json"
           done
           gh release edit "$RELEASE_TAG" --draft=false
+
+  publish-verified:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[publish verified]') && github.event.repository.private
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: v0.1.0-alpha.3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 2db2f0ca07f7876a4f2f68e23e64f70fcf069516
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: 13442572905
+          run-id: 42085028026
+          github-token: ${{ github.token }}
+          path: tools/release-input
+          merge-multiple: true
+      - name: Publish the verified alpha update
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .private)" = true
+          if gh release view "$RELEASE_TAG" --json isDraft,targetCommitish > "$RUNNER_TEMP/existing.json"; then
+            if jq -e '.isDraft == false' "$RUNNER_TEMP/existing.json"; then
+              echo 'This release is already published.'
+              exit 0
+            fi
+            jq -e --arg sha "2db2f0ca07f7876a4f2f68e23e64f70fcf069516" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
+          else
+            gh release create "$RELEASE_TAG" --target "2db2f0ca07f7876a4f2f68e23e64f70fcf069516" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.3' --notes-file docs/RELEASE_ALPHA3.md
+          fi
+          mkdir -p tools/release-assets
+          cp tools/release-input/javo-revanced-development.zip tools/release-input/apks/*.apk tools/release-input/bundles/*.rvp tools/release-assets/
+          (cd tools/release-assets && sha256sum *.apk *.rvp *.zip > SHA256SUMS)
+          gh release upload "$RELEASE_TAG" tools/release-assets/* --clobber
+          release_id="$(gh release view "$RELEASE_TAG" --json databaseId --jq .databaseId)"
+          gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > "$RUNNER_TEMP/asset-info.json"
+          for asset in tools/release-assets/*; do
+            digest="sha256:$(sha256sum "$asset" | cut -d ' ' -f 1)"
+            jq -e --arg name "$(basename "$asset")" --arg digest "$digest" '.assets | any(.name == $name and .state == "uploaded" and .digest == $digest)' "$RUNNER_TEMP/asset-info.json"
+          done
+          gh release edit "$RELEASE_TAG" --draft=false
+
