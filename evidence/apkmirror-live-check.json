@@ -1,7 +1,14 @@
 {
-  "date": "2026-11-05",
-  "page": "https://www.apkmirror.com/apk/google-inc/youtube/youtube-20-40-45-release/youtube-20-40-45-2-android-apk-download/",
-  "status": 403,
-  "realYouTubeApkDownloaded": false,
-  "result": "Live site access blocked in the development environment. First-party browser and HTTPS fixtures cover pipeline behavior separately."
+  "checkedAt": "2026-11-06",
+  "genericRequest": 403,
+  "mobileUserAgentWithRefererPage": 200,
+  "pythonMobileSessionApkDownload": {
+    "status": 200,
+    "size": 169541734,
+    "sha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1"
+  },
+  "separateProductionJavaRequest": 403,
+  "productionPipelineLiveDownload": "not-verified",
+  "productionPipelineFixture": "Android HTTPS redirect, cookie, missing-size, APKM transfer/merge verified"
 }
+

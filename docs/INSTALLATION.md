@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.3** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
+Ye guide **v0.1.0-alpha.4** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
 
 ## 1. GitHub se files download karein
 
@@ -49,17 +49,17 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.3-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.4-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.3
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-manager-0.1.0-alpha.3-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-core-0.3.13.2.250932-javo.2-test.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.4
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-manager-0.1.0-alpha.4-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-core-0.3.13.2.250932-javo.2-test.apk
+[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-branding-0.1.0-alpha.1.rvp
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/SHA256SUMS
 
 
 ## Alpha 2 ke changes
@@ -74,6 +74,9 @@ Play Protect ka exact verdict device aur Google ki classification par depend kar
 
 APKMirror browser mein ad protection default on hai. Suggested YouTube version ka release page seedha khulta hai. Unique standalone APK variant milne par browser us page ko select karta hai. Toolbar ke **Download APK** se asli download control use karein. **Search APKMirror** aur **Ad protection** toggle bhi available hain. Website ke wait timer aur verification challenge follow karein.
 
-Preparing, patching aur writing mein elapsed time aur measured memory usage dikhegi. Default separate patcher process ka requested heap limit 1024 MB hai. Device RAM ka one-quarter upper cap lagta hai, kyunki ART heap ke liye extra address space reserve karta hai. Advanced settings mein runtime aur memory limit adjust kar sakte hain. Process band hone par error aur Save logs se report milegi. Agar error aaye, exact step, Android version aur latest logs record karein.
+Preparing, patching aur writing mein elapsed time aur measured memory usage dikhegi. Default separate patcher process ka requested heap limit 700 MB hai. Android 10 ya purane version par 700 MB upper cap aur device RAM ka one-quarter cap lagta hai, kyunki ART heap ke liye extra address space reserve karta hai. Advanced settings mein runtime aur memory limit adjust kar sakte hain. Process band hone par error aur Save logs se report milegi. Agar error aaye, exact step, Android version aur latest logs record karein.
 
 Core asset alpha.2 ka verified, matching-certificate binary hai. Manager update ke liye apni existing compatible Core installation use kar sakte hain. Manager development signing certificate pehle release se differ kar sakta hai. Installation conflict par settings aur patch-signing keystore ka export sambhal kar rakhein.
+
+Asli YouTube 20.40.45 ka local test teen selected patches ke saath preparation, patching aur signing tak lagbhag 4 minute 49 second chala. Device ke hisaab se waqt badlega. Elapsed time aur memory badal rahe hon to kaam abhi chal raha hai. Playback aur account sign-in is test ka hissa nahi the.
+

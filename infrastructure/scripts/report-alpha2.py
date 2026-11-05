@@ -31,7 +31,7 @@ if official.get('metadataLoadedOnAndroid'):
     catalog_result = f"The official ReVanced catalog loaded {official['patchCount']} patch definitions on Android. Third-party patch execution is unverified."
 else:
     catalog_result = 'The optional official catalog diagnostic was unavailable. See the integration report for its failure. Third-party patch execution is unverified.'
-report = f"""# Javo ReVanced alpha.3 verification report
+report = f"""# Javo ReVanced alpha.4 verification report
 
 The private workflow built these development APKs and bound the results below to their exact hashes. [Verification run]({run_url})
 
@@ -51,7 +51,7 @@ The earlier APK requested RECEIVE_SMS. Google documents sensitive-permission blo
 
 ## Manager download changes
 
-APKMirror transfers have connection and read timeouts, bounded redirects, browser-session cookies and an overall coroutine timeout. Transfer, merge and write stages are visible. The APKMirror browser filters known ad resources and pop-ups, opens supported suggested versions directly and highlights download controls. Preparing, patching and writing report measured elapsed time and memory use. The native heap-property override returns a terminated property value and older Android versions skip unavailable AppCompat initialization. The default separate patcher process has a 1024 MB requested heap limit, capped to one quarter of device RAM, a completion timeout and process-exit recovery. The host handles split APKM merging with modules kept open until serialization finishes. Archive extraction rejects traversal and duplicate paths and bounds split count and expanded size. Byte progress supports missing size and nonzero buffer offsets. Failed replacement downloads preserve the previous APK. Logs remain exportable during patching.
+APKMirror transfers have connection and read timeouts, bounded redirects, browser-session cookies and an overall coroutine timeout. Transfer, merge and write stages are visible. The APKMirror browser filters known ad resources and pop-ups, opens supported suggested versions directly and highlights download controls. Preparing, patching and writing report measured elapsed time and memory use. The native heap-property override returns a terminated property value and older Android versions skip unavailable AppCompat initialization. The default separate patcher process has a 700 MB requested heap limit, capped to one quarter of device RAM and to 700 MB on Android 10 and older, a completion timeout and process-exit recovery. The host handles split APKM merging with modules kept open until serialization finishes. Archive extraction rejects traversal and duplicate paths and bounds split count and expanded size. Byte progress supports missing size and nonzero buffer offsets. Failed replacement downloads preserve the previous APK. Logs remain exportable during patching.
 
 ## Tests from this build
 
@@ -69,7 +69,7 @@ The integration also transfers a 32 MiB asset APKM over a local HTTPS redirect w
 
 ## Scope and remaining verification
 
-Real YouTube and Music APK download, playback, Google sign-in, messaging, physical-device behavior and the Play Protect classification remain unverified. APKMirror can change its website and access controls. A live APKMirror request from this development environment returned HTTP 403. Live site download and real YouTube execution remain pending. The fixture tests cover browser navigation, HTTPS transport, repository recovery, split merging, preparation, patching and signing with first-party APKs.
+A separate local Android 10 check patched and signed a Google-signed YouTube 20.40.45 APK using GmsCore support, Spoof video streams and Javo Video branding with a 700 MB heap. See evidence/alpha3-real-youtube.json for its exact local Manager hash and installation result; it is a different development build from this CI APK. This does not verify every official patch. A mobile-browser request and Python download succeeded, while a separate Java request returned HTTP 403. The CI fixture tests cover browser navigation, HTTPS transport, repository recovery, split merging, preparation, patching and signing against the exact delivered Manager hash. Playback, Google sign-in, Music patching, physical-device behavior and Play Protect classification remain unverified.
 
 Core retains app.revanced.android.gms for patch compatibility. An existing installation with a different signing certificate requires a deliberate migration. The installation guide covers exporting Manager settings and its patch-signing keystore before changing installations. Lint warnings remain in the included reports.
 
@@ -80,4 +80,5 @@ The ZIP includes the five pinned upstream source trees, master prompt, four visu
 Use apks/ for installation files, bundles/ for the optional Javo branding patch, website/ for the built site, docs/ for setup and evidence/ for test reports and screenshots. SHA256SUMS accompanies the release assets.
 """
 (root / 'docs/FINAL_REPORT.md').write_text(report, encoding='utf-8')
-print('Generated report from matching alpha.2 APK and regression evidence')
+print('Generated report from matching alpha.4 APK and regression evidence')
+

@@ -367,7 +367,7 @@
   {
     "file": "apps/javo-manager/app/gradle.properties",
     "upstreamSha256": "83454e6fb50fc952b5f3f7e7cdea09604994f2f3378bb991fe83d0057a30c6c6",
-    "javoSha256": "8d51abb24d415b8e1007764b5c07103593fa708deabf499556e2e7fb8967a22c"
+    "javoSha256": "70961e1dcf4146df2d42d913e2ccdd3f7e229bbfc48a4e531a07565bec514bbe"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/BrowserChecks.kt",
@@ -387,7 +387,7 @@
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/PatchIntegrationInstrumentation.kt",
     "upstreamSha256": null,
-    "javoSha256": "ae658300917b6d3c0fa4545ff0fea714a4950e2548141f6591892936958b7318"
+    "javoSha256": "a1d5052eef824f8fb81e8364a939377b95f579ff6bbad8a2399c53ff83ae2db0"
   },
   {
     "file": "apps/javo-manager/app/src/main/assets/third_party/ARSCLib-LICENSE.txt",
@@ -417,7 +417,7 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/manager/PreferencesManager.kt",
     "upstreamSha256": "9ebee34b76b0f46ae920b3b5c19f1fa49217364195f61503250bfb8be7bd7726",
-    "javoSha256": "bac319213190899d1e9775fb128acfc6b3617355df792f18008bacac7ed30ccf"
+    "javoSha256": "c2aaa356e23cb984499cf94ed435f25cbb73e1546d93f946645336cbc14574b2"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/ChangelogsRepository.kt",
@@ -472,7 +472,7 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/ProcessRuntime.kt",
     "upstreamSha256": "e8a13207eeda37e8dd6fb2fe31792cc9e6d9c2c2817373fd99ea458640594433",
-    "javoSha256": "ba48c3d6ff8db632b0dc78b3896897b401334e65c097370f7a3aa78927b73917"
+    "javoSha256": "3189dd968c8931d0e85ff8569f507f1d09fb5f557995bb679605dce4fa5a9c3a"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/process/PatcherProcess.kt",
@@ -937,7 +937,7 @@
   {
     "file": "apps/javo-manager/gradle.properties",
     "upstreamSha256": "01b63136d3fca9f60cf86b9af39476e4368d174d092aa8e487b7ce96d10f726a",
-    "javoSha256": "7b824c78b87515eb9524af184f0a03a8dc36d392b8371206ea1dc0df1aed13e4"
+    "javoSha256": "83c2a773511b315c601bd516097d4112e534fbe7ea13b1b283e677163c5a9f8b"
   },
   {
     "file": "apps/javo-manager/settings.gradle.kts",
@@ -945,3 +945,4 @@
     "javoSha256": "d5b284b672d01b2a5ffee49fab3da7dfa75f84ded0b18045b7087d94d5ce9589"
   }
 ]
+

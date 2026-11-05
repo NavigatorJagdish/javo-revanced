@@ -89,7 +89,10 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
         }
         // ART's region collector can reserve twice the configured maximum heap.
         val deviceCap = (memory.totalMem / (4 * 1024 * 1024)).toInt().coerceAtLeast(128)
-        val limitMb = minOf(requested, deviceCap)
+        // Older ART reserves a contiguous low-address region twice the heap size.
+        // A 985 MB heap failed before Java initialization on Android 10; 700 MB started.
+        val addressSpaceCap = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) 700 else 4096
+        val limitMb = minOf(requested, deviceCap, addressSpaceCap)
         val limit = "${limitMb}M"
         logger.info("Separate patcher heap limit $limitMb MB (requested $requested MB, device RAM ${memory.totalMem / (1024 * 1024)} MB)")
         val propOverride = resolvePropOverride(context)?.absolutePath
@@ -202,4 +205,5 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
      */
     class RemoteFailureException(val originalStackTrace: String) : Exception()
 }
+
 

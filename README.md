@@ -6,9 +6,9 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.3 Manager changes prepared on 2026-11-05. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.4 Manager changes prepared on 2026-11-06. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
 
-Alpha.3 adds APKMirror ad protection, direct suggested-version navigation, browser session/source-page headers, measured preparation progress and patcher-process exit recovery. The Core binary is reused from verified alpha.2 after matching its source tree. The physical-device Play Protect verdict and real-app download/playback verification remain pending.
+Alpha.4 includes APKMirror ad protection, direct suggested-version navigation, browser session/source-page headers, measured preparation progress and patcher-process exit recovery. The Core binary is reused from verified alpha.2 after matching its source tree. The heap defaults to 700 MB, with an Android 10 cap, after a separate real YouTube patch/sign check. See the evidence for the local build hash and tested patches. Physical-device behavior, playback and account sign-in remain unverified.
 
 ## Included
 
@@ -36,8 +36,9 @@ Open http://127.0.0.1:4173 locally. The source package includes the static build
 
 Read [BUILDING.md](docs/BUILDING.md), [upstream compatibility](docs/UPSTREAM_COMPATIBILITY.md), and [verification limits](docs/FINAL_REPORT.md). Never label a debug-signed APK as a production release. No proprietary Video or Music APK is included.
 
-GitHub blocks the original patches repository, but the official API serves bundle 6.2.1 and links to a public GitLab source repository. The bundle signature was checked; 294 catalog entries loaded on Android. Real-app patch execution and playback remain unverified. A pinned GitLab source snapshot is included separately and is not claimed to match that bundle byte-for-byte. The exact packaged Core APK installed and launched without observed crashes on API29 and API35 x86_64 emulators. Google account authentication, streaming playback, notifications and physical-device compatibility remain unverified.
+GitHub blocks the original patches repository, but the official API serves bundle 6.2.1 and links to a public GitLab source repository. The bundle signature was checked; 294 catalog entries loaded on Android. A separate local Android 10 check applied GmsCore support, Spoof video streams and Javo branding to YouTube 20.40.45 and signed the result. The final report distinguishes this local build from CI fixtures. Playback remains unverified. A pinned GitLab source snapshot is included separately and is not claimed to match that bundle byte-for-byte. The exact packaged Core APK installed and launched without observed crashes on API29 and API35 x86_64 emulators. Google account authentication, streaming playback, notifications and physical-device compatibility remain unverified.
 
 ## Licenses and independence
 
 Manager and Javo code: GPL-3.0-only unless a file states otherwise. GmsCore: Apache-2.0 with additional upstream component notices. Full upstream licenses and source are preserved. See [LICENSING.md](docs/LICENSING.md). Javo is not affiliated with Google, YouTube, ReVanced or microG.
+

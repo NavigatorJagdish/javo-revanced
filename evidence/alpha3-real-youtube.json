@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerApkSha256": "af0f2a690a7b4af213e206b3514605e68cdf4080fff26d97471d30bfd238d27e",
+  "sourceApkSha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1",
+  "selectedPatches": [
+    "GmsCore support",
+    "Spoof video streams",
+    "Javo Video branding"
+  ],
+  "separateProcessPatch": true,
+  "patchedPackage": "app.revanced.android.youtube",
+  "brandingLabelVerified": true,
+  "signedOutput": true,
+  "signedApkSha256": "bdad2c75c54c51e66a7c377649ae3624e65a0de8655c7a48e14b32a97612ff0b",
+  "elapsedSeconds": 289,
+  "androidApi": 29,
+  "architecture": "x86_64",
+  "testBuild": "local production-source equivalent; not the CI release APK",
+  "sourceSignatureVerified": true,
+  "installed": true,
+  "installResult": "Performing Streamed Install\r\nSuccess"
+}
+

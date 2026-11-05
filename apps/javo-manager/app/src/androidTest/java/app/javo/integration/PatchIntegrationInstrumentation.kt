@@ -20,8 +20,10 @@ import java.security.MessageDigest
 
 /** Exercises the production bundle loader, Session and signer against first-party code only. */
 class PatchIntegrationInstrumentation : Instrumentation() {
-    override fun onCreate(arguments: Bundle?) { super.onCreate(arguments); start() }
+    private var realInput: String? = null
+    override fun onCreate(arguments: Bundle?) { realInput=arguments?.getString("realInput"); super.onCreate(arguments); start() }
     override fun onStart() {
+        realInput?.let { checkRealYoutube(this, File(it)); return }
         val report = JSONObject().put("fixture", "first-party; no YouTube code")
             .put("playback", "not-tested").put("accountLogin", "not-tested")
         val folder = File(targetContext.filesDir, "integration").also {
@@ -66,7 +68,14 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             report.put("androidBundleLoading", true)
             val unsigned = File(folder, "$id-patched-unsigned.apk")
             val logger = object : Logger() {
-                override fun log(level: LogLevel, message: String) { android.util.Log.i("JavoIntegration", "$level: $message") }
+                override fun log(level: LogLevel, message: String) {
+                    if (message.startsWith("Separate patcher heap limit ")) {
+                        val heap=message.substringAfter("limit ").substringBefore(" MB").toInt()
+                        check(heap in 128..700) { "Unexpected default heap: $message" }
+                        report.put("effectiveHeapMb",heap)
+                    }
+                    android.util.Log.i("JavoIntegration", "$level: $message")
+                }
             }
             if (id == "video") {
                 runBlocking {
@@ -141,3 +150,4 @@ class PatchIntegrationInstrumentation : Instrumentation() {
         }
     }
 }
+
