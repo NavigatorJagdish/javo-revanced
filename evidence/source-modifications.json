@@ -467,7 +467,7 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/ProcessRuntime.kt",
     "upstreamSha256": "e8a13207eeda37e8dd6fb2fe31792cc9e6d9c2c2817373fd99ea458640594433",
-    "javoSha256": "78f1aa5f1dd5980ee78a8881ea04e08a75ed6698c969167837386f6ddc971753"
+    "javoSha256": "3aa2713667952862a6d4b518fac6f87f93b94bf3041455b51229aaedfc81f3d6"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/worker/PatcherWorker.kt",

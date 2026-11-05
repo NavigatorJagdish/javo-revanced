@@ -24,6 +24,10 @@ import app.revanced.manager.util.PatchSelection
 import app.revanced.manager.util.tag
 import com.github.pgreze.process.Redirect
 import com.github.pgreze.process.process
+import java.io.IOException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.async
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.CompletableDeferred
@@ -58,6 +62,9 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
             withTimeout(10000L) {
                 binderFuture.await()
             }
+        } catch (error: TimeoutCancellationException) {
+            currentCoroutineContext().ensureActive()
+            throw IOException("Patcher process did not connect within 10 seconds. Export the logs and check the runtime setting.", error)
         } finally {
             context.unregisterReceiver(receiver)
         }

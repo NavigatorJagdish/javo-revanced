@@ -6,13 +6,13 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.2 fixes verified on 2026-11-05. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.3 Manager changes prepared on 2026-11-05. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
 
-Alpha.2 removes consumer Core SMS, overlay and ROM signature-spoofing permission requests, disables backup and debugging, and repairs APKMirror streaming and split merging. The physical-device Play Protect verdict and real-app download/playback verification remain pending.
+Alpha.3 adds APKMirror ad protection, direct suggested-version navigation, browser session/source-page headers, measured preparation progress and patcher-process exit recovery. The Core binary is reused from verified alpha.2 after matching its source tree. The physical-device Play Protect verdict and real-app download/playback verification remain pending.
 
 ## Included
 
-- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager. The packaged alpha.2 APK passed installation, launch, four download regression groups, and first-party patch/sign/install integration on Android API35.
+- `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager. The workflow checks the packaged APK through browser, HTTPS transfer and first-party patch/sign/install integration. See the generated final report for each release's verified outcomes.
 - `apps/javo-core`: complete real ReVanced GmsCore source with Javo branding while retaining `app.revanced.android.gms` and service contracts. See evidence for the actual build result.
 - `patches/javo-branding`: opt-in Video/Music label and icon resource patch source. The Kotlin bundle and DEX archive compile. Resource transformations and external-entity rejection were checked on Android; both first-party fixtures passed patching, signing, installation and launch.
 - `apps/javo-website`: 17 static pages, responsive navigation, persisted theme, honest artifact inventory, documentation and security information. No installation dependencies are required.
