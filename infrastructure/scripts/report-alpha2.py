@@ -21,6 +21,11 @@ for item in artifacts.values():
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())
 check_list = '\n'.join('- ' + str(check) + '.' for check in checks)
+official = integration.get('officialCatalog', {})
+if official.get('metadataLoadedOnAndroid'):
+    catalog_result = f"The official ReVanced catalog loaded {official['patchCount']} patch definitions on Android. Third-party patch execution is unverified."
+else:
+    catalog_result = 'The optional official catalog diagnostic was unavailable. See the integration report for its failure. Third-party patch execution is unverified.'
 report = f"""# Javo ReVanced alpha.2 verification report
 
 The private workflow built these development APKs and bound the results below to their exact hashes. [Verification run]({run_url})
@@ -49,7 +54,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
-- The official ReVanced catalog loaded {integration['officialCatalog']['patchCount']} patch definitions on Android. Third-party patch execution is unverified.
+- {catalog_result}
 
 Android download regression checks passed.
 
