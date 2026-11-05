@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.2** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
+Ye guide **v0.1.0-alpha.3** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
 
 ## 1. GitHub se files download karein
 
@@ -49,17 +49,17 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.2-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.3-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.2
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-manager-0.1.0-alpha.2-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-core-0.3.13.2.250932-javo.2-test.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.2/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.3
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-manager-0.1.0-alpha.3-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-core-0.3.13.2.250932-javo.2-test.apk
+[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-branding-0.1.0-alpha.1.rvp
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.3/SHA256SUMS
 
 
 ## Alpha 2 ke changes
@@ -69,3 +69,11 @@ Core ka consumer build SMS, overlay aur ROM signature-spoofing permissions reque
 APKMirror downloader se bundle lene par Manager download, merge aur write ki alag stages dikhata hai. Manual **Select from storage** input ke liye ab bhi standalone APK chahiye. Download fail ho to **Save logs** patching ke dauraan bhi available hai.
 
 Play Protect ka exact verdict device aur Google ki classification par depend karta hai. Agar naya Core bhi block ho, exact warning text, Android version aur release filename record karein. Is update ki verification report mein permission audit aur emulator results dekhein.
+
+## Alpha 3 Manager flow
+
+APKMirror browser mein ad protection default on hai. Suggested YouTube version ka release page seedha khulta hai. Unique standalone APK variant milne par browser us page ko select karta hai. Toolbar ke **Download APK** se asli download control use karein. **Search APKMirror** aur **Ad protection** toggle bhi available hain. Website ke wait timer aur verification challenge follow karein.
+
+Preparing, patching aur writing mein elapsed time aur measured memory usage dikhegi. Default separate patcher process ka heap limit 1024 MB hai. Advanced settings mein runtime aur memory limit adjust kar sakte hain. Process band hone par error aur Save logs se report milegi. Agar error aaye, exact step, Android version aur latest logs record karein.
+
+Core asset alpha.2 ka verified, matching-certificate binary hai. Manager update ke liye apni existing compatible Core installation use kar sakte hain. Manager development signing certificate pehle release se differ kar sakta hai. Installation conflict par settings aur patch-signing keystore ka export sambhal kar rakhein.

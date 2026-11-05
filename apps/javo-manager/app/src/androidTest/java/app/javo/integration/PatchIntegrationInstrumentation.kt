@@ -12,6 +12,7 @@ import app.revanced.manager.patcher.logger.LogLevel
 import app.revanced.manager.patcher.logger.Logger
 import app.revanced.manager.patcher.patch.PatchBundle
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 import org.json.JSONArray
 import java.io.File
@@ -33,10 +34,12 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 if (file.exists()) { file.setWritable(true); check(file.delete()) }
                 context.assets.open(name).use { input -> file.outputStream().use { input.copyTo(it) } }
             }
+            report.put("browserChecks", checkBrowser(this))
             val bundle = asset("javo-branding.rvp").also { check(it.setReadOnly()) }
             val videoFixture = asset("fixture-video.apk")
             val apkmFixture = asset("fixture-video.apkm")
             report.put("downloadRegressions", runBlocking { checkDownloads(targetContext, videoFixture, apkmFixture, folder) })
+            report.put("httpsTransfer", runBlocking { checkHttpsDownload(targetContext, apkmFixture, videoFixture, folder, context.assets.open("transfer-test.p12").use { it.readBytes() }) })
             report.put("bundleSha256", MessageDigest.getInstance("SHA-256").digest(bundle.readBytes()).joinToString("") { "%02x".format(it) })
             val official = JSONObject().put("patchExecution", "not-tested")
             report.put("officialCatalog", official)
@@ -65,7 +68,45 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             val logger = object : Logger() {
                 override fun log(level: LogLevel, message: String) { android.util.Log.i("JavoIntegration", "$level: $message") }
             }
-            runBlocking {
+            if (id == "video") {
+                runBlocking {
+                    val repository = org.koin.core.context.GlobalContext.get().get<app.revanced.manager.domain.repository.PatchBundleRepository>()
+                    repository.createLocal { bundle.inputStream() }
+                    val imported = kotlinx.coroutines.withTimeout(30_000) {
+                        repository.bundles.first { values -> values.values.any { it.manifestAttributes?.name == "Javo resource branding" } }
+                    }
+                    val uid = imported.entries.first { it.value.manifestAttributes?.name == "Javo resource branding" }.key
+                    try {
+                        kotlinx.coroutines.withTimeout(20_000) {
+                            app.revanced.manager.patcher.runtime.ProcessRuntime(targetContext).execute(
+                                fixture.absolutePath, File(folder, "killed-output.apk").absolutePath, packageName,
+                                mapOf(uid to setOf("$label branding")), emptyMap(), logger,
+                                { event ->
+                                    if (event is app.revanced.manager.patcher.ProgressEvent.Started && event.stepId == app.revanced.manager.patcher.StepId.LoadPatches) {
+                                        val command = java.lang.Runtime.getRuntime().exec(arrayOf("/system/bin/pidof", "${targetContext.packageName}:Patcher"))
+                                        val pid = command.inputStream.bufferedReader().readText().trim().toInt()
+                                        check(pid != android.os.Process.myPid())
+                                        android.os.Process.killProcess(pid)
+                                    }
+                                }
+                            )
+                        }
+                        error("Terminated patcher process was accepted")
+                    } catch (error: Exception) {
+                        check(error.message.orEmpty().contains("stopped before completion")) { error.stackTraceToString() }
+                        report.put("terminatedProcessRecovery", true)
+                    }
+                    val events = java.util.Collections.synchronizedList(mutableListOf<app.revanced.manager.patcher.ProgressEvent>())
+                    kotlinx.coroutines.withTimeout(180_000) {
+                        app.revanced.manager.patcher.runtime.ProcessRuntime(targetContext).execute(
+                            fixture.absolutePath, unsigned.absolutePath, packageName,
+                            mapOf(uid to setOf("$label branding")), emptyMap(), logger, { events.add(it) }
+                        )
+                    }
+                    check(events.any { it is app.revanced.manager.patcher.ProgressEvent.Progress && it.message.orEmpty().contains("memory") })
+                    report.put("separateProcessPatch", true)
+                }
+            } else runBlocking {
                 Session(File(folder,"cache").absolutePath, File(folder,"framework").also { it.mkdirs() }.absolutePath,
                     checkNotNull(Aapt.binary(targetContext)).absolutePath, logger, fixture, {}, LogLevel.INFO).use {
                     it.run(unsigned, patches.toList())

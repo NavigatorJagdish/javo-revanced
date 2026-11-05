@@ -22,7 +22,7 @@ From apps/javo-manager:
 ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug --no-daemon
 ```
 
-On Windows use gradlew.bat or infrastructure/scripts/build-android.ps1. The package ID is app.javo.manager; namespace remains upstream for source compatibility. The development version is 0.1.0-alpha.2. Default Javo update URL and public key are empty, so no upstream Manager APK can be offered as a Javo update.
+On Windows use gradlew.bat or infrastructure/scripts/build-android.ps1. The package ID is app.javo.manager; namespace remains upstream for source compatibility. The development version is 0.1.0-alpha.3. Default Javo update URL and public key are empty, so no upstream Manager APK can be offered as a Javo update.
 
 ## Core
 
@@ -60,3 +60,5 @@ Build patches/javo-branding, convert its JAR with D8, and run build-integration-
 The official catalog diagnostic pins the checksum of the previously signature-inspected snapshot; it reports metadata loading separately from patch execution. If that mutable upstream endpoint changes or is unavailable, the diagnostic records the limitation instead of silently trusting new bytes.
 
 Alpha.2 Android regression checks cover unknown-size progress, nonzero-offset writes, timeout recovery, two-split merging with a preserved Hindi resource, and archive traversal rejection. Core runs install/launch checks on API29 and API35. Core lint has targeted annotations for permission-removal markers and the upstream version-qualified AccountManager permission annotation. The merged APK audit enforces actual permission absence.
+
+Alpha.3 adds 12 browser-policy checks, a real WebView navigation fixture, a 32 MiB HTTPS transfer with a redirect/session cookie/unknown length, and separate-process completion and termination checks. The Core job matches the alpha.2 source tree and reuses its pinned binary before repeating APK verification and Android install/launch checks.

@@ -79,7 +79,7 @@ data class PatchBundle(val patchesJar: String) : Parcelable {
 
         fun patches(bundles: Iterable<PatchBundle>, packageName: String): Map<PatchBundle, Set<Patch>> =
             patches(bundles).mapValues { (_, result) ->
-                val patches = result.getOrDefault(emptySet())
+                val patches = result.getOrElse { throw IOException("Could not load patch bundle. Re-import a compatible RVP and export the logs.", it) }
 
                 patches.filterTo(HashSet(patches.size)) { patch ->
                     val compatiblePackages = patch.compatiblePackages

@@ -15,8 +15,8 @@ class PreferencesManager(
 
     val api = stringPreference("api_url", "https://api.revanced.app")
 
-    val useProcessRuntime = booleanPreference("use_process_runtime", false)
-    val patcherProcessMemoryLimit = intPreference("process_runtime_memory_limit", 700)
+    val useProcessRuntime = booleanPreference("use_process_runtime", true)
+    val patcherProcessMemoryLimit = intPreference("process_runtime_memory_limit", 1024)
     val minPatcherLogLevel = enumPreference("min_patcher_log_level", LogLevel.INFO)
 
     val keystoreAlias = stringPreference("keystore_alias", KeystoreManager.DEFAULT)

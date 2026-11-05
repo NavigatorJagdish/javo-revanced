@@ -21,6 +21,7 @@ abstract class Logger {
 
     val handler = object : Handler() {
         override fun publish(record: LogRecord) {
+            if (!isLoggable(record)) return
             val msg = record.message
             val loggerName = record.loggerName
 
@@ -64,10 +65,10 @@ inline fun <T> Logger.withJavaLogging(block: () -> T): T {
     // eagerly allocating millions of string/LogRecord objects for TRACE logs.
     val previousLevel = rootLogger.level
     rootLogger.level = Level.INFO
+    handler.level = Level.INFO
 
     val oldHandlers = rootLogger.handlers.toList()
     oldHandlers.forEach {
-        it.close()
         rootLogger.removeHandler(it)
     }
 
@@ -77,6 +78,7 @@ inline fun <T> Logger.withJavaLogging(block: () -> T): T {
         block()
     } finally {
         rootLogger.removeHandler(handler)
+        oldHandlers.forEach(rootLogger::addHandler)
         rootLogger.level = previousLevel
     }
 }

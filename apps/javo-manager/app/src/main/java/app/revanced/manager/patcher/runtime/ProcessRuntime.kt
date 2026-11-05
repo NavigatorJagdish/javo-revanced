@@ -24,6 +24,8 @@ import app.revanced.manager.util.PatchSelection
 import app.revanced.manager.util.tag
 import com.github.pgreze.process.Redirect
 import com.github.pgreze.process.process
+import kotlinx.coroutines.async
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -90,6 +92,8 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
                 )
             }
 
+        val connection = async(start = CoroutineStart.UNDISPATCHED) { awaitBinderConnection() }
+        val patching = CompletableDeferred<Unit>()
         launch(Dispatchers.IO) {
             val result = process(
                 APP_PROCESS_BIN_PATH,
@@ -108,13 +112,13 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
 
             Log.d(tag, "Process finished with exit code ${result.resultCode}")
 
-            if (result.resultCode != 0) throw Exception("Process exited with nonzero exit code ${result.resultCode}")
+            if (!patching.isCompleted) {
+                patching.completeExceptionally(Exception("Patcher process stopped before completion (exit ${result.resultCode}). Check available memory and export the logs."))
+            }
         }
 
-        val patching = CompletableDeferred<Unit>()
-
         launch(Dispatchers.IO) {
-            val binder = awaitBinderConnection()
+            val binder = connection.await()
 
             // Android Studio's fast deployment feature causes an issue where the other process will be running older code compared to the main process.
             // The patcher process might be running outdated code if the fast deployment feature is used.
@@ -131,13 +135,13 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
                 }
 
                 override fun finished(exceptionStackTrace: String?) {
-                    binder.exit()
-
                     exceptionStackTrace?.let {
                         patching.completeExceptionally(RemoteFailureException(it))
+                        binder.exit()
                         return
                     }
                     patching.complete(Unit)
+                    binder.exit()
                 }
             }
 
@@ -148,7 +152,7 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
                 packageName = packageName,
                 inputFile = inputFile,
                 outputFile = outputFile,
-                configurations = bundles().map { (uid, bundle) ->
+                configurations = bundles().filterKeys { it in selectedPatches }.map { (uid, bundle) ->
                     PatchConfiguration(
                         bundle,
                         selectedPatches[uid].orEmpty(),
@@ -162,7 +166,7 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
         }
 
         // Wait until patching finishes.
-        patching.await()
+        withTimeout(20 * 60 * 1000L) { patching.await() }
     }
 
     companion object : LibraryResolver() {

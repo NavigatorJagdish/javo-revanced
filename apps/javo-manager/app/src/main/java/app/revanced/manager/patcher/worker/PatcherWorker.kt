@@ -269,6 +269,10 @@ class PatcherWorker(
                 )
             ) // Fallback if exception doesn't occur within step
             Result.failure()
+        } catch (e: OutOfMemoryError) {
+            val failure = IllegalStateException("Patcher ran out of memory. Close other apps and use the separate patcher process in Advanced settings.", e)
+            args.onEvent(ProgressEvent.Failed(null, failure.toRemoteError()))
+            Result.failure()
         } catch (e: Exception) {
             Log.e(tag, "An exception occurred while patching".logFmt(), e)
             args.onEvent(

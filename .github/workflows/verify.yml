@@ -43,10 +43,11 @@ jobs:
           node --input-type=module -e "import fs from 'node:fs'; const p='infrastructure/release/catalog.json'; const c=JSON.parse(fs.readFileSync(p)); c.artifacts=[]; fs.writeFileSync(p,JSON.stringify(c,null,2));"
           node --test tests/*.test.mjs | tee evidence/node-tests.log
           python -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee evidence/runtime-evidence-tests.log
-          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java tests/UpdateSecurityTest.java patches/javo-branding/src/main/java/app/javo/branding/BrandingResources.java tests/BrandingResourcesTest.java apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/DownloadConnection.java tests/DownloadConnectionTest.java
+          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java tests/UpdateSecurityTest.java patches/javo-branding/src/main/java/app/javo/branding/BrandingResources.java tests/BrandingResourcesTest.java apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/DownloadConnection.java tests/DownloadConnectionTest.java apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/webview/ApkMirrorPolicy.java tests/ApkMirrorPolicyTest.java
           java -cp tools/java-tests UpdateSecurityTest | tee evidence/java-security-tests.log
           java -cp tools/java-tests BrandingResourcesTest | tee evidence/java-branding-tests.log
           java -cp tools/java-tests DownloadConnectionTest | tee evidence/java-download-tests.log
+          java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log
           node apps/javo-website/build.mjs
       - uses: actions/upload-artifact@v4
         with:
@@ -57,6 +58,7 @@ jobs:
             evidence/java-security-tests.log
             evidence/java-branding-tests.log
             evidence/java-download-tests.log
+            evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
   manager:
     needs: sources
@@ -165,6 +167,16 @@ jobs:
           chmod +x gradlew
           mkdir -p ../../evidence
           ./gradlew :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
+      - name: Reuse the working Core signing identity after matching its source tree
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin 624a2ae8974c9c9e93af76300e187694e6174eca
+          git diff --exit-code FETCH_HEAD HEAD -- apps/javo-core
+          mkdir -p tools/core-alpha2
+          gh release download v0.1.0-alpha.2 --pattern javo-revanced-development.zip --dir tools/core-alpha2
+          python infrastructure/scripts/reuse-verified-core.py
       - name: Verify Core APK
         run: |
           set -euo pipefail
@@ -263,7 +275,7 @@ jobs:
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: v0.1.0-alpha.2
+      RELEASE_TAG: v0.1.0-alpha.3
     steps:
       - uses: actions/checkout@v4
         with:
@@ -284,7 +296,7 @@ jobs:
             fi
             jq -e --arg sha "$GITHUB_SHA" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
           else
-            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.2' --notes-file docs/RELEASE_ALPHA2.md
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.3' --notes-file docs/RELEASE_ALPHA3.md
           fi
           mkdir -p tools/release-assets
           cp tools/release-input/javo-revanced-development.zip tools/release-input/apks/*.apk tools/release-input/bundles/*.rvp tools/release-assets/

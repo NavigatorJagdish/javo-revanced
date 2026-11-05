@@ -18,14 +18,20 @@ def main():
         for p in classes.rglob('*.class'):z.write(p,p.relative_to(classes).as_posix())
     run(Path(os.environ['JAVA_HOME'])/'bin'/('java'+suffix),'-cp',build/'lib/d8.jar',
         'com.android.tools.r8.D8','--min-api','26','--lib',android,'--output',work,jar)
-    resources=work/'resources.zip'
-    run(build/('aapt2'+suffix),'compile','--dir',ROOT/'tests/fixture/res','-o',resources)
+    # Large resource table exercises preparation and patch writing beyond a tiny fixture.
+    fixture_res=work/'large-res/values'
+    fixture_res.mkdir(parents=True,exist_ok=True)
+    (fixture_res/'strings.xml').write_text('<resources><string name="app_name">Javo integration fixture</string>'+''.join(f'<string name="stress_{i:05d}">Fixture resource {i}</string>' for i in range(4096))+'</resources>')
+    resources=work/'resources.zip' 
+    run(build/('aapt2'+suffix),'compile','--dir',fixture_res.parent,'-o',resources)
     for product,package in [('video','com.google.android.youtube'),('music','com.google.android.apps.youtube.music')]:
         manifest=work/(product+'-manifest.xml')
         manifest.write_text((ROOT/'tests/fixture/AndroidManifest.xml').read_text().replace('com.google.android.youtube',package))
         apk=out/('fixture-'+product+'.apk')
         run(build/('aapt2'+suffix),'link','-I',android,'--manifest',manifest,'-o',apk,resources)
-        with zipfile.ZipFile(apk,'a') as z:z.write(work/'classes.dex','classes.dex')
+        with zipfile.ZipFile(apk,'a') as z:
+            z.write(work/'classes.dex','classes.dex')
+            z.writestr('assets/javo-transfer-stress.bin',bytes(32*1024*1024),compress_type=zipfile.ZIP_STORED)
     # Config splits share the base resource IDs and add a configuration.
     (work/'config-res/values/strings.xml').unlink(missing_ok=True)
     config_res=work/'config-res/values-hi'
@@ -40,6 +46,12 @@ def main():
     with zipfile.ZipFile(out/'fixture-video.apkm','w') as bundle:
         bundle.write(out/'fixture-video.apk','base.apk')
         bundle.write(config_apk,'config.javo.apk')
+    # Local HTTPS fixture certificate is generated only for the Android test APK.
+    tls=work/'transfer-test.p12'
+    tls.unlink(missing_ok=True)
+    if not tls.exists():
+        run(Path(os.environ['JAVA_HOME'])/'bin'/('keytool'+suffix),'-J-Dkeystore.pkcs12.legacy','-genkeypair','-alias','fixture','-keyalg','RSA','-keysize','2048','-storetype','PKCS12','-keystore',tls,'-storepass','fixture-test','-keypass','fixture-test','-dname','CN=localhost','-ext','SAN=dns:localhost,ip:127.0.0.1','-validity','30','-noprompt')
+    shutil.copyfile(tls,out/'transfer-test.p12')
     if args.fixture_only:
         print('Built first-party Video/Music test fixtures. No patches executed.');return
     shutil.copyfile(ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp',out/'javo-branding.rvp')

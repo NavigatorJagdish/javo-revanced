@@ -169,11 +169,12 @@ class PatcherViewModel(
     private val logs by savedStateHandle.saveable<MutableList<Pair<LogLevel, String>>> { mutableListOf() }
     private val logger = object : Logger() {
         override fun log(level: LogLevel, message: String) {
-            level.androidLog(message)
             if (level == LogLevel.TRACE) return
+            level.androidLog(message)
 
             viewModelScope.launch {
-                logs.add(level to message)
+                logs.add(level to message.take(16000))
+                while (logs.size > 1000 || logs.sumOf { it.second.length } > 128000) logs.removeAt(0)
             }
         }
     }
@@ -750,7 +751,7 @@ class PatcherViewModel(
 
         fun appendLog(current: String?, line: String): String =
             current?.takeIf { it.isNotBlank() }
-                ?.let { "$it\n$line" }
+                ?.let { "$it\n$line".takeLast(32768) }
                 ?: line
 
         fun generateSteps(

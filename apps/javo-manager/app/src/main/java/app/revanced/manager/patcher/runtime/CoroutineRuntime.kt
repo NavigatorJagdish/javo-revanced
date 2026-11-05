@@ -32,7 +32,7 @@ class CoroutineRuntime(context: Context) : Runtime(context) {
         val patchList = runStep(StepId.LoadPatches, onEvent) {
             loadLogger.withJavaLogging {
                 val selectedBundles = selectedPatches.keys
-                val bundles = bundles()
+                val bundles = bundles().filterKeys { it in selectedBundles }
                 val uids = bundles.entries.associate { (key, value) -> value to key }
 
                 val allPatches =

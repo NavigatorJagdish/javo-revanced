@@ -14,6 +14,11 @@ import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import java.io.ByteArrayInputStream
+import java.util.concurrent.atomic.AtomicBoolean
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.MenuProvider
@@ -47,7 +52,7 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
         requireActivity().apply {
             enableEdgeToEdge()
             onBackPressedDispatcher.addCallback {
-                if (webView.canGoBack()) webView.goBack()
+                if (::webView.isInitialized && webView.canGoBack()) webView.goBack()
                 else cancelActivity()
             }
             actionBar?.apply {
@@ -62,6 +67,11 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
                         menu: Menu,
                         menuInflater: MenuInflater
                     ) {
+                        if (vm.mirrorMode) {
+                            menu.add(0, 1, 0, "Download APK").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+                            menu.add(0, 2, 1, "Ad protection").apply { isCheckable = true; isChecked = vm.blockAds }
+                            menu.add(0, 3, 2, "Search APKMirror")
+                        }
                     }
 
                     override fun onMenuItemSelected(menuItem: MenuItem) =
@@ -69,7 +79,12 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
                             cancelActivity()
 
                             true
-                        } else false
+                        } else when (menuItem.itemId) {
+                            1 -> { webView.evaluateJavascript(ApkMirrorPolicy.pageScript(vm.blockAds, true), null); true }
+                            2 -> { vm.blockAds = !vm.blockAds; menuItem.isChecked = vm.blockAds; webView.reload(); true }
+                            3 -> { webView.loadUrl(vm.originalUrl); true }
+                            else -> false
+                        }
                 },
                 this
             )
@@ -94,13 +109,17 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
             settings.apply {
                 cacheMode = WebSettings.LOAD_NO_CACHE
                 allowContentAccess = false
+                allowFileAccess = false
+                javaScriptCanOpenWindowsAutomatically = false
+                setSupportMultipleWindows(true)
                 domStorageEnabled = true
                 javaScriptEnabled = true
             }
 
+            webChromeClient = WebChromeClient()
             webViewClient = vm.webViewClient
             setDownloadListener { url, userAgent, _, mimetype, _ ->
-                vm.onDownload(url, mimetype, userAgent)
+                vm.onDownload(url, mimetype.orEmpty(), userAgent ?: settings.userAgentString)
             }
         }
 
@@ -114,7 +133,12 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
                             activity.finish()
                         }
 
-                        is WebViewModel.Command.Load -> webView.loadUrl(it.url)
+                        is WebViewModel.Command.Load -> {
+                            vm.originalUrl = it.url
+                            vm.mirrorMode = ApkMirrorPolicy.isMirror(it.url)
+                            activity.invalidateOptionsMenu()
+                            webView.loadUrl(ApkMirrorPolicy.startPage(it.url))
+                        }
                     }
                 }
             }
@@ -146,6 +170,10 @@ internal class WebViewModel : ViewModel() {
         }
     }
 
+    var mirrorMode = false
+    var blockAds = true
+    var originalUrl = ""
+    private val downloadStarted = AtomicBoolean(false)
     private val commandChannel = Channel<Command>()
     val commands = commandChannel.receiveAsFlow()
 
@@ -165,14 +193,27 @@ internal class WebViewModel : ViewModel() {
     }
 
     val webViewClient = object : WebViewClient() {
+        override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
+            mirrorMode && request.isForMainFrame && !ApkMirrorPolicy.isMirror(request.url.toString())
+
+        override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+            if (mirrorMode && blockAds && !request.isForMainFrame && ApkMirrorPolicy.isAd(request.url.toString())) {
+                return WebResourceResponse("text/plain", "UTF-8", 204, "No Content", emptyMap(), ByteArrayInputStream(byteArrayOf()))
+            }
+            return null
+        }
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            eventBinder!!.pageLoad(url)
+            if (mirrorMode && view != null && url != null && ApkMirrorPolicy.isMirror(url)) {
+                view.evaluateJavascript(ApkMirrorPolicy.pageScript(blockAds, false), null)
+            }
+            eventBinder?.pageLoad(url)
         }
     }
 
     fun onDownload(url: String, mimeType: String, userAgent: String) {
-        eventBinder!!.download(url, mimeType, userAgent)
+        if (mirrorMode && !ApkMirrorPolicy.isMirror(url)) return
+        if (downloadStarted.compareAndSet(false, true)) eventBinder?.download(url, mimeType, userAgent)
     }
 
     fun setup(binder: IWebViewEvents) {

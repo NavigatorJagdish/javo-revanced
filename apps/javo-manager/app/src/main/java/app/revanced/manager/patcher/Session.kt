@@ -71,47 +71,46 @@ class Session(
         }
 
     suspend fun run(output: File, selectedPatches: PatchList) {
+        require(selectedPatches.isNotEmpty()) { "No selected patches loaded. Re-import a compatible patch bundle." }
         val indices = HashMap<Patch, Int>(selectedPatches.size)
         selectedPatches.forEachIndexed { idx, patch -> indices[patch] = idx }
-
         val prepareLogger = logger.forStep(StepId.ReadAPK, minLogLevel, onEvent)
         val patchingLogger = logger.forStep(StepId.ExecutePatches, minLogLevel, onEvent)
         val writingLogger = logger.forStep(StepId.WriteAPK, minLogLevel, onEvent)
 
         val patcher = runStep(StepId.ReadAPK, onEvent) {
-            prepareLogger.withJavaLogging {
-                patcher(
-                    apkFile = input,
-                    temporaryFilesPath = tempDir,
-                    frameworkFileDirectory = frameworkDir,
-                    aaptBinaryPath = File(aaptPath)
-                ) { _packageName, _version ->
-                    selectedPatches.toSet()
+            withPatcherActivity(StepId.ReadAPK, "Preparing APK", onEvent) {
+                prepareLogger.withJavaLogging {
+                    patcher(
+                        apkFile = input,
+                        temporaryFilesPath = tempDir,
+                        frameworkFileDirectory = frameworkDir,
+                        aaptBinaryPath = File(aaptPath)
+                    ) { _, _ -> selectedPatches.toSet() }
                 }
             }
         }
-
         val result = runStep(StepId.ExecutePatches, onEvent) {
-            patchingLogger.withJavaLogging {
-                patchingLogger.info("Applying patches...")
-                applyPatchesVerbose(patcher, indices, patchingLogger)
+            withPatcherActivity(StepId.ExecutePatches, "Applying patches", onEvent) {
+                patchingLogger.withJavaLogging {
+                    patchingLogger.info("Applying patches...")
+                    applyPatchesVerbose(patcher, indices, patchingLogger)
+                }
             }
         }
-
         runStep(StepId.WriteAPK, onEvent) {
-            writingLogger.withJavaLogging {
-                writingLogger.info("Writing patched files...")
-
-                val patched = tempDir.resolve("result.apk")
-                withContext(Dispatchers.IO) {
-                    Files.copy(input.toPath(), patched.toPath(), StandardCopyOption.REPLACE_EXISTING)
-                }
-                result.applyTo(patched)
-
-                writingLogger.info("Patched apk saved to $patched")
-
-                withContext(Dispatchers.IO) {
-                    Files.move(patched.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            withPatcherActivity(StepId.WriteAPK, "Writing APK", onEvent) {
+                writingLogger.withJavaLogging {
+                    writingLogger.info("Writing patched files...")
+                    val patched = tempDir.resolve("result.apk")
+                    withContext(Dispatchers.IO) {
+                        Files.copy(input.toPath(), patched.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    }
+                    result.applyTo(patched)
+                    writingLogger.info("Patched apk saved to $patched")
+                    withContext(Dispatchers.IO) {
+                        Files.move(patched.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    }
                 }
             }
         }
