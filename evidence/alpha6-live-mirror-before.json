@@ -1,0 +1,11 @@
+{
+  "liveDownloadVerified": false,
+  "pageFinished": true,
+  "webViewVersion": "74.0.3729.185",
+  "userAgent": "Mozilla/5.0 (Linux; Android 10; Android SDK built for x86_64 Build/QSR1.210820.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.185 Mobile Safari/537.36",
+  "page": "\"{\\\"title\\\":\\\"YouTube 20.40.45 (nodpi) (Android 9.0+) APK Download by Google LLC - APKMirror\\\",\\\"links\\\":227,\\\"hasFinal\\\":false,\\\"hasButton\\\":true}\"",
+  "nativeUrlReturned": true,
+  "failure": "Download server returned HTTP 403. Reopen the source or select an APK from storage.",
+  "diagnosticCompleted": true,
+  "scope": "Local candidate before browser-side protected-endpoint/CDN resolution"
+}

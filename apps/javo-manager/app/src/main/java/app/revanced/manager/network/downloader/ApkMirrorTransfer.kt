@@ -18,7 +18,7 @@ import java.io.OutputStream
 import java.nio.file.Files
 import java.util.zip.ZipFile
 
-enum class ApkDownloadStage { DOWNLOADING, MERGING, WRITING }
+enum class ApkDownloadStage { DOWNLOADING, IMPORTING, MERGING, WRITING }
 
 object ApkMirrorTransfer {
     private const val MAX_BYTES = 2L * 1024 * 1024 * 1024
@@ -61,6 +61,15 @@ object ApkMirrorTransfer {
         } finally {
             work.deleteRecursively()
         }
+    }
+
+    suspend fun importArchive(archive: File, output: OutputStream, onStage: suspend (ApkDownloadStage) -> Unit) = withContext(Dispatchers.IO) {
+        require(archive.length() in 1..MAX_BYTES) { "Selected archive is empty or exceeds 2 GiB" }
+        val work = Files.createTempDirectory("javo-apk-import-").toFile()
+        try {
+            onStage(ApkDownloadStage.IMPORTING)
+            processArchive(archive, output, work, onStage)
+        } finally { work.deleteRecursively() }
     }
 
     internal suspend fun processArchive(

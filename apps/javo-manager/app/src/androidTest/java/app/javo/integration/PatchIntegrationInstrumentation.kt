@@ -21,8 +21,10 @@ import java.security.MessageDigest
 /** Exercises the production bundle loader, Session and signer against first-party code only. */
 class PatchIntegrationInstrumentation : Instrumentation() {
     private var realInput: String? = null
-    override fun onCreate(arguments: Bundle?) { realInput=arguments?.getString("realInput"); super.onCreate(arguments); start() }
+    private var liveMirror = false
+    override fun onCreate(arguments: Bundle?) { realInput=arguments?.getString("realInput"); liveMirror=arguments?.getString("liveMirror")=="1"; super.onCreate(arguments); start() }
     override fun onStart() {
+        if (liveMirror) { diagnoseLiveMirror(this); return }
         realInput?.let { checkRealYoutube(this, File(it)); return }
         val report = JSONObject().put("fixture", "first-party; no YouTube code")
             .put("playback", "not-tested").put("accountLogin", "not-tested")
@@ -40,6 +42,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             val bundle = asset("javo-branding.rvp").also { check(it.setReadOnly()) }
             val videoFixture = asset("fixture-video.apk")
             val apkmFixture = asset("fixture-video.apkm")
+            report.put("productionBrowserChecks", checkProductionBrowser(this, apkmFixture))
             report.put("downloadRegressions", runBlocking { checkDownloads(targetContext, videoFixture, apkmFixture, folder) })
             report.put("httpsTransfer", runBlocking { checkHttpsDownload(targetContext, apkmFixture, videoFixture, folder, context.assets.open("transfer-test.p12").use { it.readBytes() }) })
             report.put("bundleSha256", MessageDigest.getInstance("SHA-256").digest(bundle.readBytes()).joinToString("") { "%02x".format(it) })
@@ -150,4 +153,3 @@ class PatchIntegrationInstrumentation : Instrumentation() {
         }
     }
 }
-

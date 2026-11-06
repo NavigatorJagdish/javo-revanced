@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main">
-
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:id="@+id/main" android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:id="@+id/javo_web_controls" android:orientation="vertical"
+        android:visibility="gone" android:padding="8dp" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <TextView android:id="@+id/javo_web_status" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite" android:text="Opening source page…" />
+        <ProgressBar android:id="@+id/javo_web_progress" style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent" android:layout_height="4dp" android:max="100" />
+        <Button android:id="@+id/javo_web_download" android:tag="javo.download" android:text="Download APK"
+            android:layout_width="match_parent" android:layout_height="wrap_content" />
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <Button android:id="@+id/javo_web_browser" android:tag="javo.browser" android:text="Open browser"
+                android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" />
+            <Button android:id="@+id/javo_web_import" android:tag="javo.import" android:text="Use downloaded APK"
+                android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+    <WebView android:id="@+id/webview" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 </LinearLayout>

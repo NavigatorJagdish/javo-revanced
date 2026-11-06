@@ -164,6 +164,7 @@ class PatcherWorker(
                     onStage = { stage ->
                         val text = when (stage) {
                             ApkDownloadStage.DOWNLOADING -> R.string.javo_download_transfer
+                            ApkDownloadStage.IMPORTING -> R.string.javo_download_import
                             ApkDownloadStage.MERGING -> R.string.javo_download_merge
                             ApkDownloadStage.WRITING -> R.string.javo_download_write
                         }

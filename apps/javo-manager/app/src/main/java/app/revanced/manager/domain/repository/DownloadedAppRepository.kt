@@ -40,6 +40,21 @@ class DownloadedAppRepository(
 ) {
     private val dir = app.getDir("downloaded-apps", Context.MODE_PRIVATE)
     private val dao = db.downloadedAppDao()
+    private val webImports = File(app.cacheDir, "javo-web-imports").canonicalFile
+
+    private fun importedArchive(data: Parcelable): File? {
+        val url = (data as? DownloadUrl)?.url ?: return null
+        val uri = java.net.URI(url)
+        if (uri.scheme != "file") return null
+        require(uri.authority.isNullOrEmpty() && uri.query == null && uri.fragment == null) { "Invalid imported file URI" }
+        val original = File(uri)
+        val file = original.canonicalFile
+        require(!java.nio.file.Files.isSymbolicLink(original.toPath()) && file.parentFile == webImports &&
+            file.name.startsWith("selected-") && file.name.endsWith(".zip") && file.isFile) {
+            "Only files selected in the native APK picker can be imported"
+        }
+        return file
+    }
 
     fun getAll() = dao.getAllApps().distinctUntilChanged()
 
@@ -80,7 +95,9 @@ class DownloadedAppRepository(
         val targetFile = saveDir.resolve("base.apk").toPath()
 
         var committed = false
+        var selectedArchive: File? = null
         try {
+            selectedArchive = importedArchive(data)
             val downloadSize = AtomicLong(0)
             val downloadedBytes = AtomicLong(0)
 
@@ -101,7 +118,7 @@ class DownloadedAppRepository(
                         }
 
                         val downloadContext = currentCoroutineContext()
-                        val managedMirror = data is DownloadUrl && downloader.className.contains(".apkmirror.")
+                        val managedMirror = selectedArchive != null || (data is DownloadUrl && downloader.className.contains(".apkmirror."))
 
                         fun emitProgress(bytes: Long) {
                             downloadContext.ensureActive()
@@ -121,7 +138,10 @@ class DownloadedAppRepository(
                                         )
                                     }
                             }
-                            if (managedMirror) {
+                            if (selectedArchive != null) {
+                                ApkMirrorTransfer.importArchive(selectedArchive!!, stream, onStage)
+                                send(selectedArchive!!.length() to selectedArchive!!.length())
+                            } else if (managedMirror) {
                                 ApkMirrorTransfer.download(data as DownloadUrl, stream,
                                     onProgress = { send(it) }, onStage = onStage)
                             } else {
@@ -167,7 +187,7 @@ class DownloadedAppRepository(
         } catch (e: Exception) {
             if (!committed) saveDir.deleteRecursively()
             throw e
-        }
+        } finally { selectedArchive?.delete() }
 
         // Return the Apk file.
         return getApkFileForDir(saveDir)

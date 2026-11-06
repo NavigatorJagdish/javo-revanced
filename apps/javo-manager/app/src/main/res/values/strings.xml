@@ -615,4 +615,5 @@ Tap them for more details.</string>
     <plurals name="selected_count">
         <item quantity="other">%d selected</item>
     </plurals>
+    <string name="javo_download_import">Importing selected APK…</string>
 </resources>

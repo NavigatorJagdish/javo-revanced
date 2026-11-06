@@ -13,7 +13,7 @@ if audit['apkSha256'] != artifacts['core']['sha256'] or not audit['forbiddenPerm
 if integration['managerApkSha256'] != artifacts['manager']['sha256'] or not integration.get('success'):
     raise ValueError('Manager integration must match this APK')
 checks = integration.get('downloadRegressions', [])
-if not integration.get('httpsTransfer') or not integration.get('browserChecks') or integration.get('separateProcessPatch') is not True or integration.get('terminatedProcessRecovery') is not True:
+if not integration.get('productionBrowserChecks') or not integration.get('httpsTransfer') or not integration.get('browserChecks') or integration.get('separateProcessPatch') is not True or integration.get('terminatedProcessRecovery') is not True:
     raise ValueError('Browser, HTTPS transfer or separate process evidence is missing')
 if len(checks) < 4:
     raise ValueError('Download regression evidence is missing')
@@ -31,7 +31,7 @@ if official.get('metadataLoadedOnAndroid'):
     catalog_result = f"The official ReVanced catalog loaded {official['patchCount']} patch definitions on Android. Third-party patch execution is unverified."
 else:
     catalog_result = 'The optional official catalog diagnostic was unavailable. See the integration report for its failure. Third-party patch execution is unverified.'
-report = f"""# Javo ReVanced alpha.5 verification report
+report = f"""# Javo ReVanced alpha.6 verification report
 
 The private workflow built these development APKs and bound the results below to their exact hashes. [Verification run]({run_url})
 
@@ -51,11 +51,11 @@ The earlier APK requested RECEIVE_SMS. Google documents sensitive-permission blo
 
 ## Manager download changes
 
-APKMirror transfers have connection and read timeouts, bounded redirects, browser-session cookies and an overall coroutine timeout. Transfer, merge and write stages are visible. The APKMirror browser filters known ad resources and pop-ups, opens supported suggested versions directly and highlights download controls. It recognizes both the initial download control and the final download.php link, uses the same window and reports missing controls instead of silently doing nothing. An external-browser fallback is available. Preparing, patching and writing report measured elapsed time and memory use. The native heap-property override returns a terminated property value and older Android versions skip unavailable AppCompat initialization. The default separate patcher process has a 700 MB requested heap limit, capped to one quarter of device RAM and to 700 MB on Android 10 and older, a completion timeout and process-exit recovery. The host handles split APKM merging with modules kept open until serialization finishes. Archive extraction rejects traversal and duplicate paths and bounds split count and expanded size. Byte progress supports missing size and nonzero buffer offsets. Failed replacement downloads preserve the previous APK. Logs remain exportable during patching.
+APKMirror transfers have connection and read timeouts, bounded redirects, browser-session cookies and an overall coroutine timeout. Transfer, merge and write stages are visible. The APKMirror browser filters known ad resources and pop-ups, opens supported suggested versions directly and highlights download controls. It recognizes both the initial download control and the final download.php link, uses the same window and reports missing controls instead of silently doing nothing. Persistent native controls resolve the final URL directly instead of waiting for a WebView download callback. A native document picker imports a browser-downloaded APK/APKM back into the same patching session, validates and merges it, and cleans up its private temporary copy. Only imports inside the dedicated private cache directory are accepted. An external-browser fallback is available. Preparing, patching and writing report measured elapsed time and memory use. The native heap-property override returns a terminated property value and older Android versions skip unavailable AppCompat initialization. The default separate patcher process has a 700 MB requested heap limit, capped to one quarter of device RAM and to 700 MB on Android 10 and older, a completion timeout and process-exit recovery. The host handles split APKM merging with modules kept open until serialization finishes. Archive extraction rejects traversal and duplicate paths and bounds split count and expanded size. Byte progress supports missing size and nonzero buffer offsets. Failed replacement downloads preserve the previous APK. Logs remain exportable during patching.
 
 ## Tests from this build
 
-- 89 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 13 Java download, 12 Java browser policy and 14 Python checks.
+- 98 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 13 Java download, 17 Java browser policy and 18 Python checks.
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
@@ -80,5 +80,4 @@ The ZIP includes the five pinned upstream source trees, master prompt, four visu
 Use apks/ for installation files, bundles/ for the optional Javo branding patch, website/ for the built site, docs/ for setup and evidence/ for test reports and screenshots. SHA256SUMS accompanies the release assets.
 """
 (root / 'docs/FINAL_REPORT.md').write_text(report, encoding='utf-8')
-print('Generated report from matching alpha.5 APK and regression evidence')
-
+print('Generated report from matching alpha.6 APK and regression evidence')

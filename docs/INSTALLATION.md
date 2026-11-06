@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.5** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
+Ye guide **v0.1.0-alpha.6** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
 
 ## 1. GitHub se files download karein
 
@@ -15,9 +15,9 @@ Private repository ka access rakhne wale GitHub account se sign in karein. Phone
 
 Agar GitHub par **404** aaye, pehle account aur repository access check karein. Saari files release ke **Assets** section mein bhi milengi. [GitHub Release][release]
 
-## Alpha.4 se alpha.5 Manager update
+## Purane alpha se alpha.6 Manager update
 
-Is release mein Manager ka development signing certificate badla hai. Android alpha.4 par in-place update ko reject kar sakta hai. Pehle purane Manager mein **Settings → Import & export** se **settings aur patch-signing keystore**, dono export karein aur files ka backup sambhalein. Uske baad sirf purana Manager remove karke alpha.5 install karein aur settings/keystore import karein. Apna working Core use karte rahein. Backup ke bina uninstall karne se purani patch-signing key kho sakti hai.
+Is release se development signing identity ko stable rakhne ka setup hai. Purane alpha ka certificate alag hone par Android in-place update reject karega. Pehle **Settings → Import & export** se **settings aur patch-signing keystore**, dono export karein. Phir purana Manager remove karke alpha.6 install karein aur backups import karein. Working Core ko use karte rahein.
 
 ## 2. Manager install karein
 
@@ -55,17 +55,17 @@ Is release mein Manager ka development signing certificate badla hai. Android al
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.5-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.6-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.5
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-manager-0.1.0-alpha.5-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-core-0.3.13.2.250932-javo.2-test.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.6
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-manager-0.1.0-alpha.6-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-core-0.3.13.2.250932-javo.2-test.apk
+[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-branding-0.1.0-alpha.1.rvp
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/SHA256SUMS
 
 
 ## Alpha 2 ke changes
@@ -88,3 +88,8 @@ Asli YouTube 20.40.45 ka local test teen selected patches ke saath preparation, 
 
 
 Agar APKMirror ke final page par download apne aap start na ho, toolbar ka **Download APK** use karein. Alpha.5 final download link ko bhi pehchanta hai. Link ready na ho to message dikhega. Site verification ke liye **Open in browser** use kar sakte hain: browser mein APK download karein, Manager mein wapas aakar source page close karein aur **Apps → Select from storage** se downloaded standalone APK select karein.
+
+
+## Alpha.6 ka APKMirror flow
+
+Browser page ke upar native **Download APK**, **Open browser** aur **Use downloaded APK** buttons hamesha dikhte hain. **Download APK** final link ko Manager ko seedha deta hai; page ka apna automatic download callback zaroori nahi hai. Agar site verification ya error aaye, **Open browser** mein download karein. Manager ki isi screen par wapas aa kar **Use downloaded APK** se file select karein. APK/APKM validate aur zaroorat par merge hone ke baad wahi patching session continue hoga. Source download safal hone se pehle verification challenges poore karne pad sakte hain.

@@ -84,7 +84,7 @@ class WebViewScope<T> internal constructor(
             // Preserve the browser session for sites that protect download links.
             @Suppress("UNCHECKED_CAST")
             val finalResult = if (result is DownloadUrl) {
-                val cookie = if (result.headers.keys.none { it.equals("Cookie", true) }) {
+                val cookie = if (result.url.startsWith("https://") && result.headers.keys.none { it.equals("Cookie", true) }) {
                     withContext(Dispatchers.Main) { CookieManager.getInstance().getCookie(result.url) }
                 } else null
                 val headers = result.headers.toMutableMap()

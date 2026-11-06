@@ -65,6 +65,10 @@ jobs:
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
   manager:
+    permissions:
+      contents: read
+      packages: read
+      actions: read
     outputs:
       artifact: ${{ steps.manager_artifact.outputs.artifact-id }}
     needs: sources
@@ -85,6 +89,16 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/cache@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
+        with:
+          path: ~/.android/debug.keystore
+          key: javo-manager-development-signing-v1
+      - name: Restore the private stable development signing identity
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python infrastructure/scripts/restore-manager-signing.py
       - name: Compile, unit test and lint Manager
         working-directory: apps/javo-manager
         run: |
@@ -97,6 +111,14 @@ jobs:
           set -euo pipefail
           sdkmanager 'build-tools;34.0.0'
           python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/debug/*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
+        with:
+          name: javo-manager-development-identity
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 90
+          path: ~/.android/debug.keystore
       - name: Build opt-in branding bundle
         working-directory: apps/javo-manager
         run: |
@@ -308,7 +330,7 @@ jobs:
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: v0.1.0-alpha.5
+      RELEASE_TAG: v0.1.0-alpha.6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -330,7 +352,7 @@ jobs:
             fi
             jq -e --arg sha "$GITHUB_SHA" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
           else
-            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.5' --notes-file docs/RELEASE_ALPHA5.md
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.6' --notes-file docs/RELEASE_ALPHA6.md
           fi
           mkdir -p tools/release-assets
           cp tools/release-input/javo-revanced-development.zip tools/release-input/apks/*.apk tools/release-input/bundles/*.rvp tools/release-assets/
@@ -343,4 +365,3 @@ jobs:
             jq -e --arg name "$(basename "$asset")" --arg digest "$digest" '.assets | any(.name == $name and .state == "uploaded" and .digest == $digest)' "$RUNNER_TEMP/asset-info.json"
           done
           gh release edit "$RELEASE_TAG" --draft=false
-

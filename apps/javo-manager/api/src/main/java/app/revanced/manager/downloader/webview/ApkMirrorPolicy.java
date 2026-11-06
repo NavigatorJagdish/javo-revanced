@@ -18,6 +18,12 @@ public final class ApkMirrorPolicy {
         }
     }
 
+    public static boolean isDownloadFile(String address) {
+        if (!isMirror(address)) return false;
+        String path = URI.create(address).getPath().toLowerCase(Locale.ROOT);
+        return path.endsWith(".apk") || path.endsWith(".apkm") || path.endsWith(".apks") || path.endsWith(".xapk");
+    }
+
     public static boolean isAd(String address) {
         String host;
         try { host = URI.create(address).getHost(); }
@@ -54,20 +60,33 @@ public final class ApkMirrorPolicy {
 
     /** Keeps download controls visible. Site countdowns and browser challenges retain their behavior. */
     public static String pageScript(boolean blockAds, boolean activateDownload) {
+        return script(blockAds, activateDownload, false);
+    }
+
+    /** Resolve a user-selected control for the native host; no browser download event is needed. */
+    public static String downloadActionScript(boolean blockAds) {
+        return script(blockAds, true, true);
+    }
+
+    public static String browserUserAgent(String original) {
+        return original.replace("; wv", "").replace(" Version/4.0", "");
+    }
+
+    private static String script(boolean blockAds, boolean activateDownload, boolean resolve) {
         return "(()=>{if(!/(^|\\.)apkmirror\\.com$/i.test(location.hostname))return;"
                 + "let old=document.getElementById('javo-ad-style');if(old)old.remove();"
-                + (blockAds ? "let s=document.createElement('style');s.id='javo-ad-style';s.textContent='ins.adsbygoogle,.ad-container,.ad-placement,[id^=div-gpt-ad],iframe[src*=doubleclick]{display:none!important}';document.head.appendChild(s);" : "")
+                + (blockAds ? "let s=document.createElement('style');s.id='javo-ad-style';s.textContent='ins.adsbygoogle,.ains,.ad-container,.ad-placement,[id^=div-gpt-ad],iframe[src*=doubleclick]{display:none!important}';document.head.appendChild(s);" : "")
                 + "let safe=a=>{try{let u=new URL(a.href,location.href);return u.protocol==='https:'&&u.origin===location.origin&&u.pathname.startsWith('/apk/')}catch(e){return false}};"
                 + "let ready=a=>!a.hasAttribute('disabled')&&a.getAttribute('aria-disabled')!=='true'&&!a.classList.contains('disabled');"
                 + "let finalLink=document.querySelector('a#download-link[href]');"
                 + "let trustedFinal=a=>{try{let u=new URL(a.href,location.href);return u.protocol==='https:'&&u.origin===location.origin&&u.pathname==='/wp-content/themes/APKMirror/download.php'}catch(e){return false}};"
                 + "let button=(finalLink&&trustedFinal(finalLink)?finalLink:null)||[...document.querySelectorAll('a[href]')].find(a=>safe(a)&&/\\/download\\/\\?/.test(a.href));"
                 + "if(button){button.target='_self';button.style.outline='3px solid #00e5a8';button.scrollIntoView({block:'center'});"
-                + "if(!ready(button))return 'waiting';"
+                + (resolve ? "if(!ready(button))return JSON.stringify({kind:'waiting'});return JSON.stringify({kind:trustedFinal(button)?'download':'navigate',url:button.href});" : "if(!ready(button))return 'waiting';")
                 + (activateDownload ? "location.assign(button.href);return 'navigating';" : "return 'ready';") + "}"
                 + "let apk=[...document.querySelectorAll('.table-row')].filter(r=>/\\bAPK\\b/.test(r.innerText)&&!/\\bBUNDLE\\b/.test(r.innerText)).reduce((all,r)=>all.concat([...r.querySelectorAll('a[href]')]),[]).filter(a=>safe(a)&&new URL(a.href).pathname.startsWith(location.pathname)&&/android-apk-download\\/$/.test(new URL(a.href).pathname));"
-                + "let urls=[...new Set(apk.map(a=>a.href))];if(urls.length===1){location.href=urls[0];return 'variant';}"
-                + "let d=document.getElementById('downloads')||document.querySelector('.downloadButton');if(d)d.scrollIntoView({block:'center'});return 'no-control';})();";
+                + "let urls=[...new Set(apk.map(a=>a.href))];if(urls.length===1){"
+                + (resolve ? "return JSON.stringify({kind:'navigate',url:urls[0]});" : "location.href=urls[0];return 'variant';") + "}"
+                + "let d=document.getElementById('downloads')||document.querySelector('.downloadButton');if(d)d.scrollIntoView({block:'center'});" + (resolve ? "return JSON.stringify({kind:'missing'});" : "return 'no-control';") + "})();";
     }
 }
-
