@@ -19,9 +19,16 @@ public final class ApkMirrorPolicy {
     }
 
     public static boolean isDownloadFile(String address) {
-        if (!isMirror(address)) return false;
-        String path = URI.create(address).getPath().toLowerCase(Locale.ROOT);
-        return path.endsWith(".apk") || path.endsWith(".apkm") || path.endsWith(".apks") || path.endsWith(".xapk");
+        try {
+            URI uri = URI.create(address);
+            String path = uri.getPath().toLowerCase(Locale.ROOT);
+            boolean source = isMirror(address);
+            // Dedicated bucket observed in APKMirror's own signed file redirect, not all R2 tenants.
+            boolean storage = "https".equalsIgnoreCase(uri.getScheme())
+                    && "eb5e7388c3df147b74dd2379b7cf8323.r2.cloudflarestorage.com".equalsIgnoreCase(uri.getHost())
+                    && uri.getUserInfo() == null && path.startsWith("/downloadprod/");
+            return (source || storage) && (path.endsWith(".apk") || path.endsWith(".apkm") || path.endsWith(".apks") || path.endsWith(".xapk"));
+        } catch (IllegalArgumentException | NullPointerException error) { return false; }
     }
 
     public static boolean isAd(String address) {

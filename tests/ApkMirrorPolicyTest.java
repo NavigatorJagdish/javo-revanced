@@ -28,6 +28,11 @@ public class ApkMirrorPolicyTest {
         check(ApkMirrorPolicy.isDownloadFile("https://downloadr2.apkmirror.com/file.apk?token=sample"), "signed CDN APK address recognized");
         check(!ApkMirrorPolicy.isDownloadFile("https://www.apkmirror.com/wp-content/themes/APKMirror/download.php?id=sample"), "protected PHP endpoint remains in browser");
         check(!ApkMirrorPolicy.isDownloadFile("https://apkmirror.com.evil.test/file.apk"), "foreign file address rejected");
+        String bucket="https://eb5e7388c3df147b74dd2379b7cf8323.r2.cloudflarestorage.com";
+        check(ApkMirrorPolicy.isDownloadFile(bucket+"/downloadprod/app.apk?X-Amz-Signature=fixture"), "verified APKMirror R2 file host accepted");
+        check(!ApkMirrorPolicy.isDownloadFile(bucket.replace("eb5e7388c3df147b74dd2379b7cf8323","other")+"/downloadprod/app.apk"), "other R2 tenants rejected");
+        check(!ApkMirrorPolicy.isDownloadFile(bucket+"/other/app.apk"), "unverified bucket prefix rejected");
+        check(!ApkMirrorPolicy.isDownloadFile(bucket+"/downloadprod/page.html"), "R2 HTML navigation rejected");
         System.out.println(checks + " APKMirror browser checks passed");
     }
 }

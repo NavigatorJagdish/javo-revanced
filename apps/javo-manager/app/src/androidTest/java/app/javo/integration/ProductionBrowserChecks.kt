@@ -68,7 +68,7 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
     val base="https://www.apkmirror.com/apk/google-inc/youtube/fixture-android-apk-download/"
     val intermediate=base+"download/?key=fixture"
     val final="https://www.apkmirror.com/wp-content/themes/APKMirror/download.php?id=fixture&key=fixture"
-    val cdn="https://downloadr2.apkmirror.com/fixture/youtube.apk?token=fixture"
+    val cdn="https://eb5e7388c3df147b74dd2379b7cf8323.r2.cloudflarestorage.com/downloadprod/fixture/youtube.apk?token=fixture"
     BrowserHost(test).use { host ->
         test.runOnMainSync {
             val browser=host.fragment.webView

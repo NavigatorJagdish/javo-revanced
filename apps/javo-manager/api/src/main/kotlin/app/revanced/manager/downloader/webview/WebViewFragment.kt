@@ -380,6 +380,7 @@ internal class WebViewModel : ViewModel() {
         }
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
+            if (mirrorMode && url != null && ApkMirrorPolicy.isDownloadFile(url)) return
             eventBinder?.pageLoad(url)
             if (view != null && url != null) onPageReady?.invoke(view, url)
         }

@@ -89,7 +89,7 @@ class WebViewScope<T> internal constructor(
                 } else null
                 val headers = result.headers.toMutableMap()
                 if (!cookie.isNullOrBlank()) headers["Cookie"] = cookie
-                lastPageUrl?.takeIf { ApkMirrorPolicy.isMirror(it) && ApkMirrorPolicy.isMirror(result.url) }?.let {
+                lastPageUrl?.takeIf { ApkMirrorPolicy.isMirror(it) && ApkMirrorPolicy.isDownloadFile(result.url) }?.let {
                     if (headers.keys.none { key -> key.equals("Referer", true) }) headers["Referer"] = it
                 }
                 result.copy(headers = headers) as T
