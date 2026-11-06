@@ -1,0 +1,56 @@
+{
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.5",
+  "draft": false,
+  "testedCommit": "a9cb88e5dc0ca9c2cf043c305bf41447d94479d5",
+  "verificationRun": 42138970837,
+  "sourceZipSha256": "620a86bc0512f13e52e73ea6ddde07359e944731ed0b67c57d28f1b0db1a3691",
+  "sourceEntriesVerified": 7235,
+  "hostChecksPassed": 89,
+  "managerAndroidApis": [
+    29,
+    35
+  ],
+  "coreAndroidApis": [
+    29,
+    35
+  ],
+  "android10DefaultHeapMb": 700,
+  "managerApkSha256": "a8989070a976572aed876de6a0ecd197657e9cd329a41898b14c319607e621db",
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "assets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "size": 7352,
+      "digest": "sha256:b7160e524fbb6546ef12b8ba679537750b93c282c5515e8ae7a747c5b69d0bd9"
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "size": 92219219,
+      "digest": "sha256:4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.5-debug.apk",
+      "size": 62587368,
+      "digest": "sha256:a8989070a976572aed876de6a0ecd197657e9cd329a41898b14c319607e621db"
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "size": 318231157,
+      "digest": "sha256:620a86bc0512f13e52e73ea6ddde07359e944731ed0b67c57d28f1b0db1a3691"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 405,
+      "digest": "sha256:a84aac07f2677e903b8a0b77838498326eef6b0a8111a05abd2b60844d0d1cc7"
+    }
+  ],
+  "realYoutubeLocalReport": "evidence/alpha3-real-youtube.json",
+  "realYoutubeScope": "Separate local alpha.3 build, three selected patches, 700 MB configured heap. Patch/sign/install and main navigation after setup passed.",
+  "nativeDownloadButtonRegression": "Real WebView final download.php target=_blank link reached native download listener on Android 10 and 15",
+  "liveProductionApkMirrorDownload": "not-verified; Python browser-session request succeeded, separate Java request returned 403",
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerSignerSha256": "b917e08bc2d807198952112de9cdaacd56a13b6d1e139a1b0efb9ce9a1462289",
+  "alpha4SignerSha256": "1e30b4650727425222bec97e68ab50b5cc5ddc45ccd2b4e8585a632c7228bc43",
+  "managerAlpha4SignatureChanged": true
+}

@@ -6,7 +6,7 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated from the owner's master prompt and four design references, with alpha.5 Manager changes prepared on 2026-11-06. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+Independent Android ecosystem regenerated from the owner's master prompt and four design references, with verified alpha.5 Manager update published on 2026-11-06. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
 
 Alpha.5 includes APKMirror ad protection, direct suggested-version navigation, browser session/source-page headers, measured preparation progress and patcher-process exit recovery. The Core binary is reused from verified alpha.2 after matching its source tree. The APKMirror toolbar recognizes both first-page and final download.php links, handles download controls in the same window and offers an external-browser fallback. The heap defaults to 700 MB, with an Android 10 cap, after a separate real YouTube patch/sign check. See the evidence for the local build hash and tested patches. Physical-device behavior, playback and account sign-in remain unverified.
 
@@ -41,4 +41,3 @@ GitHub blocks the original patches repository, but the official API serves bundl
 ## Licenses and independence
 
 Manager and Javo code: GPL-3.0-only unless a file states otherwise. GmsCore: Apache-2.0 with additional upstream component notices. Full upstream licenses and source are preserved. See [LICENSING.md](docs/LICENSING.md). Javo is not affiliated with Google, YouTube, ReVanced or microG.
-

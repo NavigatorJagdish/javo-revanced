@@ -4,41 +4,6 @@
   "generatedAt": "2026-11-03",
   "artifacts": [
     {
-      "id": "manager",
-      "displayName": "Javo Manager",
-      "applicationId": "app.javo.manager",
-      "version": "0.1.0-alpha.4",
-      "versionCode": 100004,
-      "minSdk": 26,
-      "channel": "development",
-      "signing": "debug",
-      "verification": "signature-and-package-verified",
-      "sha256": "8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135",
-      "signerSha256": "1e30b4650727425222bec97e68ab50b5cc5ddc45ccd2b4e8585a632c7228bc43",
-      "size": 62586268,
-      "path": "/downloads/files/javo-manager-0.1.0-alpha.4-debug.apk",
-      "runtimeVerified": false,
-      "architectures": [
-        "arm64-v8a",
-        "armeabi-v7a",
-        "x86_64"
-      ],
-      "runtimeSmoke": {
-        "device": "emulator-5554",
-        "package": "app.javo.manager",
-        "processRunning": true,
-        "crashObserved": false,
-        "installedArtifactMatchesDeliverable": true,
-        "authentication": "not-tested",
-        "pushDelivery": "not-tested",
-        "playback": "not-tested",
-        "androidApi": 29,
-        "architecture": "x86_64",
-        "bootCompleted": true,
-        "installedApkSha256": "8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135"
-      }
-    },
-    {
       "id": "core",
       "displayName": "Javo Core",
       "applicationId": "app.revanced.android.gms",
@@ -73,6 +38,41 @@
         "bootCompleted": true,
         "installedApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
       }
+    },
+    {
+      "id": "manager",
+      "displayName": "Javo Manager",
+      "applicationId": "app.javo.manager",
+      "version": "0.1.0-alpha.5",
+      "versionCode": 100005,
+      "minSdk": 26,
+      "channel": "development",
+      "signing": "debug",
+      "verification": "signature-and-package-verified",
+      "sha256": "a8989070a976572aed876de6a0ecd197657e9cd329a41898b14c319607e621db",
+      "signerSha256": "b917e08bc2d807198952112de9cdaacd56a13b6d1e139a1b0efb9ce9a1462289",
+      "size": 62587368,
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.5-debug.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5554",
+        "package": "app.javo.manager",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "installedApkSha256": "a8989070a976572aed876de6a0ecd197657e9cd329a41898b14c319607e621db"
+      }
     }
   ],
   "limitations": [
@@ -82,4 +82,3 @@
     "Owner-managed production signing and a published signed update feed remain unconfigured."
   ]
 }
-

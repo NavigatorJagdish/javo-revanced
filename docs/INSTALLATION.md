@@ -15,6 +15,10 @@ Private repository ka access rakhne wale GitHub account se sign in karein. Phone
 
 Agar GitHub par **404** aaye, pehle account aur repository access check karein. Saari files release ke **Assets** section mein bhi milengi. [GitHub Release][release]
 
+## Alpha.4 se alpha.5 Manager update
+
+Is release mein Manager ka development signing certificate badla hai. Android alpha.4 par in-place update ko reject kar sakta hai. Pehle purane Manager mein **Settings → Import & export** se **settings aur patch-signing keystore**, dono export karein aur files ka backup sambhalein. Uske baad sirf purana Manager remove karke alpha.5 install karein aur settings/keystore import karein. Apna working Core use karte rahein. Backup ke bina uninstall karne se purani patch-signing key kho sakti hai.
+
 ## 2. Manager install karein
 
 1. Phone ke **Files → Downloads** mein Manager APK kholein aur **Install** tap karein.
@@ -84,4 +88,3 @@ Asli YouTube 20.40.45 ka local test teen selected patches ke saath preparation, 
 
 
 Agar APKMirror ke final page par download apne aap start na ho, toolbar ka **Download APK** use karein. Alpha.5 final download link ko bhi pehchanta hai. Link ready na ho to message dikhega. Site verification ke liye **Open in browser** use kar sakte hain: browser mein APK download karein, Manager mein wapas aakar source page close karein aur **Apps → Select from storage** se downloaded standalone APK select karein.
-
