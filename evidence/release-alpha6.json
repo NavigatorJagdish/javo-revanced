@@ -1,0 +1,57 @@
+{
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.6",
+  "draft": false,
+  "testedCommit": "b24c89ea77eba222d97323de6e07ad9838976e9a",
+  "verificationRun": 42152158095,
+  "sourceZipSha256": "1060cbf9da78676ac9fe4e72106ec69cc8372707f30f7f14c7aa996e90c4a25d",
+  "sourceEntriesVerified": 7247,
+  "hostChecksPassed": 102,
+  "managerAndroidApis": [
+    29,
+    35
+  ],
+  "coreAndroidApis": [
+    29,
+    35
+  ],
+  "android10DefaultHeapMb": 700,
+  "managerApkSha256": "fcec4cf8210fb1334fb90949f2213a4d2056ecabdda2819678bd5317423d5a13",
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "assets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "size": 7352,
+      "digest": "sha256:6884bf37d0187b61a0496b69a37875a8a8468d45c1954ce17f6b721a6ba8d497"
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "size": 92219219,
+      "digest": "sha256:4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.6-debug.apk",
+      "size": 62599908,
+      "digest": "sha256:fcec4cf8210fb1334fb90949f2213a4d2056ecabdda2819678bd5317423d5a13"
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "size": 318321012,
+      "digest": "sha256:1060cbf9da78676ac9fe4e72106ec69cc8372707f30f7f14c7aa996e90c4a25d"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 405,
+      "digest": "sha256:5ee5e8eb31f4a8656d251be2f2de1c939e4cf98bc511be0187d5791071352bd0"
+    }
+  ],
+  "realYoutubeLocalReport": "evidence/alpha3-real-youtube.json",
+  "realYoutubeScope": "Separate local alpha.3 build, three selected patches, 700 MB configured heap. Patch/sign/install and main navigation after setup passed.",
+  "nativeDownloadButtonRegression": "Real WebView final download.php target=_blank link reached native download listener on Android 10 and 15",
+  "liveProductionApkMirrorDownload": "Local alpha.6 source build downloaded all 169541734 bytes through actual browser redirect and native transfer, HTTP 200, SHA-256 b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1; certificate differs from CI APK",
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerSignerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+  "privateSigningBackupCertificateVerified": true,
+  "developmentSigningIdentity": "private cache and protected artifact; pinned certificate, owner offline backup saved outside source/release packages",
+  "productionBrowserRegression": "Actual Manager screen resolves protected endpoint, captures the verified R2 file URL, and imports a native document-picker APKM through repository validation/merge/cleanup on Android 10 and 15"
+}

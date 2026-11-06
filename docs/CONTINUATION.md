@@ -3,12 +3,12 @@
 ```json
 {
   "updatedAt": "2026-11-06",
-  "readiness": "functional-alpha.5",
+  "readiness": "functional-alpha.6",
   "repo": "NavigatorJagdish/javo-revanced",
-  "verifiedBuildCommit": "a9cb88e5dc0ca9c2cf043c305bf41447d94479d5",
-  "verificationRun": 42138970837,
+  "verifiedBuildCommit": "b24c89ea77eba222d97323de6e07ad9838976e9a",
+  "verificationRun": 42152158095,
   "privateCi": "all-six-jobs-passed",
-  "hostChecksPassed": 89,
+  "hostChecksPassed": 102,
   "managerAndroidApis": [
     29,
     35
@@ -17,12 +17,12 @@
     29,
     35
   ],
-  "browserRegression": "Final download.php target=_blank link reached native download listener on both Android APIs",
-  "release": "v0.1.0-alpha.5",
-  "sourceZipSha256": "620a86bc0512f13e52e73ea6ddde07359e944731ed0b67c57d28f1b0db1a3691",
-  "sourceEntriesVerifiedLocally": 7235,
+  "browserRegression": "Actual Manager screen resolves protected endpoint, captures verified R2 file URL and imports document-picker APKM on both Android APIs",
+  "release": "v0.1.0-alpha.6",
+  "sourceZipSha256": "1060cbf9da78676ac9fe4e72106ec69cc8372707f30f7f14c7aa996e90c4a25d",
+  "sourceEntriesVerifiedLocally": 7247,
   "realYoutubeLocalScope": "Separate local alpha.3 build, three selected patches, 700 MB configured heap. Patch/sign/install and main navigation after setup passed.",
-  "liveApkMirrorTransport": "phone verification pending; controlled native button + HTTPS pipeline tests passed; external browser fallback provided",
+  "liveApkMirrorTransport": "Actual local alpha.6 Manager downloaded all 169541734 bytes, HTTP 200 and matching source SHA; both CI APIs verified resolved CDN/native picker import",
   "productionSigning": "owner-key-required",
   "productionUpdateFeed": "unconfigured",
   "playback": "not-tested",
@@ -30,4 +30,4 @@
 }
 ```
 
-Release assets include the Manager APK, the same working Core APK, branding RVP, complete source ZIP and checksums. INSTALLATION.md has installation, migration and APKMirror fallback steps. FINAL_REPORT.md distinguishes CI fixtures from the separate local real YouTube check. The release receipt is evidence/release-alpha5.json.
+Release assets include the Manager APK, the same working Core APK, branding RVP, complete source ZIP and checksums. INSTALLATION.md has installation, migration and APKMirror fallback steps. FINAL_REPORT.md distinguishes CI fixtures from the separate local real YouTube check. The release receipt is evidence/release-alpha6.json.

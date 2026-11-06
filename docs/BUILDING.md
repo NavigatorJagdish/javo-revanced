@@ -76,3 +76,11 @@ python infrastructure/scripts/android-real-youtube.py --source-apk tools/alpha3/
 
 This opt-in check runs three selected patches through ProcessRuntime and signs/installs the output. It never uploads either proprietary APK. Inspect evidence/alpha3-real-youtube.json for exact build hashes. The observed local run used alpha.3 application sources with the heap preference set to 700 MB; alpha.4 makes this the default and caps older ART heaps. Main navigation opened after granting the patched app account-discovery permission and exempting Core from battery optimization. Playback and account login were not tested.
 
+
+## Alpha.6 browser and signing checks
+
+The production browser test starts DownloaderActivity and WebViewFragment, clicks the visible native controls, follows the protected endpoint to the verified R2 file origin, simulates a document-picker result and imports/merges an APKM through DownloadedAppRepository. Outside-directory file URIs are rejected and temporary imports are removed. Both Android 10 and 15 execute these checks against the exact CI Manager APK.
+
+For an optional real-network diagnosis on an isolated emulator, use the matching Android test APK and run instrumentation with `-e liveMirror 1`. The report is written to the Manager's private `files/mirror-live-diagnostic.json`. It records success separately from fixture tests and does not automate browser challenges. The observed local check downloaded all 169541734 bytes of YouTube 20.40.45 with HTTP 200 and SHA-256 b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1. See evidence/alpha6-live-mirror.json for the exact local Manager hash.
+
+The private main-branch CI keeps its development identity in a protected cache and a private Actions backup. Backup uploads include the hidden Android directory intentionally and are excluded from release packaging. Cache eviction falls back to a non-expired private artifact. If both are missing after alpha.6 exists, the workflow stops instead of generating a different identity. An owner-only offline copy has been saved under ignored tools/signing-private/. Preserve it privately for recovery after artifact expiration; it is not in the source ZIP. Production signing is separate.

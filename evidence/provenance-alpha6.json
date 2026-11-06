@@ -1,0 +1,7 @@
+{
+  "releaseSourceZipSha256": "1060cbf9da78676ac9fe4e72106ec69cc8372707f30f7f14c7aa996e90c4a25d",
+  "sourceInventoryEntriesVerified": 7247,
+  "repositoryModificationDigests": "refreshed from the exact verified release archive",
+  "recordsRefreshed": 0,
+  "note": "evidence/source-inventory.json is authoritative for the exact archive bytes. Modification digests in repository metadata are refreshed after GitHub newline serialization."
+}

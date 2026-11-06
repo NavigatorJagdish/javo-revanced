@@ -87,9 +87,6 @@ Core asset alpha.2 ka verified, matching-certificate binary hai. Manager update 
 Asli YouTube 20.40.45 ka local test teen selected patches ke saath preparation, patching aur signing tak lagbhag 4 minute 49 second chala. Device ke hisaab se waqt badlega. Elapsed time aur memory badal rahe hon to kaam abhi chal raha hai. Playback aur account sign-in is test ka hissa nahi the.
 
 
-Agar APKMirror ke final page par download apne aap start na ho, toolbar ka **Download APK** use karein. Alpha.5 final download link ko bhi pehchanta hai. Link ready na ho to message dikhega. Site verification ke liye **Open in browser** use kar sakte hain: browser mein APK download karein, Manager mein wapas aakar source page close karein aur **Apps → Select from storage** se downloaded standalone APK select karein.
-
-
 ## Alpha.6 ka APKMirror flow
 
 Browser page ke upar native **Download APK**, **Open browser** aur **Use downloaded APK** buttons hamesha dikhte hain. **Download APK** final link ko Manager ko seedha deta hai; page ka apna automatic download callback zaroori nahi hai. Agar site verification ya error aaye, **Open browser** mein download karein. Manager ki isi screen par wapas aa kar **Use downloaded APK** se file select karein. APK/APKM validate aur zaroorat par merge hone ke baad wahi patching session continue hoga. Source download safal hone se pehle verification challenges poore karne pad sakte hain.
