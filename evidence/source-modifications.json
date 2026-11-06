@@ -342,7 +342,7 @@
   {
     "file": "apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/webview/ApkMirrorPolicy.java",
     "upstreamSha256": null,
-    "javoSha256": "bb447562b6cc976979b7557f68b7cdd0c0a790be410120ec07366b545b76d202"
+    "javoSha256": "d63637411ce429969d507ab6f21d3331dcbb661a1bcf00c2c56cfb4f219b524d"
   },
   {
     "file": "apps/javo-manager/api/src/main/kotlin/app/revanced/manager/downloader/Parcelables.kt",
@@ -357,7 +357,7 @@
   {
     "file": "apps/javo-manager/api/src/main/kotlin/app/revanced/manager/downloader/webview/WebViewFragment.kt",
     "upstreamSha256": "bbe5117c09a089728581ae3b9669af49bc6a114db33f02fafdea8b924131871c",
-    "javoSha256": "22bca9d133cd12df71247b7d2011aee9c45d7509641f3eaf54e103cf718b6878"
+    "javoSha256": "dbdc68a2530af4832f2c56670fbc78411991f412e1ad7851d1b6e7f023e899a9"
   },
   {
     "file": "apps/javo-manager/app/build.gradle.kts",
@@ -367,12 +367,12 @@
   {
     "file": "apps/javo-manager/app/gradle.properties",
     "upstreamSha256": "83454e6fb50fc952b5f3f7e7cdea09604994f2f3378bb991fe83d0057a30c6c6",
-    "javoSha256": "70961e1dcf4146df2d42d913e2ccdd3f7e229bbfc48a4e531a07565bec514bbe"
+    "javoSha256": "abeaed68444ef4937f49d58dfdb2c802dfe25a1c8017b2ddd543ecd480b1003a"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/BrowserChecks.kt",
     "upstreamSha256": null,
-    "javoSha256": "8309610b129bca688f33daaa082deb1c02501d9cc3f1c200a237b2c35537998b"
+    "javoSha256": "09bac258d1040eae044da36fbe5ef91a4769dae66699be335d1030a72636d896"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/DownloadRegressionChecks.kt",
@@ -937,7 +937,7 @@
   {
     "file": "apps/javo-manager/gradle.properties",
     "upstreamSha256": "01b63136d3fca9f60cf86b9af39476e4368d174d092aa8e487b7ce96d10f726a",
-    "javoSha256": "83c2a773511b315c601bd516097d4112e534fbe7ea13b1b283e677163c5a9f8b"
+    "javoSha256": "e021abb91c5211a8afd7ca56b299d7b79fb73280d464a718b0bec473258aa83b"
   },
   {
     "file": "apps/javo-manager/settings.gradle.kts",

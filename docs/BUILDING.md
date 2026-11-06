@@ -62,3 +62,17 @@ The official catalog diagnostic pins the checksum of the previously signature-in
 Alpha.2 Android regression checks cover unknown-size progress, nonzero-offset writes, timeout recovery, two-split merging with a preserved Hindi resource, and archive traversal rejection. Core runs install/launch checks on API29 and API35. Core lint has targeted annotations for permission-removal markers and the upstream version-qualified AccountManager permission annotation. The merged APK audit enforces actual permission absence.
 
 Alpha.3 adds 12 browser-policy checks, a real WebView navigation fixture, a 32 MiB HTTPS transfer with a redirect/session cookie/unknown length, and separate-process completion and termination checks. The Core job matches the alpha.2 source tree and reuses its pinned binary before repeating APK verification and Android install/launch checks.
+
+
+## Optional real YouTube integration
+
+The alpha.4 heap defaults to 700 MB and is capped at 700 MB on Android 10 and older. Android 10 CI uses a 4 GB guest to exercise that address-space cap.
+
+Build the Manager and its Android test APK with the same development signing identity. Keep the proprietary source APK under ignored tools/. The reference input is YouTube 20.40.45, SHA-256 b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1; Google signatures were verified in evidence/alpha3-real-source-signature.txt. Start an isolated API29 emulator and run:
+
+```powershell
+python infrastructure/scripts/android-real-youtube.py --source-apk tools/alpha3/youtube-20.40.45.apk --manager-apk <local-manager-apk> --test-apk <matching-test-apk> --serial emulator-5556
+```
+
+This opt-in check runs three selected patches through ProcessRuntime and signs/installs the output. It never uploads either proprietary APK. Inspect evidence/alpha3-real-youtube.json for exact build hashes. The observed local run used alpha.3 application sources with the heap preference set to 700 MB; alpha.4 makes this the default and caps older ART heaps. Main navigation opened after granting the patched app account-discovery permission and exempting Core from battery optimization. Playback and account login were not tested.
+

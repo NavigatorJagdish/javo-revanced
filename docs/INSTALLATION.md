@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.4** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
+Ye guide **v0.1.0-alpha.5** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
 
 ## 1. GitHub se files download karein
 
@@ -25,6 +25,8 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 
 1. Core APK kholein, **Install** tap karein aur phir **Javo Core Settings** ek baar launch karein.
 2. Agar pehle se ReVanced GmsCore ya koi aur build `app.revanced.android.gms` ke saath installed hai, Android update ke liye matching signature maangega. **App not installed** aaye to existing Core ko turant remove na karein. Pehle check karein ki selected patch us Core ke saath compatible hai, aur Core badalne se pehle zaroori settings aur account setup ka backup plan rakhein.
+3. Patched app agar Core ke battery-optimization prompt par ruke, **Continue** se Core ki battery setting kholein aur optimization exemption allow karein. Android 10 test mein ye setup zaroori tha.
+4. Agar patched YouTube launch hote hi band ho aur logs mein **missing google package permission or GET_ACCOUNTS** aaye, patched app ki **App info → Permissions → Contacts** setting check karein. Account discovery ki ye permission dene ke baad emulator par main navigation khula. Menu ka naam phone ke hisaab se badal sakta hai.
 
 ## 4. Branding bundle import karein aur APK patch karein
 
@@ -49,17 +51,17 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.4-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.5-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.4
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-manager-0.1.0-alpha.4-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-core-0.3.13.2.250932-javo.2-test.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.4/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.5
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-manager-0.1.0-alpha.5-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-core-0.3.13.2.250932-javo.2-test.apk
+[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-branding-0.1.0-alpha.1.rvp
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.5/SHA256SUMS
 
 
 ## Alpha 2 ke changes
@@ -79,4 +81,7 @@ Preparing, patching aur writing mein elapsed time aur measured memory usage dikh
 Core asset alpha.2 ka verified, matching-certificate binary hai. Manager update ke liye apni existing compatible Core installation use kar sakte hain. Manager development signing certificate pehle release se differ kar sakta hai. Installation conflict par settings aur patch-signing keystore ka export sambhal kar rakhein.
 
 Asli YouTube 20.40.45 ka local test teen selected patches ke saath preparation, patching aur signing tak lagbhag 4 minute 49 second chala. Device ke hisaab se waqt badlega. Elapsed time aur memory badal rahe hon to kaam abhi chal raha hai. Playback aur account sign-in is test ka hissa nahi the.
+
+
+Agar APKMirror ke final page par download apne aap start na ho, toolbar ka **Download APK** use karein. Alpha.5 final download link ko bhi pehchanta hai. Link ready na ho to message dikhega. Site verification ke liye **Open in browser** use kar sakte hain: browser mein APK download karein, Manager mein wapas aakar source page close karein aur **Apps → Select from storage** se downloaded standalone APK select karein.
 

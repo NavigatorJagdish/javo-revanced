@@ -308,7 +308,7 @@ jobs:
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: v0.1.0-alpha.4
+      RELEASE_TAG: v0.1.0-alpha.5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -330,7 +330,7 @@ jobs:
             fi
             jq -e --arg sha "$GITHUB_SHA" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
           else
-            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.4' --notes-file docs/RELEASE_ALPHA4.md
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.5' --notes-file docs/RELEASE_ALPHA5.md
           fi
           mkdir -p tools/release-assets
           cp tools/release-input/javo-revanced-development.zip tools/release-input/apks/*.apk tools/release-input/bundles/*.rvp tools/release-assets/

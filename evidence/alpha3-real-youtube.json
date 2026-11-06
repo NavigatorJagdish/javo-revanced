@@ -20,6 +20,19 @@
   "testBuild": "local production-source equivalent; not the CI release APK",
   "sourceSignatureVerified": true,
   "installed": true,
-  "installResult": "Performing Streamed Install\r\nSuccess"
+  "installResult": "Performing Streamed Install\r\nSuccess",
+  "launchStatus": "ok",
+  "processRunningAfterLaunch": true,
+  "crashObservedAfterLaunch": false,
+  "effectiveHeapMb": 700,
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "mainNavigationVisible": true,
+  "setupRequiredOnEmulator": [
+    "GET_ACCOUNTS permission for patched app",
+    "Battery optimization exemption for Core"
+  ],
+  "launchScope": "Main navigation displayed after setup; feed, playback and account sign-in not verified",
+  "managerProductionSources": "alpha.3 local build; configured heap 700 MB; differs from CI alpha.3/alpha.4 APK hashes",
+  "defaultPatchSet": "not-tested; only the three named selections were executed"
 }
 

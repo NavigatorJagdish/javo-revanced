@@ -1,0 +1,55 @@
+{
+  "fixture": "first-party; no YouTube code",
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerApkSha256": "a379166204d3697f18ede12140786180090cd6074a8a5168956abdb8f71b375f",
+  "browserChecks": [
+    "Real WebView hides ad containers and selects the unique standalone APK variant",
+    "Final download.php link with target=_blank reaches the native WebView download listener"
+  ],
+  "downloadRegressions": [
+    "unknown size and nonzero buffer offset complete with exact byte count",
+    "stalled plugin fails and preserves the previous valid APK",
+    "two-split APKM serializes before resources close and preserves split resources",
+    "archive path traversal rejected"
+  ],
+  "httpsTransfer": [
+    "HTTPS redirect, session cookie, missing length, 32 MiB APKM transfer and merge completed through repository"
+  ],
+  "bundleSha256": "629aa5aadf241c980492204e9c6ca067c3ba3605ec703e9c8dca3801dec5ccd9",
+  "officialCatalog": {
+    "patchExecution": "not-tested",
+    "metadataLoadedOnAndroid": true,
+    "patchCount": 294,
+    "sha256": "50f41e4656b7374a1c8fe5579fd107f697f86d7f13fc6cd194cf3821761dc4b4"
+  },
+  "products": [
+    {
+      "id": "video",
+      "packageName": "com.google.android.youtube",
+      "sourceApkSha256": "7b2313c3356a9bc8270173725abe6110513497a4a627f38003c5842e676f0337",
+      "brandingLabelVerified": true,
+      "signedOutput": true,
+      "signedApkSha256": "f535aadc143c02e5f98999b91c9b82912039e44ebffb6c39492ecebb3f0fd80c",
+      "success": true
+    },
+    {
+      "id": "music",
+      "packageName": "com.google.android.apps.youtube.music",
+      "sourceApkSha256": "d33c9103e6d1afd8c1ee0c08827bcced9be955c94393d6860ccbb8dee32c56a7",
+      "brandingLabelVerified": true,
+      "signedOutput": true,
+      "signedApkSha256": "08e9526c6241d2deec19d2cb9f9f15642e9c419a90bcb1902eb34a117883a6dc",
+      "success": true
+    }
+  ],
+  "androidBundleLoading": true,
+  "effectiveHeapMb": 700,
+  "terminatedProcessRecovery": true,
+  "separateProcessPatch": true,
+  "productionSessionPatchedFixture": true,
+  "success": true,
+  "androidApi": 29,
+  "scope": "Local browser-fix candidate with alpha.4 version label; separate from released CI APKs. Native download callback and first-party patch/sign only; fixture outputs were not reinstalled in this local invocation."
+}
+

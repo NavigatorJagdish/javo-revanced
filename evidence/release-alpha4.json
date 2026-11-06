@@ -1,0 +1,53 @@
+{
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.4",
+  "draft": false,
+  "testedCommit": "b8818d1f33fd08483d676c7c87868979282db733",
+  "verificationRun": 42090044817,
+  "sourceZipSha256": "5fdcfabf78338228d304d4b441d2190378d6554d99c80db7056ebfd902476e6f",
+  "sourceEntriesVerified": 7231,
+  "hostChecksPassed": 89,
+  "managerAndroidApis": [
+    29,
+    35
+  ],
+  "coreAndroidApis": [
+    29,
+    35
+  ],
+  "android10DefaultHeapMb": 700,
+  "managerApkSha256": "8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135",
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "assets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "size": 7352,
+      "digest": "sha256:f9f3361e28a5c39bd32a6be82d15d4f7a16213978a47066c2de47bad8d7b1023"
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "size": 92219219,
+      "digest": "sha256:4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.4-debug.apk",
+      "size": 62586268,
+      "digest": "sha256:8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135"
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "size": 318207147,
+      "digest": "sha256:5fdcfabf78338228d304d4b441d2190378d6554d99c80db7056ebfd902476e6f"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 405,
+      "digest": "sha256:29bfab78afb3aa721b94a694b182fd4acdadaf9d57a24d94ea719540a62b1216"
+    }
+  ],
+  "realYoutubeLocalReport": "evidence/alpha3-real-youtube.json",
+  "realYoutubeScope": "Separate local alpha.3 build, three selected patches, 700 MB configured heap. Patch/sign/install and main navigation after setup passed.",
+  "liveProductionApkMirrorDownload": "not-verified; Python browser-session request succeeded, separate Java request returned 403",
+  "playback": "not-tested",
+  "accountLogin": "not-tested"
+}
+

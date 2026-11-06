@@ -1,0 +1,20 @@
+{
+  "androidApi": 29,
+  "sourceApkSha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1",
+  "patchedApkSha256": "bdad2c75c54c51e66a7c377649ae3624e65a0de8655c7a48e14b32a97612ff0b",
+  "managerApkSha256": "af0f2a690a7b4af213e206b3514605e68cdf4080fff26d97471d30bfd238d27e",
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "steps": [
+    "Initially received GET_ACCOUNTS access denial and returned to launcher",
+    "Granted the patched app its declared GET_ACCOUNTS runtime permission",
+    "Observed Core battery optimization prompt",
+    "Allowed Core battery optimization exemption",
+    "Reopened patched app and observed Home, Shorts, Subscriptions, You navigation"
+  ],
+  "processRunning": true,
+  "crashObserved": false,
+  "screenshot": "evidence/screenshots/real-youtube-api29.png",
+  "playback": "not-tested",
+  "accountLogin": "not-tested"
+}
+

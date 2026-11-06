@@ -3,6 +3,8 @@ package app.revanced.manager.downloader.webview
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
@@ -17,6 +19,7 @@ import android.webkit.WebViewClient
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
+import android.widget.Toast
 import java.io.ByteArrayInputStream
 import java.util.concurrent.atomic.AtomicBoolean
 import androidx.activity.addCallback
@@ -71,6 +74,7 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
                             menu.add(0, 1, 0, "Download APK").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                             menu.add(0, 2, 1, "Ad protection").apply { isCheckable = true; isChecked = vm.blockAds }
                             menu.add(0, 3, 2, "Search APKMirror")
+                            menu.add(0, 4, 3, "Open in browser")
                         }
                     }
 
@@ -80,9 +84,27 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
 
                             true
                         } else when (menuItem.itemId) {
-                            1 -> { webView.evaluateJavascript(ApkMirrorPolicy.pageScript(vm.blockAds, true), null); true }
+                            1 -> {
+                                webView.evaluateJavascript(ApkMirrorPolicy.pageScript(vm.blockAds, true)) { result ->
+                                    val message = when (result.trim('"')) {
+                                        "waiting" -> "The download is not ready yet. Wait for the page countdown."
+                                        "no-control", "null" -> "No download link on this page yet. Complete the site check, select a version, or use Open in browser."
+                                        else -> null
+                                    }
+                                    if (message != null && isAdded) Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                                }
+                                true
+                            }
                             2 -> { vm.blockAds = !vm.blockAds; menuItem.isChecked = vm.blockAds; webView.reload(); true }
                             3 -> { webView.loadUrl(vm.originalUrl); true }
+                            4 -> {
+                                val address = webView.url
+                                if (address != null && ApkMirrorPolicy.isMirror(address)) {
+                                    runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(address))) }
+                                        .onFailure { Toast.makeText(requireContext(), "No browser is available.", Toast.LENGTH_LONG).show() }
+                                }
+                                true
+                            }
                             else -> false
                         }
                 },
@@ -226,3 +248,4 @@ internal class WebViewModel : ViewModel() {
         data object Finish : Command
     }
 }
+

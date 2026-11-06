@@ -2,11 +2,84 @@
   "schemaVersion": 1,
   "status": "functional-alpha",
   "generatedAt": "2026-11-03",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "id": "manager",
+      "displayName": "Javo Manager",
+      "applicationId": "app.javo.manager",
+      "version": "0.1.0-alpha.4",
+      "versionCode": 100004,
+      "minSdk": 26,
+      "channel": "development",
+      "signing": "debug",
+      "verification": "signature-and-package-verified",
+      "sha256": "8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135",
+      "signerSha256": "1e30b4650727425222bec97e68ab50b5cc5ddc45ccd2b4e8585a632c7228bc43",
+      "size": 62586268,
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.4-debug.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5554",
+        "package": "app.javo.manager",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "installedApkSha256": "8dd4acfe90039f199b0fcecd5255fea09698424018f52b800057f950d0695135"
+      }
+    },
+    {
+      "id": "core",
+      "displayName": "Javo Core",
+      "applicationId": "app.revanced.android.gms",
+      "version": "0.3.13.2.250932-javo.2",
+      "versionCode": 250932005,
+      "minSdk": 19,
+      "channel": "development",
+      "signing": "test",
+      "verification": "signature-and-package-verified",
+      "sha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+      "signerSha256": "98cbe3dc2314dbd5ebe25af31c85814e7a570952ba568c66e0814fc3e56f18df",
+      "size": 92219219,
+      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5554",
+        "package": "app.revanced.android.gms",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 35,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "installedApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
+      }
+    }
+  ],
   "limitations": [
-    "Both debug APKs passed signature verification and emulator installation and launch.",
-    "Javo branding was applied, signed, installed and launched on two first-party fixtures. The official catalog loaded 294 metadata entries.",
-    "Playback, Google account authentication, notifications and physical-device compatibility remain unverified.",
-    "Production signing and a published Javo update feed are unconfigured."
+    "Manager uses a debug development certificate. Core uses release runtime flags and a test certificate.",
+    "CI browser, HTTPS transfer and first-party patch/sign/install pass on Android 10 and 15. A separate local YouTube check tested three named patches; see its exact build hash.",
+    "Playback, account login and physical-device compatibility remain unverified.",
+    "Owner-managed production signing and a published signed update feed remain unconfigured."
   ]
 }
+

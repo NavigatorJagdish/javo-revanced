@@ -58,11 +58,16 @@ public final class ApkMirrorPolicy {
                 + "let old=document.getElementById('javo-ad-style');if(old)old.remove();"
                 + (blockAds ? "let s=document.createElement('style');s.id='javo-ad-style';s.textContent='ins.adsbygoogle,.ad-container,.ad-placement,[id^=div-gpt-ad],iframe[src*=doubleclick]{display:none!important}';document.head.appendChild(s);" : "")
                 + "let safe=a=>{try{let u=new URL(a.href,location.href);return u.protocol==='https:'&&u.origin===location.origin&&u.pathname.startsWith('/apk/')}catch(e){return false}};"
-                + "let button=[...document.querySelectorAll('a[href]')].find(a=>safe(a)&&/\\/download\\/\\?/.test(a.href));"
-                + "if(button){button.style.outline='3px solid #00e5a8';button.scrollIntoView({block:'center'});"
-                + (activateDownload ? "button.click();" : "") + "return;}"
+                + "let ready=a=>!a.hasAttribute('disabled')&&a.getAttribute('aria-disabled')!=='true'&&!a.classList.contains('disabled');"
+                + "let finalLink=document.querySelector('a#download-link[href]');"
+                + "let trustedFinal=a=>{try{let u=new URL(a.href,location.href);return u.protocol==='https:'&&u.origin===location.origin&&u.pathname==='/wp-content/themes/APKMirror/download.php'}catch(e){return false}};"
+                + "let button=(finalLink&&trustedFinal(finalLink)?finalLink:null)||[...document.querySelectorAll('a[href]')].find(a=>safe(a)&&/\\/download\\/\\?/.test(a.href));"
+                + "if(button){button.target='_self';button.style.outline='3px solid #00e5a8';button.scrollIntoView({block:'center'});"
+                + "if(!ready(button))return 'waiting';"
+                + (activateDownload ? "location.assign(button.href);return 'navigating';" : "return 'ready';") + "}"
                 + "let apk=[...document.querySelectorAll('.table-row')].filter(r=>/\\bAPK\\b/.test(r.innerText)&&!/\\bBUNDLE\\b/.test(r.innerText)).reduce((all,r)=>all.concat([...r.querySelectorAll('a[href]')]),[]).filter(a=>safe(a)&&new URL(a.href).pathname.startsWith(location.pathname)&&/android-apk-download\\/$/.test(new URL(a.href).pathname));"
-                + "let urls=[...new Set(apk.map(a=>a.href))];if(urls.length===1){location.href=urls[0];return;}"
-                + "let d=document.getElementById('downloads')||document.querySelector('.downloadButton');if(d)d.scrollIntoView({block:'center'});})();";
+                + "let urls=[...new Set(apk.map(a=>a.href))];if(urls.length===1){location.href=urls[0];return 'variant';}"
+                + "let d=document.getElementById('downloads')||document.querySelector('.downloadButton');if(d)d.scrollIntoView({block:'center'});return 'no-control';})();";
     }
 }
+
