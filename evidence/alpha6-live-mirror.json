@@ -1,0 +1,16 @@
+{
+  "liveDownloadVerified": true,
+  "pageFinished": true,
+  "webViewVersion": "74.0.3729.185",
+  "userAgent": "Mozilla/5.0 (Linux; Android 10; Android SDK built for x86_64 Build/QSR1.210820.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.185 Mobile Safari/537.36",
+  "page": "\"{\\\"title\\\":\\\"YouTube 20.40.45 (nodpi) (Android 9.0+) APK Download by Google LLC - APKMirror\\\",\\\"links\\\":227,\\\"hasFinal\\\":false,\\\"hasButton\\\":true}\"",
+  "blockedNavigation": "https://eb5e7388c3df147b74dd2379b7cf8323.r2.cloudflarestorage.com/downloadprod/wp-content/uploads/2025/10/29/68e90078566ef/com.google.android.youtube_20.40.45-1557278144_minAPI28%28arm64-v8a%2Carmeabi-v7a%2Cx86%2Cx86_64%29%28nodpi%29_apkmirror.com.apk",
+  "nativeUrlReturned": true,
+  "httpStatus": 200,
+  "bytes": 169541734,
+  "sha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1",
+  "diagnosticCompleted": true,
+  "managerApkSha256": "5cc3553196d6e50582bb61cc0c4abdae88ddcb88642586a4365b3c040a081847",
+  "scope": "Actual local Manager browser, browser-side protected endpoint resolution, native CDN capture, complete DownloadConnection transfer and Android package/version validation. Different development certificate from CI.",
+  "blockedNavigationMeaning": "Diagnostic marks a navigation handled by the native host; the verified R2 file was captured, not rejected."
+}

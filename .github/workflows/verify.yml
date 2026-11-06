@@ -74,6 +74,7 @@ jobs:
     needs: sources
     runs-on: ubuntu-latest
     env:
+      ANDROID_USER_HOME: /home/runner/.android
       ORG_GRADLE_PROJECT_githubPackagesUsername: ${{ github.actor }}
       ORG_GRADLE_PROJECT_githubPackagesPassword: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -115,6 +116,7 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
         with:
           name: javo-manager-development-identity
+          include-hidden-files: true
           if-no-files-found: error
           overwrite: true
           retention-days: 90
