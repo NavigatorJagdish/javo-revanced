@@ -8,7 +8,9 @@ catalog = json.loads((root / 'infrastructure/release/catalog.json').read_text())
 integration = json.loads((root / 'evidence/manager-patch-integration.json').read_text())
 audit = json.loads((root / 'evidence/core-security-audit.json').read_text())
 artifacts = {item['id']: item for item in catalog['artifacts']}
-if audit['apkSha256'] != artifacts['core']['sha256'] or not audit['forbiddenPermissionsAbsent']:
+if (audit['apkSha256'] != artifacts['core']['sha256']
+    or audit['signerSha256'] != artifacts['core']['signerSha256']
+    or not audit['signatureSchemeV2Verified'] or not audit['forbiddenPermissionsAbsent']):
     raise ValueError('Core security audit must match this APK')
 if integration['managerApkSha256'] != artifacts['manager']['sha256'] or not integration.get('success'):
     raise ValueError('Manager integration must match this APK')
@@ -23,6 +25,17 @@ for item in artifacts.values():
 manager35 = json.loads((root / 'evidence/manager-api35-runtime-smoke.json').read_text())
 if manager35.get('installedApkSha256') != artifacts['manager']['sha256'] or manager35.get('processRunning') is not True or manager35.get('crashObserved') is not False:
     raise ValueError('Matching Android 15 Manager evidence is missing')
+integration35 = json.loads((root / 'evidence/manager-api35-patch-integration.json').read_text())
+for result, api in [(integration, 29), (integration35, 35)]:
+    if result['androidApi'] != api or result['managerApkSha256'] != artifacts['manager']['sha256'] or not result['success']:
+        raise ValueError(f'Android {api} patch evidence must match this Manager')
+    if not any('HTTP 503' in check for check in result['productionBrowserChecks']):
+        raise ValueError(f'Android {api} HTTP 503 recovery evidence is missing')
+    products = {item['id']: item for item in result['products']}
+    if set(products) != {'video', 'music'} or not all(item['mandatorySettingsAndIconVerified'] for item in products.values()):
+        raise ValueError(f'Android {api} mandatory branding evidence is missing')
+    if not products['video']['videoHeaderVerified']:
+        raise ValueError(f'Android {api} Javo Video header evidence is missing')
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())
 check_list = '\n'.join('- ' + str(check) + '.' for check in checks)
@@ -31,7 +44,7 @@ if official.get('metadataLoadedOnAndroid'):
     catalog_result = f"The official ReVanced catalog loaded {official['patchCount']} patch definitions on Android. Third-party patch execution is unverified."
 else:
     catalog_result = 'The optional official catalog diagnostic was unavailable. See the integration report for its failure. Third-party patch execution is unverified.'
-report = f"""# Javo ReVanced alpha.6 verification report
+report = f"""# Javo ReVanced {artifacts['manager']['version']} verification report
 
 The private workflow built these development APKs and bound the results below to their exact hashes. [Verification run]({run_url})
 
@@ -47,7 +60,7 @@ Manager uses a debug certificate. Core uses release runtime flags with a test ce
 
 The non-system build removes SMS, overlay and ROM signature-spoofing permission requests. The merged APK audit confirms the restricted permissions are absent, backup is disabled and debugging is disabled. SMS retrieval and overlay-dependent features are outside this build's scope. The self-check lists declared permissions. Raw account, token, request and result logging is removed from the two modified authorization service entry points.
 
-The earlier APK requested RECEIVE_SMS. Google documents sensitive-permission blocks for internet-sideloaded applications in supported markets. The reporter's exact warning is needed to confirm its classification. A device Play Protect verdict remains unverified. [Google guidance](https://developers.google.com/android/play-protect/warning-dev-guidance)
+The APK audit verified the expected Core signing certificate, APK Signature Scheme v2 and target SDK {audit['targetSdk']}. The reporter said the Core APK passed their phone's scan and installed. Google Play Protect may scan sideloaded apps on other devices. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en)
 
 ## Manager download changes
 
@@ -59,6 +72,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
+- Built-in Javo launcher icon and settings branding were verified for both fixture outputs, along with the Javo Video header. The production browser test showed a fixture HTTP 503, retried with the native button, captured the file URL and ignored a late 503 after handoff.
 - {catalog_result}
 
 Android download regression checks passed.
@@ -77,7 +91,7 @@ Core retains app.revanced.android.gms for patch compatibility. An existing insta
 
 The ZIP includes the five pinned upstream source trees, master prompt, four visual references, branding assets, 17-page static website, installation guide, APKs, branding RVP and build evidence. The website remains a static deliverable. GitHub downloads require access to the private repository.
 
-Use apks/ for installation files, bundles/ for the optional Javo branding patch, website/ for the built site, docs/ for setup and evidence/ for test reports and screenshots. SHA256SUMS accompanies the release assets.
+Use apks/ for installation files, bundles/ for the standalone branding RVP for external patchers, website/ for the built site, docs/ for setup and evidence/ for test reports and screenshots. SHA256SUMS accompanies the release assets.
 """
 (root / 'docs/FINAL_REPORT.md').write_text(report, encoding='utf-8')
-print('Generated report from matching alpha.6 APK and regression evidence')
+print('Generated report from matching APK and regression evidence')

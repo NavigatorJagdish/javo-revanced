@@ -24,7 +24,7 @@ jobs:
         run: echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
   web-and-security:
     outputs:
-      artifact: ${{ steps.host_artifact.outputs.artifact-id }}
+      cache-key: ${{ format('javo-verify-host-{0}-{1}', github.run_id, github.run_attempt) }}
     needs: sources
     runs-on: ubuntu-latest
     steps:
@@ -51,11 +51,9 @@ jobs:
           java -cp tools/java-tests DownloadConnectionTest | tee evidence/java-download-tests.log
           java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log
           node apps/javo-website/build.mjs
-      - uses: actions/upload-artifact@v4
-        id: host_artifact
+      - uses: actions/cache/save@v4
         with:
-          name: website-and-host-test-evidence
-          overwrite: true
+          key: ${{ format('javo-verify-host-{0}-{1}', github.run_id, github.run_attempt) }}
           path: |
             apps/javo-website/dist
             evidence/node-tests.log
@@ -70,7 +68,7 @@ jobs:
       packages: read
       actions: read
     outputs:
-      artifact: ${{ steps.manager_artifact.outputs.artifact-id }}
+      cache-key: ${{ format('javo-verify-manager-{0}-{1}', github.run_id, github.run_attempt) }}
     needs: sources
     runs-on: ubuntu-latest
     env:
@@ -114,6 +112,7 @@ jobs:
           python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/debug/*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
+        continue-on-error: true
         with:
           name: javo-manager-development-identity
           include-hidden-files: true
@@ -135,6 +134,7 @@ jobs:
         run: python infrastructure/scripts/export-revanced-dependencies.py
       - uses: actions/upload-artifact@v4
         if: always()
+        continue-on-error: true
         with:
           name: resolved-revanced-maven-cache
           path: tools/revanced-maven
@@ -177,23 +177,18 @@ jobs:
           script: |
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
-      - uses: actions/upload-artifact@v4
-        id: manager_artifact
-        if: always()
+      - uses: actions/cache/save@v4
         with:
-          name: manager-development-and-evidence
-          overwrite: true
+          key: ${{ format('javo-verify-manager-{0}-{1}', github.run_id, github.run_attempt) }}
           path: |
-            deliverables/apks
+            deliverables/apks/javo-manager-*.apk
             evidence/manager*
             evidence/screenshots/manager*
             apps/javo-manager/app/build/reports
-            apps/javo-manager/app/build/outputs/apk/debug/*.apk
-            apps/javo-manager/app/build/outputs/apk/androidTest/debug/*.apk
             patches/javo-branding/build/libs/*.rvp
   core:
     outputs:
-      artifact: ${{ steps.core_artifact.outputs.artifact-id }}
+      cache-key: ${{ format('javo-verify-core-{0}-{1}', github.run_id, github.run_attempt) }}
     needs: sources
     runs-on: ubuntu-latest
     env:
@@ -262,21 +257,17 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
-      - uses: actions/upload-artifact@v4
-        id: core_artifact
-        if: always()
+      - uses: actions/cache/save@v4
         with:
-          name: core-development-and-evidence
-          overwrite: true
+          key: ${{ format('javo-verify-core-{0}-{1}', github.run_id, github.run_attempt) }}
           path: |
-            deliverables/apks
+            deliverables/apks/javo-core-*.apk
             evidence/core*
             evidence/screenshots/core*
             apps/javo-core/play-services-core/build/reports
-            apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/release/*.apk
   package:
     outputs:
-      artifact: ${{ steps.package_artifact.outputs.artifact-id }}
+      cache-key: ${{ format('javo-verify-package-{0}-{1}', github.run_id, github.run_attempt) }}
     needs: [sources, web-and-security, manager, core]
     runs-on: ubuntu-latest
     steps:
@@ -294,13 +285,39 @@ jobs:
         with:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
-      - uses: actions/download-artifact@v4
+      # Run-scoped cache entries carry verified outputs between jobs. Cache storage is
+      # separate from the Actions artifact quota and contains no signing material.
+      - uses: actions/cache/restore@v4
         with:
-          artifact-ids: ${{ needs.manager.outputs.artifact }},${{ needs.core.outputs.artifact }}
-          merge-multiple: true
-      - uses: actions/download-artifact@v4
+          key: ${{ needs.manager.outputs.cache-key }}
+          fail-on-cache-miss: true
+          path: |
+            deliverables/apks/javo-manager-*.apk
+            evidence/manager*
+            evidence/screenshots/manager*
+            apps/javo-manager/app/build/reports
+            patches/javo-branding/build/libs/*.rvp
+      - uses: actions/cache/restore@v4
         with:
-          artifact-ids: ${{ needs['web-and-security'].outputs.artifact }}
+          key: ${{ needs.core.outputs.cache-key }}
+          fail-on-cache-miss: true
+          path: |
+            deliverables/apks/javo-core-*.apk
+            evidence/core*
+            evidence/screenshots/core*
+            apps/javo-core/play-services-core/build/reports
+      - uses: actions/cache/restore@v4
+        with:
+          key: ${{ needs['web-and-security'].outputs.cache-key }}
+          fail-on-cache-miss: true
+          path: |
+            apps/javo-website/dist
+            evidence/node-tests.log
+            evidence/java-security-tests.log
+            evidence/java-branding-tests.log
+            evidence/java-download-tests.log
+            evidence/java-browser-tests.log
+            evidence/runtime-evidence-tests.log
       - name: Reverify every APK and package corresponding source
         run: |
           set -euo pipefail
@@ -313,11 +330,9 @@ jobs:
           cp patches/javo-branding/build/libs/*.rvp deliverables/bundles/
           python infrastructure/scripts/report-alpha2.py
           python infrastructure/scripts/package.py
-      - uses: actions/upload-artifact@v4
-        id: package_artifact
+      - uses: actions/cache/save@v4
         with:
-          name: javo-verified-development-package
-          overwrite: true
+          key: ${{ format('javo-verify-package-{0}-{1}', github.run_id, github.run_attempt) }}
           path: |
             deliverables/javo-revanced-development.zip
             deliverables/SHA256SUMS
@@ -338,11 +353,15 @@ jobs:
         with:
           ref: ${{ needs.sources.outputs.commit }}
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/cache/restore@v4
         with:
-          artifact-ids: ${{ needs.package.outputs.artifact }}
-          path: tools/release-input
-          merge-multiple: true
+          key: ${{ needs.package.outputs.cache-key }}
+          fail-on-cache-miss: true
+          path: |
+            deliverables/javo-revanced-development.zip
+            deliverables/SHA256SUMS
+            deliverables/apks/*.apk
+            deliverables/bundles/*.rvp
       - name: Publish the verified alpha update
         run: |
           set -euo pipefail
@@ -357,7 +376,7 @@ jobs:
             gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.7' --notes-file docs/RELEASE_ALPHA7.md
           fi
           mkdir -p tools/release-assets
-          cp tools/release-input/javo-revanced-development.zip tools/release-input/apks/*.apk tools/release-input/bundles/*.rvp tools/release-assets/
+          cp deliverables/javo-revanced-development.zip deliverables/apks/*.apk deliverables/bundles/*.rvp tools/release-assets/
           (cd tools/release-assets && sha256sum *.apk *.rvp *.zip > SHA256SUMS)
           gh release upload "$RELEASE_TAG" tools/release-assets/* --clobber
           release_id="$(gh release view "$RELEASE_TAG" --json databaseId --jq .databaseId)"
