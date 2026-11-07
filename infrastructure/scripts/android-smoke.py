@@ -1,6 +1,6 @@
 """Install and launch an exact development APK on an isolated Android emulator."""
 from pathlib import Path
-import argparse,hashlib,json,os,re,shutil,subprocess,tempfile,time
+import argparse,hashlib,json,os,re,shlex,shutil,subprocess,tempfile,time
 
 ROOT=Path(__file__).resolve().parents[2]
 def main():
@@ -44,9 +44,23 @@ def main():
         if 'Success' not in install:raise RuntimeError('APK installation did not succeed')
         paths=run('shell','pm','path',args.package).decode().splitlines()
         remote=next(p.removeprefix('package:') for p in paths if p.startswith('package:') and p.endswith('/base.apk'))
-        with tempfile.TemporaryDirectory(prefix='javo-installed-apk-') as folder:
-            installed=Path(folder)/'installed.apk';run('pull',remote,str(installed))
-            with installed.open('rb') as f:actual=hashlib.file_digest(f,'sha256').hexdigest()
+        try:
+            # Hash the installed APK without transferring it over the emulator connection.
+            result=run('shell',f'sha256sum {shlex.quote(remote)}').decode().strip()
+            digest=re.fullmatch(r'([a-f0-9]{64})\s+.+',result)
+            if not digest:raise RuntimeError('Emulator did not return an APK checksum')
+            actual=digest[1]
+        except (RuntimeError, subprocess.TimeoutExpired):
+            with tempfile.TemporaryDirectory(prefix='javo-installed-apk-') as folder:
+                installed=Path(folder)/'installed.apk'
+                for attempt in range(3):
+                    try:
+                        run('pull',remote,str(installed))
+                        break
+                    except (RuntimeError, subprocess.TimeoutExpired):
+                        if attempt==2:raise
+                        time.sleep(2)
+                with installed.open('rb') as f:actual=hashlib.file_digest(f,'sha256').hexdigest()
         report['installedApkSha256']=actual
         report['installedArtifactMatchesDeliverable']=actual==expected
         if actual!=expected:raise RuntimeError('Installed package differs from the requested APK')
@@ -70,4 +84,3 @@ def main():
     print('Install/launch smoke check passed; account, message delivery and playback integration were not tested.')
 
 if __name__=='__main__':main()
-
