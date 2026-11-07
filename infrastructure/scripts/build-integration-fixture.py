@@ -37,7 +37,8 @@ def main():
         manifest=work/(product+'-manifest.xml')
         manifest.write_text((ROOT/'tests/fixture/AndroidManifest.xml').read_text().replace('com.google.android.youtube',package))
         apk=out/('fixture-'+product+'.apk')
-        run(build/('aapt2'+suffix),'link','-I',android,'--manifest',manifest,'-o',apk,resources)
+        run(build/('aapt2'+suffix),'link','-I',android,'--manifest',manifest,
+            '--emit-ids',work/f'{product}-resource-ids.txt','-o',apk,resources)
         with zipfile.ZipFile(apk,'a') as z:
             z.write(work/'classes.dex','classes.dex')
             z.writestr('assets/javo-transfer-stress.bin',bytes(32*1024*1024),compress_type=zipfile.ZIP_STORED)
@@ -51,7 +52,8 @@ def main():
     config_manifest=work/'config-manifest.xml'
     config_manifest.write_text('<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.android.youtube" split="config.javo" android:versionCode="1" android:versionName="fixture-1"><uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28"/><application android:hasCode="false"/></manifest>',encoding='utf-8')
     config_apk=work/'config.javo.apk'
-    run(build/('aapt2'+suffix),'link','-I',android,'--manifest',config_manifest,'--no-resource-removal','-o',config_apk,config_resources)
+    run(build/('aapt2'+suffix),'link','-I',android,'--manifest',config_manifest,'--no-resource-removal',
+        '--stable-ids',work/'video-resource-ids.txt','-o',config_apk,config_resources)
     with zipfile.ZipFile(out/'fixture-video.apkm','w') as bundle:
         bundle.write(out/'fixture-video.apk','base.apk')
         bundle.write(config_apk,'config.javo.apk')
