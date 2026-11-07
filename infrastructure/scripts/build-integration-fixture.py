@@ -28,8 +28,9 @@ def main():
         + '</resources>')
     drawable = fixture_res.parent / 'drawable'
     drawable.mkdir(exist_ok=True)
-    (drawable / 'yt_ringo2_wordmark_header_light.xml').write_text(
-        '<shape xmlns:android="http://schemas.android.com/apk/res/android"><solid android:color="#FF0000"/></shape>')
+    for name in ('yt_ringo2_wordmark_header_light', 'yt_wordmark_header_light'):
+        (drawable / f'{name}.xml').write_text(
+            '<shape xmlns:android="http://schemas.android.com/apk/res/android"><solid android:color="#FF0000"/></shape>')
     resources=work/'resources.zip' 
     run(build/('aapt2'+suffix),'compile','--dir',fixture_res.parent,'-o',resources)
     for product,package in [('video','com.google.android.youtube'),('music','com.google.android.apps.youtube.music')]:

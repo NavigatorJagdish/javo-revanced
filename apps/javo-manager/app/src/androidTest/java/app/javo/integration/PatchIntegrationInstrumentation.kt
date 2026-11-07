@@ -140,10 +140,12 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             check(resources.getString(settingsTitle) == "$label settings")
             val launcherId = resources.getIdentifier("javo_brand_icon", "drawable", packageName)
             check(launcherId != 0 && app.icon == launcherId)
-            val headerId = resources.getIdentifier("yt_ringo2_wordmark_header_light", "drawable", packageName)
-            val header = resources.getDrawable(headerId, null)
-            if (id == "video") check(header is android.graphics.drawable.VectorDrawable)
-            else check(header is android.graphics.drawable.GradientDrawable)
+            for (name in listOf("yt_ringo2_wordmark_header_light", "yt_wordmark_header_light")) {
+                val headerId = resources.getIdentifier(name, "drawable", packageName)
+                val header = resources.getDrawable(headerId, null)
+                if (id == "video") check(header is android.graphics.drawable.VectorDrawable)
+                else check(header is android.graphics.drawable.GradientDrawable)
+            }
             check(!info.signatures.isNullOrEmpty()) { "Signed fixture has no signer" }
             products.put(JSONObject().put("id",id).put("packageName",packageName).put("sourceApkSha256",UpdateSecurity.sha256(fixture))
                 .put("brandingLabelVerified", true).put("mandatorySettingsAndIconVerified", true)

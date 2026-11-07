@@ -74,9 +74,11 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         check(icon != 0 && app.icon == icon)
         val settings = resource("revanced_settings_title", "string")
         check(resources.getString(settings) == "Javo Video settings")
-        for (mode in listOf("light", "dark")) {
-            val header = resource("yt_ringo2_wordmark_header_$mode", "drawable")
-            check(resources.getDrawable(header, null) is android.graphics.drawable.VectorDrawable)
+        for (name in listOf("yt_ringo2_wordmark_header", "yt_wordmark_header", "yt_premium_wordmark_header")) {
+            for (mode in listOf("light", "dark")) {
+                val header = resource("${name}_$mode", "drawable")
+                check(resources.getDrawable(header, null) is android.graphics.drawable.VectorDrawable)
+            }
         }
         check(!info.signatures.isNullOrEmpty())
         report.put("patchedPackage",info.packageName).put("brandingLabelVerified",true)

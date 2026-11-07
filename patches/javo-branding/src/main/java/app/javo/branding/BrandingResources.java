@@ -56,9 +56,16 @@ public final class BrandingResources {
     public static void applyInterface(Path resources, String packageId, String label) throws Exception {
         var headerNames = Arrays.asList(
             "yt_ringo2_wordmark_header_dark", "yt_ringo2_wordmark_header_light",
-            "yt_ringo2_premium_wordmark_header_dark", "yt_ringo2_premium_wordmark_header_light");
+            "yt_ringo2_premium_wordmark_header_dark", "yt_ringo2_premium_wordmark_header_light",
+            "yt_wordmark_header_dark", "yt_wordmark_header_light",
+            "yt_premium_wordmark_header_dark", "yt_premium_wordmark_header_light");
+        var wordmarkText = Arrays.asList(
+            "yt_logo_text_dark", "yt_logo_text_light", "yt_premium_logo_text_dark", "yt_premium_logo_text_light");
+        var videoIcons = Arrays.asList("yt_icon_header", "ringo2_action_bar_logo_release",
+            "ic_youtube_logo", "yt_color_youtube_logo_icon_24dp");
+        boolean video = packageId.equals("com.google.android.youtube");
         var settingsIcons = Arrays.asList("revanced_settings_icon", "revanced_settings_icon_bold");
-        var productLabel = packageId.equals("com.google.android.youtube") ? "application_name" : "app_launcher_name";
+        var productLabel = video ? "application_name" : "app_launcher_name";
         var launcher = resources.resolve("drawable/javo_brand_icon.xml");
         try (var directories = Files.newDirectoryStream(resources)) {
             for (var directory : directories) {
@@ -78,8 +85,11 @@ public final class BrandingResources {
                             var replacement = directory.resolve(resourceName + ".xml");
                             if (settingsIcons.contains(resourceName)) {
                                 Files.copy(launcher, replacement, StandardCopyOption.REPLACE_EXISTING);
-                            } else if (packageId.equals("com.google.android.youtube") && headerNames.contains(resourceName)) {
-                                Files.write(replacement, header(resourceName.endsWith("_dark")).getBytes(StandardCharsets.UTF_8));
+                            } else if (video && (headerNames.contains(resourceName) || wordmarkText.contains(resourceName))) {
+                                Files.write(replacement, header(resourceName.endsWith("_dark"),
+                                    headerNames.contains(resourceName)).getBytes(StandardCharsets.UTF_8));
+                            } else if (video && videoIcons.contains(resourceName)) {
+                                Files.write(replacement, videoIcon().getBytes(StandardCharsets.UTF_8));
                             } else continue;
                             if (!file.equals(replacement)) Files.delete(file);
                         }
@@ -107,20 +117,39 @@ public final class BrandingResources {
         if (changed) writeXml(document, file);
     }
 
-    private static String header(boolean dark) {
-        var ink = dark ? "#FFF7FA" : "#22202A";
+    private static final String VIDEO_MARK = """
+        <path android:fillColor="#FF475F" android:fillType="evenOdd"
+            android:pathData="M5,5 Q5,3 7,4 L25,14 Q29,16 25,18 L7,28 Q5,29 5,26 Z M10,11 L10,21 L19,16 Z"/>
+        <path android:strokeColor="#FF8A38" android:strokeWidth="2.3" android:strokeLineCap="round"
+            android:pathData="M7,5 L24,15"/>
+        """;
+
+    private static String videoIcon() {
         return """
             <vector xmlns:android="http://schemas.android.com/apk/res/android"
-                android:width="86dp" android:height="32dp" android:viewportWidth="86" android:viewportHeight="32">
-                <path android:fillColor="#FF475F" android:fillType="evenOdd"
-                    android:pathData="M5,5 Q5,3 7,4 L25,14 Q29,16 25,18 L7,28 Q5,29 5,26 Z M10,11 L10,21 L19,16 Z"/>
-                <path android:strokeColor="#FF8A38" android:strokeWidth="2.3" android:strokeLineCap="round"
-                    android:pathData="M7,5 L24,15"/>
-                <path android:strokeColor="%s" android:strokeWidth="2.6" android:strokeLineCap="round"
+                android:width="24dp" android:height="24dp" android:viewportWidth="32" android:viewportHeight="32">
+                %s
+            </vector>
+            """.replace("%s", VIDEO_MARK);
+    }
+
+    private static String header(boolean dark, boolean includeIcon) {
+        return """
+            <vector xmlns:android="http://schemas.android.com/apk/res/android"
+                android:width="WIDTHdp" android:height="HEIGHTdp" android:viewportWidth="WIDTH" android:viewportHeight="HEIGHT">
+                <group android:translateX="LEFT" android:translateY="TOP">
+                MARK
+                <path android:strokeColor="INK" android:strokeWidth="2.6" android:strokeLineCap="round"
                     android:strokeLineJoin="round"
                     android:pathData="M42,9 L42,19 Q42,24 38,24 Q35,24 34,21 M46,24 L51,9 L56,24 M48,19 L54,19 M59,9 L64,24 L69,9 M75,10 C82,5 85,12 84,17 C83,25 77,26 74,21 C71,17 72,12 75,10"/>
+                </group>
             </vector>
-            """.replace("%s", ink);
+            """.replace("WIDTH", includeIcon ? "110" : "54")
+            .replace("HEIGHT", includeIcon ? "48" : "32")
+            .replace("LEFT", includeIcon ? "11" : "-32")
+            .replace("TOP", includeIcon ? "8" : "0")
+            .replace("MARK", includeIcon ? VIDEO_MARK : "")
+            .replace("INK", dark ? "#FFF7FA" : "#22202A");
     }
 
     private static Document readXml(Path file) throws Exception {
