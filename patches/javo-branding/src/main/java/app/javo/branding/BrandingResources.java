@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.CodingErrorAction;
 import java.util.Locale;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -18,6 +19,8 @@ import org.xml.sax.SAXException;
 /** Applies Javo branding to an already decoded compatible APK. */
 public final class BrandingResources {
     private static final String ANDROID="http://schemas.android.com/apk/res/android";
+    private static final Pattern VIDEO_PRODUCT_ICON =
+        Pattern.compile("product_logo_youtube_(?:2024_q4_)?color_(24|144|192)");
     private BrandingResources() {}
     public static void apply(Path decoded, String packageId, String displayName, InputStream icon) throws Exception {
         if (!displayName.matches("Javo (Video|Music)")) throw new IllegalArgumentException("Unknown Javo product");
@@ -88,8 +91,15 @@ public final class BrandingResources {
                             } else if (video && (headerNames.contains(resourceName) || wordmarkText.contains(resourceName))) {
                                 Files.write(replacement, header(resourceName.endsWith("_dark"),
                                     headerNames.contains(resourceName)).getBytes(StandardCharsets.UTF_8));
-                            } else if (video && videoIcons.contains(resourceName)) {
-                                Files.write(replacement, videoIcon().getBytes(StandardCharsets.UTF_8));
+                            } else if (video) {
+                                var productIcon = VIDEO_PRODUCT_ICON.matcher(resourceName);
+                                if (productIcon.matches()) {
+                                    Files.write(replacement, videoIcon(productIcon.group(1)).getBytes(StandardCharsets.UTF_8));
+                                } else if (videoIcons.contains(resourceName)) {
+                                    Files.write(replacement, videoIcon("24").getBytes(StandardCharsets.UTF_8));
+                                } else if (resourceName.equals("youtube_logo")) {
+                                    Files.write(replacement, header(true, true).getBytes(StandardCharsets.UTF_8));
+                                } else continue;
                             } else continue;
                             if (!file.equals(replacement)) Files.delete(file);
                         }
@@ -124,13 +134,13 @@ public final class BrandingResources {
             android:pathData="M7,5 L24,15"/>
         """;
 
-    private static String videoIcon() {
+    private static String videoIcon(String size) {
         return """
             <vector xmlns:android="http://schemas.android.com/apk/res/android"
-                android:width="24dp" android:height="24dp" android:viewportWidth="32" android:viewportHeight="32">
+                android:width="SIZEdp" android:height="SIZEdp" android:viewportWidth="32" android:viewportHeight="32">
                 %s
             </vector>
-            """.replace("%s", VIDEO_MARK);
+            """.replace("SIZE", size).replace("%s", VIDEO_MARK);
     }
 
     private static String header(boolean dark, boolean includeIcon) {

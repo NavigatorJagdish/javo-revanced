@@ -80,9 +80,14 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
                 check(resources.getDrawable(header, null) is android.graphics.drawable.VectorDrawable)
             }
         }
+        for (name in listOf("product_logo_youtube_color_144", "product_logo_youtube_2024_q4_color_144")) {
+            val id = resource(name, "drawable")
+            check(resources.getDrawable(id, null) is android.graphics.drawable.VectorDrawable)
+        }
         check(!info.signatures.isNullOrEmpty())
         report.put("patchedPackage",info.packageName).put("brandingLabelVerified",true)
             .put("mandatorySettingsAndIconVerified",true).put("lightAndDarkHeaderVerified",true)
+            .put("bundledProductLogoVerified",true)
             .put("signedOutput",true).put("signedApkSha256",UpdateSecurity.sha256(signed)).put("success",true)
         key.delete()
     } catch(error:Throwable) {

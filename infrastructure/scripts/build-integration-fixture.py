@@ -28,7 +28,7 @@ def main():
         + '</resources>')
     drawable = fixture_res.parent / 'drawable'
     drawable.mkdir(exist_ok=True)
-    for name in ('yt_ringo2_wordmark_header_light', 'yt_wordmark_header_light'):
+    for name in ('yt_ringo2_wordmark_header_light', 'yt_wordmark_header_light', 'product_logo_youtube_color_144'):
         (drawable / f'{name}.xml').write_text(
             '<shape xmlns:android="http://schemas.android.com/apk/res/android"><solid android:color="#FF0000"/></shape>')
     resources=work/'resources.zip' 

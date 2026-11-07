@@ -140,7 +140,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             check(resources.getString(settingsTitle) == "$label settings")
             val launcherId = resources.getIdentifier("javo_brand_icon", "drawable", packageName)
             check(launcherId != 0 && app.icon == launcherId)
-            for (name in listOf("yt_ringo2_wordmark_header_light", "yt_wordmark_header_light")) {
+            for (name in listOf("yt_ringo2_wordmark_header_light", "yt_wordmark_header_light", "product_logo_youtube_color_144")) {
                 val headerId = resources.getIdentifier(name, "drawable", packageName)
                 val header = resources.getDrawable(headerId, null)
                 if (id == "video") check(header is android.graphics.drawable.VectorDrawable)
