@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.6** ke liye hai. Basic Manager setup ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager debug-signed hai. Core release runtime flags aur test certificate use karta hai. Har release ke saath usi APK ki emulator installation aur launch evidence shamil hai.
+Ye guide **v0.1.0-alpha.7** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager development certificate aur Core test certificate use karte hain. Release ZIP mein APKs aur unki verification reports milengi.
 
 ## 1. GitHub se files download karein
 
@@ -10,14 +10,13 @@ Private repository ka access rakhne wale GitHub account se sign in karein. Phone
 | --- | --- | --- |
 | Manager APK | Manager install karne ke liye | [Manager APK][manager] |
 | Core APK | Jab aapki selected patch setup mein **GmsCore support** chahiye | [Core APK][core] |
-| Javo branding bundle | Video ya Music ka Javo naam aur icon lagane ke liye | [Branding RVP][branding] |
 | Complete ZIP | Source, website, APKs aur evidence ke liye | [Project ZIP][zip] |
 
 Agar GitHub par **404** aaye, pehle account aur repository access check karein. Saari files release ke **Assets** section mein bhi milengi. [GitHub Release][release]
 
-## Purane alpha se alpha.6 Manager update
+## Manager update
 
-Is release se development signing identity ko stable rakhne ka setup hai. Purane alpha ka certificate alag hone par Android in-place update reject karega. Pehle **Settings → Import & export** se **settings aur patch-signing keystore**, dono export karein. Phir purana Manager remove karke alpha.6 install karein aur backups import karein. Working Core ko use karte rahein.
+Alpha.6 se alpha.7 Manager APK seedha update karein. Alpha.5 ya purani build se signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
 
 ## 2. Manager install karein
 
@@ -32,21 +31,22 @@ Is release se development signing identity ko stable rakhne ka setup hai. Purane
 3. Patched app agar Core ke battery-optimization prompt par ruke, **Continue** se Core ki battery setting kholein aur optimization exemption allow karein. Android 10 test mein ye setup zaroori tha.
 4. Agar patched YouTube launch hote hi band ho aur logs mein **missing google package permission or GET_ACCOUNTS** aaye, patched app ki **App info → Permissions → Contacts** setting check karein. Account discovery ki ye permission dene ke baad emulator par main navigation khula. Menu ka naam phone ke hisaab se badal sakta hai.
 
-## 4. Branding bundle import karein aur APK patch karein
+Play Protect scan maange to scan complete hone dein. Scan safe result de aur Android **Install** dikhaye, tab installation complete karein. Agar completed scan exact GitHub release APK ko harmful batakar block kare, warning ka exact text aur Android version note karein. Release checksum verify karein aur owner Google se review maang sakta hai. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en) · [App verification appeal](https://support.google.com/googleplay/android-developer/answer/2992033?hl=en)
 
-1. Manager mein **Patches → Edit** (pencil icon) → **Add patches → Select from storage** kholein. Download ki hui `javo-branding-0.1.0-alpha.1.rvp` file select karein.
-2. **Apps → Select from storage** se apna compatible, standalone YouTube ya YouTube Music APK select karein. Source APK aapke paas authorized tareeke se hona chahiye. Release mein ye source APKs shamil nahi hain. Split APK, `.apkm`, `.apks` aur `.xapk` ko seedha input ke taur par use na karein.
-3. Selected app ki patch list mein **Javo Video branding** ya **Javo Music branding** select karein. Doosra name ya icon patch deselect karein. Agar non-root setup ke liye GmsCore support chahiye, trusted upstream catalog se apne APK version ke liye compatible **GmsCore support** patch select karein.
-4. **Patch** tap karein aur patching aur signing complete hone dein. Output ki copy rakhne ke liye **Save APK** use karein. Phone par install karne ke liye **Install** use karein. Agar install mode poochha jaye, non-root setup ke liye **Default** choose karein.
-5. Patched app ka naam aur icon check karein aur app launch karein. Branding ka test first-party fixtures par hua hai. Actual YouTube aur Music APKs, Google sign-in aur playback abhi verify nahi hue hain.
+## 4. APK patch karein
+
+1. APKMirror screen mein **Download APK** tap karein. HTTP 503 aaye to isi button se retry karein. Agar source phir bhi unavailable hai, **Open browser** mein file download karein. Manager ki source screen par **Use downloaded APK** se APK ya APKM import karein. Manager file validate karke wahi patching session continue karega.
+2. Apne paas compatible standalone APK ho to **Apps → Select from storage** se select karein. Non-root setup ke liye compatible **GmsCore support** patch select karein.
+3. **Patch** tap karein. Manager YouTube output mein **Javo Video** aur Music output mein **Javo Music** branding khud lagata hai. Alag branding bundle import karne ki zaroorat nahi hai.
+4. Signing complete hone par **Install** tap karein. Non-root install ke liye **Default** choose karein. APK ki copy rakhne ke liye **Save APK** use karein.
 
 ## 5. Common errors
 
 | Problem | Kya check karein |
 | --- | --- |
 | APK install nahi hota | Download dobara verify karein. Android version, installer permission aur existing app ka signing conflict check karein. |
-| Branding patch list mein nahi dikh raha | RVP import aur selected APK ka package check karein. Video aur Music ke liye alag branding patches hain. |
-| **Incompatible patch** ya patching failure | Selected bundle ki version requirement check karein. Standalone APK use karein, overlapping branding patches hataayein aur **Save logs** se error report save karein. |
+| Purana app abhi bhi ReVanced naam dikhata hai | Alpha.7 Manager mein original compatible APK phir se patch karein. Usi patch-signing keystore se bana output install karein. |
+| **Incompatible patch** ya patching failure | Selected bundle ki version requirement check karein aur **Save logs** se error report save karein. |
 | Patched app purani copy ko update nahi kar paata | Same package ke update ke liye matching signing key chahiye. Manager mein **Settings → Import & export → Export keystore** se apni patch signing key ka private backup rakh sakte hain. |
 | Google login ya playback issue | APK version aur **GmsCore support** patch ki compatibility check karein. Is alpha mein account aur playback testing pending hai. |
 
@@ -55,17 +55,16 @@ Is release se development signing identity ko stable rakhne ka setup hai. Purane
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.6-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk, .\javo-branding-0.1.0-alpha.1.rvp -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.7-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.6
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-manager-0.1.0-alpha.6-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-core-0.3.13.2.250932-javo.2-test.apk
-[branding]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-branding-0.1.0-alpha.1.rvp
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.6/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.7
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-manager-0.1.0-alpha.7-debug.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-core-0.3.13.2.250932-javo.2-test.apk
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/SHA256SUMS
 
 
 ## Alpha 2 ke changes

@@ -246,6 +246,10 @@ android {
         buildConfig = true
     }
 
+    sourceSets.getByName("main").apply {
+        java.srcDir(rootProject.file("../../patches/javo-branding/src/main/java"))
+        resources.srcDir(rootProject.file("../../patches/javo-branding/src/main/resources"))
+    }
     sourceSets.getByName("androidTest").assets.srcDir(layout.buildDirectory.dir("integration-assets"))
 
     androidResources {

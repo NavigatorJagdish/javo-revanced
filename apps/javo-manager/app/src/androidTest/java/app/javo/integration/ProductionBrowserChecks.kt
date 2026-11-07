@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
 import android.view.View
+import android.widget.TextView
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.webkit.WebResourceRequest
@@ -70,6 +71,10 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
     val final="https://www.apkmirror.com/wp-content/themes/APKMirror/download.php?id=fixture&key=fixture"
     val cdn="https://eb5e7388c3df147b74dd2379b7cf8323.r2.cloudflarestorage.com/downloadprod/fixture/youtube.apk?token=fixture"
     BrowserHost(test).use { host ->
+        val attempts = java.util.concurrent.atomic.AtomicInteger()
+        val lastRequest = java.util.concurrent.atomic.AtomicReference<WebResourceRequest>()
+        fun unavailable() = WebResourceResponse("text/html", "UTF-8", 503, "Unavailable",
+            emptyMap(), ByteArrayInputStream("<html>Temporary error</html>".toByteArray()))
         test.runOnMainSync {
             val browser=host.fragment.webView
             val delegate=browser.webViewClient
@@ -79,22 +84,46 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
                     val body=when(request.url.toString()) {
                         base -> "<html><head></head><body><a class='downloadButton' target='_blank' onclick='return false' href='$intermediate'>Download APK</a></body></html>"
                         intermediate -> "<html><head></head><body><a id='download-link' target='_blank' onclick='return false' href='$final'>here</a></body></html>"
-                        final -> "<html><head><script>location.href='$cdn';</script></head><body>Resolving protected endpoint</body></html>"
+                        final -> {
+                            lastRequest.set(request)
+                            if (attempts.incrementAndGet() == 1) return unavailable()
+                            "<html><head><script>location.href='$cdn';</script></head><body>Resolving protected endpoint</body></html>"
+                        }
                         cdn -> error("Native host incorrectly waited for a WebView binary response")
                         else -> return delegate.shouldInterceptRequest(view,request)
                     }
                     return WebResourceResponse("text/html","UTF-8",ByteArrayInputStream(body.toByteArray()))
                 }
                 override fun onPageFinished(view:WebView,url:String) { delegate.onPageFinished(view,url) }
+                override fun onReceivedHttpError(view:WebView, request:WebResourceRequest, response:WebResourceResponse) {
+                    delegate.onReceivedHttpError(view, request, response)
+                }
             }
         }
         host.controller.load(base)
         check(host.pages.poll(25,TimeUnit.SECONDS)==base)
         test.waitForIdleSync()
         host.click("javo.download")
+        fun statusContains(expected: String): Boolean {
+            val matched = java.util.concurrent.atomic.AtomicBoolean()
+            test.runOnMainSync {
+                val status = host.activity.findViewById<View>(android.R.id.content).findViewWithTag<TextView>("javo.status")
+                matched.set(status.text.contains(expected))
+            }
+            return matched.get()
+        }
+        val deadline = android.os.SystemClock.elapsedRealtime() + 25_000
+        while (!statusContains("HTTP 503") && android.os.SystemClock.elapsedRealtime() < deadline) Thread.sleep(100)
+        check(statusContains("HTTP 503")) { "The temporary site error was not shown" }
+        host.click("javo.download")
         val download=checkNotNull(host.downloads.poll(30,TimeUnit.SECONDS)) { "Actual Manager browser did not return its final download URL" }
         check(download.first==cdn && !download.second.contains("; wv"))
+        test.runOnMainSync {
+            val page = host.fragment.webView
+            page.webViewClient.onReceivedHttpError(page, checkNotNull(lastRequest.get()), unavailable())
+        }
         check(host.downloads.poll(1,TimeUnit.SECONDS)==null) { "Duplicate native download" }
+        check(attempts.get() == 2 && statusContains("Returning to Manager")) { "A stale source error replaced the successful handoff" }
     }
     val target=test.targetContext
     val source=File(target.filesDir,"ui_ephemeral/browser-fixture.apkm").also { it.parentFile!!.mkdirs();bundle.copyTo(it,overwrite=true) }
@@ -139,6 +168,6 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
             }
         }
     } finally { test.removeMonitor(monitor);source.delete() }
-    return JSONArray().put("Production DownloaderActivity and WebViewFragment native button follow protected endpoint and capture resolved CDN URL without WebView DownloadListener")
+    return JSONArray().put("Production browser shows HTTP 503 before handoff, retries from the native button, captures the CDN URL and ignores a late source error")
         .put("Production document picker copies APKM privately, host validates/merges it, rejects outside paths, and removes temporary import")
 }

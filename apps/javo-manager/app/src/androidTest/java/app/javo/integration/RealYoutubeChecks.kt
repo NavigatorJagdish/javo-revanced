@@ -39,16 +39,12 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         val unsigned=File(folder,"youtube-unsigned.apk")
         runBlocking {
             val repository=org.koin.core.context.GlobalContext.get().get<PatchBundleRepository>()
-            for (name in listOf("official-inspected.rvp","javo-branding.rvp")) {
-                repository.createLocal { instrumentation.context.assets.open(name) }
-            }
+            repository.createLocal { instrumentation.context.assets.open("official-inspected.rvp") }
             val bundles=withTimeout(60_000) { repository.bundles.first { values ->
-                values.values.any { it.manifestAttributes?.name=="ReVanced Patches" } &&
-                values.values.any { it.manifestAttributes?.name=="Javo resource branding" }
+                values.values.any { it.manifestAttributes?.name=="ReVanced Patches" }
             } }
             val official=bundles.entries.first { it.value.manifestAttributes?.name=="ReVanced Patches" }.key
-            val branding=bundles.entries.first { it.value.manifestAttributes?.name=="Javo resource branding" }.key
-            val selection=mapOf(official to setOf("GmsCore support","Spoof video streams"),branding to setOf("Javo Video branding"))
+            val selection=mapOf(official to setOf("GmsCore support","Spoof video streams"))
             val metadata=withTimeout(60_000) { repository.bundleInfoFlow.first { it.keys.containsAll(selection.keys) } }
             for ((uid,names) in selection) {
                 check(metadata.getValue(uid).patches.filter { it.supports(original.packageName,original.versionName) }
@@ -70,8 +66,21 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         check(info.packageName=="app.revanced.android.youtube")
         val app=checkNotNull(info.applicationInfo).apply { sourceDir=signed.path;publicSourceDir=signed.path }
         check(app.loadLabel(target.packageManager).toString()=="Javo Video")
+        val resources = target.packageManager.getResourcesForApplication(app)
+        fun resource(name: String, type: String): Int =
+            resources.getIdentifier(name, type, info.packageName).takeIf { it != 0 }
+                ?: resources.getIdentifier(name, type, original.packageName)
+        val icon = resource("javo_brand_icon", "drawable")
+        check(icon != 0 && app.icon == icon)
+        val settings = resource("revanced_settings_title", "string")
+        check(resources.getString(settings) == "Javo Video settings")
+        for (mode in listOf("light", "dark")) {
+            val header = resource("yt_ringo2_wordmark_header_$mode", "drawable")
+            check(resources.getDrawable(header, null) is android.graphics.drawable.VectorDrawable)
+        }
         check(!info.signatures.isNullOrEmpty())
         report.put("patchedPackage",info.packageName).put("brandingLabelVerified",true)
+            .put("mandatorySettingsAndIconVerified",true).put("lightAndDarkHeaderVerified",true)
             .put("signedOutput",true).put("signedApkSha256",UpdateSecurity.sha256(signed)).put("success",true)
         key.delete()
     } catch(error:Throwable) {
@@ -82,4 +91,3 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
     File(folder,"result.json").writeText(report.toString(2))
     instrumentation.finish(if(report.optBoolean("success")) Activity.RESULT_OK else Activity.RESULT_CANCELED,Bundle().apply { putString("result",report.toString()) })
 }
-

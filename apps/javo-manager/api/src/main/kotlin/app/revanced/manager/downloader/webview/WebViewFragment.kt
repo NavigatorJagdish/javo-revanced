@@ -124,7 +124,13 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
         view.findViewById<View>(R.id.javo_web_download).setOnClickListener { requestDownload() }
         view.findViewById<View>(R.id.javo_web_browser).setOnClickListener { openBrowser() }
         view.findViewById<View>(R.id.javo_web_import).setOnClickListener { chooseFile() }
-        vm.onStatus = { message -> view.post { status(message) } }
+        vm.onStatus = { message -> view.post { if (!vm.hasDownload) status(message) } }
+        vm.onHandoff = {
+            view.post {
+                status("APK selected. Returning to Manager for transfer and verification…")
+                view.findViewById<ProgressBar>(R.id.javo_web_progress).visibility = View.GONE
+            }
+        }
         vm.onPageReady = { page, address ->
             if (vm.mirrorMode && ApkMirrorPolicy.isMirror(address)) {
                 view.findViewById<ProgressBar>(R.id.javo_web_progress).visibility = View.GONE
@@ -153,7 +159,8 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(page: WebView, value: Int) {
                     view.findViewById<ProgressBar>(R.id.javo_web_progress).apply {
-                        progress = value; visibility = if (value < 100) View.VISIBLE else View.GONE
+                        progress = value
+                        visibility = if (!vm.hasDownload && value < 100) View.VISIBLE else View.GONE
                     }
                 }
             }
@@ -199,11 +206,16 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
     }
 
     private fun requestDownload() {
-        if (!::webView.isInitialized || !vm.mirrorMode) return
+        if (!::webView.isInitialized || !vm.mirrorMode || vm.hasDownload) return
         vm.downloadRequested = true
+        vm.takeRetryUrl()?.let {
+            status("Retrying APKMirror…")
+            webView.loadUrl(it)
+            return
+        }
         status("Finding download link…")
         webView.evaluateJavascript(ApkMirrorPolicy.downloadActionScript(vm.blockAds)) { raw ->
-            if (!isAdded) return@evaluateJavascript
+            if (!isAdded || vm.hasDownload) return@evaluateJavascript
             runCatching {
                 val decoded = JSONTokener(raw).nextValue()
                 val action = JSONObject(decoded as? String ?: "{}")
@@ -293,6 +305,7 @@ class WebViewFragment : Fragment(R.layout.webview_fragment) {
     override fun onDestroyView() {
         vm.onPageReady = null
         vm.onStatus = null
+        vm.onHandoff = null
         if (::webView.isInitialized) { webView.stopLoading(); webView.destroy() }
         super.onDestroyView()
     }
@@ -323,12 +336,17 @@ internal class WebViewModel : ViewModel() {
 
     var onPageReady: ((WebView, String) -> Unit)? = null
     var onStatus: ((String) -> Unit)? = null
+    var onHandoff: (() -> Unit)? = null
     @Volatile var browserAgent = ""
     @Volatile var downloadRequested = false
     @Volatile var mirrorMode = false
     @Volatile var blockAds = true
     var originalUrl = ""
     private val downloadStarted = AtomicBoolean(false)
+    val hasDownload get() = mirrorMode && downloadStarted.get()
+    private var failedPage: String? = null
+
+    fun takeRetryUrl(): String? = failedPage.also { failedPage = null }
     private val commandChannel = Channel<Command>()
     val commands = commandChannel.receiveAsFlow()
 
@@ -348,7 +366,12 @@ internal class WebViewModel : ViewModel() {
     }
 
     val webViewClient = object : WebViewClient() {
+        override fun onPageStarted(view: WebView, url: String, favicon: android.graphics.Bitmap?) {
+            failedPage = null
+        }
+
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+            if (request.isForMainFrame && hasDownload) return true
             if (captureFile(request)) return true
             val blocked = mirrorMode && request.isForMainFrame && !ApkMirrorPolicy.isMirror(request.url.toString())
             if (blocked) onStatus?.invoke("External page blocked. Use Open browser if this link is needed.")
@@ -356,16 +379,22 @@ internal class WebViewModel : ViewModel() {
         }
 
         override fun onReceivedError(view: WebView, request: WebResourceRequest, error: android.webkit.WebResourceError) {
-            if (request.isForMainFrame) {
+            if (request.isForMainFrame && !hasDownload) {
                 downloadRequested = false
                 onStatus?.invoke("Page failed to load. Open browser, download there, then Use downloaded APK.")
             }
         }
 
         override fun onReceivedHttpError(view: WebView, request: WebResourceRequest, response: WebResourceResponse) {
-            if (request.isForMainFrame && response.statusCode >= 400) {
+            if (request.isForMainFrame && response.statusCode >= 400 && !hasDownload) {
                 downloadRequested = false
-                onStatus?.invoke("Source returned HTTP ${response.statusCode}. Try Open browser and Use downloaded APK.")
+                val url = request.url.toString()
+                val temporary = response.statusCode in 500..599 && ApkMirrorPolicy.isMirror(url)
+                failedPage = url.takeIf(ApkMirrorPolicy::isMirror)
+                onStatus?.invoke(
+                    if (temporary) "APKMirror is temporarily unavailable (HTTP ${response.statusCode}). Tap Download APK to retry, or open your browser."
+                    else "Source returned HTTP ${response.statusCode}. Try Open browser and Use downloaded APK."
+                )
             }
         }
 
@@ -380,7 +409,7 @@ internal class WebViewModel : ViewModel() {
         }
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            if (mirrorMode && url != null && ApkMirrorPolicy.isDownloadFile(url)) return
+            if (mirrorMode && (hasDownload || url == failedPage || (url != null && ApkMirrorPolicy.isDownloadFile(url)))) return
             eventBinder?.pageLoad(url)
             if (view != null && url != null) onPageReady?.invoke(view, url)
         }
@@ -407,7 +436,11 @@ internal class WebViewModel : ViewModel() {
     private fun emitDownload(url: String, mimeType: String, userAgent: String): Boolean {
         val binder = eventBinder ?: return false
         if (!downloadStarted.compareAndSet(false, true)) return false
-        return try { binder.download(url, mimeType, userAgent); true }
+        return try {
+            binder.download(url, mimeType, userAgent)
+            if (mirrorMode) onHandoff?.invoke()
+            true
+        }
         catch (error: android.os.RemoteException) {
             downloadStarted.set(false)
             onStatus?.invoke("Download session disconnected. Close the page and retry.")

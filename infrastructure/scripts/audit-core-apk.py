@@ -3,18 +3,40 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
+import os
 import re
+import shutil
 import subprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('apk', type=Path)
 parser.add_argument('--sdk', type=Path, required=True)
 args = parser.parse_args()
-tool = args.sdk / 'build-tools/34.0.0' / ('aapt2.exe' if __import__('os').name == 'nt' else 'aapt2')
+build_tools = args.sdk / 'build-tools/34.0.0'
+tool = build_tools / ('aapt2.exe' if os.name == 'nt' else 'aapt2')
+java_home = os.environ.get('JAVA_HOME')
+java = Path(java_home) / 'bin' / ('java.exe' if os.name == 'nt' else 'java') if java_home else shutil.which('java')
+if not java:
+    raise RuntimeError('Java is required to verify the Core signer')
+signature = subprocess.run(
+    [str(java), '-jar', str(build_tools / 'lib/apksigner.jar'), 'verify', '--verbose',
+     '--print-certs', str(args.apk)], check=True, capture_output=True, text=True
+).stdout
+signer = re.search(r'^Signer #1 certificate SHA-256 digest: ([a-f0-9]{64})$', signature, re.MULTILINE)
+expected_signer = '98cbe3dc2314dbd5ebe25af31c85814e7a570952ba568c66e0814fc3e56f18df'
+if not signer or signer[1] != expected_signer or 'Number of signers: 1' not in signature.splitlines():
+    raise RuntimeError('Core signing identity differs from the verified development release')
+if 'Verified using v2 scheme (APK Signature Scheme v2): true' not in signature.splitlines():
+    raise RuntimeError('Core requires a verified APK Signature Scheme v2 signature')
+
 def dump(*parts):
     return subprocess.run([str(tool), 'dump', *parts, str(args.apk)], check=True, capture_output=True, text=True).stdout
 
 permissions = dump('permissions')
+badging = dump('badging')
+target_sdk = re.search(r"^targetSdkVersion:'(\d+)'", badging, re.MULTILINE)
+if not target_sdk or not badging.startswith("package: name='app.revanced.android.gms' "):
+    raise RuntimeError('Could not verify Core package and target SDK')
 manifest = subprocess.run(
     [str(tool), 'dump', 'xmltree', str(args.apk), '--file', 'AndroidManifest.xml'],
     check=True, capture_output=True, text=True
@@ -39,6 +61,7 @@ for flag in ('debuggable', 'allowBackup'):
         raise RuntimeError('Core must disable ' + flag)
 report = {
     'package': 'app.revanced.android.gms', 'apkSha256': hashlib.sha256(args.apk.read_bytes()).hexdigest(),
+    'signerSha256': signer[1], 'signatureSchemeV2Verified': True, 'targetSdk': int(target_sdk[1]),
     'requestedPermissions': requested,
     'forbiddenPermissionsAbsent': True, 'debuggable': False, 'allowBackup': False,
     'playProtectVerdict': 'requires-device-or-Google-classification-check',

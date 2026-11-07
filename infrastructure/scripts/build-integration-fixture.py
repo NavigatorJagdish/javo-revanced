@@ -21,7 +21,15 @@ def main():
     # Large resource table exercises preparation and patch writing beyond a tiny fixture.
     fixture_res=work/'large-res/values'
     fixture_res.mkdir(parents=True,exist_ok=True)
-    (fixture_res/'strings.xml').write_text('<resources><string name="app_name">Javo integration fixture</string>'+''.join(f'<string name="stress_{i:05d}">Fixture resource {i}</string>' for i in range(4096))+'</resources>')
+    (fixture_res/'strings.xml').write_text(
+        '<resources><string name="app_name">Javo integration fixture</string>'
+        '<string name="revanced_settings_title">ReVanced</string>'
+        + ''.join(f'<string name="stress_{i:05d}">Fixture resource {i}</string>' for i in range(4096))
+        + '</resources>')
+    drawable = fixture_res.parent / 'drawable'
+    drawable.mkdir(exist_ok=True)
+    (drawable / 'yt_ringo2_wordmark_header_light.xml').write_text(
+        '<shape xmlns:android="http://schemas.android.com/apk/res/android"><solid android:color="#FF0000"/></shape>')
     resources=work/'resources.zip' 
     run(build/('aapt2'+suffix),'compile','--dir',fixture_res.parent,'-o',resources)
     for product,package in [('video','com.google.android.youtube'),('music','com.google.android.apps.youtube.music')]:

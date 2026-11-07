@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.charset.CodingErrorAction;
 import java.util.Locale;
+import java.util.Arrays;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -14,29 +15,14 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-/** Changes only the label and launcher icon of an already-decoded compatible APK. */
+/** Applies Javo branding to an already decoded compatible APK. */
 public final class BrandingResources {
     private static final String ANDROID="http://schemas.android.com/apk/res/android";
     private BrandingResources() {}
     public static void apply(Path decoded, String packageId, String displayName, InputStream icon) throws Exception {
         if (!displayName.matches("Javo (Video|Music)")) throw new IllegalArgumentException("Unknown Javo product");
-        var factory=DocumentBuilderFactory.newInstance();factory.setNamespaceAware(true);
-        factory.setExpandEntityReferences(false);
         Path manifest=decoded.resolve("AndroidManifest.xml");
-        // Android's XML factory does not implement the desktop Xerces security flags.
-        // Parse exactly the UTF-8 text inspected here, so encoding declarations cannot
-        // hide a DTD from this check. Decoded Apktool manifests are UTF-8.
-        if(Files.size(manifest)>16*1024*1024)throw new IOException("Manifest exceeds size limit");
-        byte[] bytes=Files.readAllBytes(manifest);
-        if(bytes.length>16*1024*1024)throw new IOException("Manifest exceeds size limit");
-        String xml=StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
-            .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();
-        String markup=xml.toUpperCase(Locale.ROOT);
-        if(markup.contains("<!DOCTYPE") || markup.contains("<!ENTITY") || xml.indexOf('\0')>=0)
-            throw new SecurityException("Document types and entity declarations are forbidden");
-        var builder=factory.newDocumentBuilder();
-        builder.setEntityResolver((publicId,systemId)->{throw new SAXException("External XML entities are forbidden");});
-        var doc=builder.parse(new InputSource(new StringReader(xml)));
+        var doc = readXml(manifest);
         String current=doc.getDocumentElement().getAttribute("package");
         // The trusted GmsCore-support patch can already have renamed the manifest.
         String renamed=switch(packageId){
@@ -64,9 +50,103 @@ public final class BrandingResources {
         // Refuse to overwrite an existing resource of unknown ownership.
         if(Files.exists(drawable))throw new IOException("javo_brand_icon already exists");
         try(var in=icon){Files.copy(in,drawable);}
+        writeXml(doc, manifest);
+    }
+
+    public static void applyInterface(Path resources, String packageId, String label) throws Exception {
+        var headerNames = Arrays.asList(
+            "yt_ringo2_wordmark_header_dark", "yt_ringo2_wordmark_header_light",
+            "yt_ringo2_premium_wordmark_header_dark", "yt_ringo2_premium_wordmark_header_light");
+        var settingsIcons = Arrays.asList("revanced_settings_icon", "revanced_settings_icon_bold");
+        var productLabel = packageId.equals("com.google.android.youtube") ? "application_name" : "app_launcher_name";
+        var launcher = resources.resolve("drawable/javo_brand_icon.xml");
+        try (var directories = Files.newDirectoryStream(resources)) {
+            for (var directory : directories) {
+                if (!Files.isDirectory(directory)) continue;
+                var qualifier = directory.getFileName().toString();
+                if (qualifier.equals("values") || qualifier.startsWith("values-")) {
+                    try (var files = Files.newDirectoryStream(directory, "{strings,revanced_strings}.xml")) {
+                        for (var file : files) updateLabels(file, label, productLabel);
+                    }
+                } else if (qualifier.equals("drawable") || qualifier.startsWith("drawable-")) {
+                    try (var files = Files.newDirectoryStream(directory)) {
+                        for (var file : files) {
+                            var filename = file.getFileName().toString();
+                            int dot = filename.indexOf('.');
+                            if (dot == -1) continue;
+                            var resourceName = filename.substring(0, dot);
+                            var replacement = directory.resolve(resourceName + ".xml");
+                            if (settingsIcons.contains(resourceName)) {
+                                Files.copy(launcher, replacement, StandardCopyOption.REPLACE_EXISTING);
+                            } else if (packageId.equals("com.google.android.youtube") && headerNames.contains(resourceName)) {
+                                Files.write(replacement, header(resourceName.endsWith("_dark")).getBytes(StandardCharsets.UTF_8));
+                            } else continue;
+                            if (!file.equals(replacement)) Files.delete(file);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void updateLabels(Path file, String label, String productLabel) throws Exception {
+        var document = readXml(file);
+        var strings = document.getElementsByTagName("string");
+        boolean changed = false;
+        for (int i = 0; i < strings.getLength(); i++) {
+            var entry = (Element) strings.item(i);
+            switch (entry.getAttribute("name")) {
+                case "revanced_settings_title" -> entry.setTextContent(label + " settings");
+                default -> {
+                    if (!entry.getAttribute("name").equals(productLabel)) continue;
+                    entry.setTextContent(label);
+                }
+            }
+            changed = true;
+        }
+        if (changed) writeXml(document, file);
+    }
+
+    private static String header(boolean dark) {
+        var ink = dark ? "#FFF7FA" : "#22202A";
+        return """
+            <vector xmlns:android="http://schemas.android.com/apk/res/android"
+                android:width="86dp" android:height="32dp" android:viewportWidth="86" android:viewportHeight="32">
+                <path android:fillColor="#FF475F" android:fillType="evenOdd"
+                    android:pathData="M5,5 Q5,3 7,4 L25,14 Q29,16 25,18 L7,28 Q5,29 5,26 Z M10,11 L10,21 L19,16 Z"/>
+                <path android:strokeColor="#FF8A38" android:strokeWidth="2.3" android:strokeLineCap="round"
+                    android:pathData="M7,5 L24,15"/>
+                <path android:strokeColor="%s" android:strokeWidth="2.6" android:strokeLineCap="round"
+                    android:strokeLineJoin="round"
+                    android:pathData="M42,9 L42,19 Q42,24 38,24 Q35,24 34,21 M46,24 L51,9 L56,24 M48,19 L54,19 M59,9 L64,24 L69,9 M75,10 C82,5 85,12 84,17 C83,25 77,26 74,21 C71,17 72,12 75,10"/>
+            </vector>
+            """.replace("%s", ink);
+    }
+
+    private static Document readXml(Path file) throws Exception {
+        var factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setExpandEntityReferences(false);
+        // Android's XML factory does not implement the desktop Xerces security flags.
+        // Parse exactly the UTF-8 text inspected here, so encoding declarations cannot
+        // hide a DTD from this check. Decoded Apktool manifests are UTF-8.
+        if(Files.size(file)>16*1024*1024)throw new IOException("Decoded XML exceeds size limit");
+        byte[] bytes=Files.readAllBytes(file);
+        if(bytes.length>16*1024*1024)throw new IOException("Decoded XML exceeds size limit");
+        String xml=StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
+            .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();
+        String markup=xml.toUpperCase(Locale.ROOT);
+        if(markup.contains("<!DOCTYPE") || markup.contains("<!ENTITY") || xml.indexOf('\0')>=0)
+            throw new SecurityException("Document types and entity declarations are forbidden");
+        var builder=factory.newDocumentBuilder();
+        builder.setEntityResolver((publicId,systemId)->{throw new SAXException("External XML entities are forbidden");});
+        return builder.parse(new InputSource(new StringReader(xml)));
+    }
+
+    private static void writeXml(Document doc, Path file) throws Exception {
         var transformerFactory=TransformerFactory.newInstance();
         // Identity transformation of the guarded DOM; no stylesheet or URL is loaded.
-        var temp=Files.createTempFile(decoded,"javo-manifest-", ".xml");
-        try{transformerFactory.newTransformer().transform(new DOMSource(doc),new StreamResult(temp.toFile()));Files.move(temp,manifest,StandardCopyOption.REPLACE_EXISTING);}finally{Files.deleteIfExists(temp);}
+        var temp=Files.createTempFile(file.getParent(),"javo-resource-", ".xml");
+        try{transformerFactory.newTransformer().transform(new DOMSource(doc),new StreamResult(temp.toFile()));Files.move(temp,file,StandardCopyOption.REPLACE_EXISTING);}finally{Files.deleteIfExists(temp);}
     }
 }

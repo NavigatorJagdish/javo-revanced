@@ -6,9 +6,9 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated from the owner's master prompt and four design references, with verified alpha.6 Manager update published on 2026-11-06. This is a **functional alpha**. See [the implementation report](docs/FINAL_REPORT.md) for actual build and test outcomes.
+Independent Android ecosystem regenerated from the owner's master prompt and four design references. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.6 includes APKMirror ad protection, direct suggested-version navigation, browser session/source-page headers, measured preparation progress and patcher-process exit recovery. The Core binary is reused from verified alpha.2 after matching its source tree. The APKMirror screen has persistent native controls, direct final-URL handoff and a document-picker import that resumes the same patch session after downloading in an external browser. A live local alpha.6 check downloaded the complete 169.5 MB Google-signed YouTube 20.40.45 source APK with HTTP 200 and the expected SHA-256 after the verified R2 file host was added. The heap defaults to 700 MB, with an Android 10 cap, after a separate real YouTube patch/sign check. See the evidence for the local build hash and tested patches. Physical-device behavior, playback and account sign-in remain unverified.
+Alpha.7 applies Javo branding automatically during YouTube and YouTube Music patching. APKMirror server errors can be retried in the source screen, and the Manager takes over once it has the file address. The Core binary is reused from verified alpha.2 after matching its source tree. See the [alpha.7 release notes](docs/RELEASE_ALPHA7.md).
 
 ## Included
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-alpha.7
+
+- Apply Javo launcher and interface branding automatically when patching YouTube or YouTube Music.
+- Offer a retry for APKMirror server errors and keep late browser messages from interrupting the file handoff.
+- Check the reused Core APK's signing identity and signature scheme in the release audit.
+
 ## 2026-11-03 — development regeneration
 
 - Recovered the master prompt and four reference images; prior source ZIP unavailable and regeneration authorized.
