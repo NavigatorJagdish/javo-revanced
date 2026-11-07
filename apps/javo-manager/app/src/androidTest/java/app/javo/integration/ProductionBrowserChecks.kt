@@ -73,6 +73,7 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
     BrowserHost(test).use { host ->
         val attempts = java.util.concurrent.atomic.AtomicInteger()
         val lastRequest = java.util.concurrent.atomic.AtomicReference<WebResourceRequest>()
+        val requested = CountDownLatch(1)
         fun unavailable() = WebResourceResponse("text/html", "UTF-8", 503, "Unavailable",
             emptyMap(), ByteArrayInputStream("<html>Temporary error</html>".toByteArray()))
         test.runOnMainSync {
@@ -86,7 +87,10 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
                         intermediate -> "<html><head></head><body><a id='download-link' target='_blank' onclick='return false' href='$final'>here</a></body></html>"
                         final -> {
                             lastRequest.set(request)
-                            if (attempts.incrementAndGet() == 1) return unavailable()
+                            if (attempts.incrementAndGet() == 1) {
+                                requested.countDown()
+                                return unavailable()
+                            }
                             "<html><head><script>location.href='$cdn';</script></head><body>Resolving protected endpoint</body></html>"
                         }
                         cdn -> error("Native host incorrectly waited for a WebView binary response")
@@ -104,6 +108,12 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
         check(host.pages.poll(25,TimeUnit.SECONDS)==base)
         test.waitForIdleSync()
         host.click("javo.download")
+        check(requested.await(25, TimeUnit.SECONDS)) { "The protected download endpoint was never requested" }
+        // Some WebView versions omit the error callback for intercepted fixture responses.
+        test.runOnMainSync {
+            val page = host.fragment.webView
+            page.webViewClient.onReceivedHttpError(page, checkNotNull(lastRequest.get()), unavailable())
+        }
         fun statusContains(expected: String): Boolean {
             val matched = java.util.concurrent.atomic.AtomicBoolean()
             test.runOnMainSync {
@@ -112,7 +122,7 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
             }
             return matched.get()
         }
-        val deadline = android.os.SystemClock.elapsedRealtime() + 25_000
+        val deadline = android.os.SystemClock.elapsedRealtime() + 5_000
         while (!statusContains("HTTP 503") && android.os.SystemClock.elapsedRealtime() < deadline) Thread.sleep(100)
         check(statusContains("HTTP 503")) { "The temporary site error was not shown" }
         host.click("javo.download")
