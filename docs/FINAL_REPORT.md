@@ -1,4 +1,20 @@
-# Javo ReVanced alpha.6 verification report
+# Javo ReVanced verification reports
+
+## Alpha.7
+
+The six release jobs passed for commit `9e47507d290319e50ad01be496379ae75e4ee24a`. Android 10 and 15 installed and launched the exact released Manager and Core APKs. [Verification run](https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42360099255)
+
+Both Android versions exercised APKMirror's production browser controls using an HTTP 503 fixture. The native button retried, the browser handed off the trusted download address, and a late 503 left the successful handoff intact. The tests also imported a document-picker APKM and verified split merging.
+
+Both fixture outputs passed patching, signing, installation and launch. The tests verified mandatory Javo labels, launcher icons and settings titles, plus the Video header and bundled product logo. The Manager certificate matches alpha.6, so Android can install it as an update.
+
+A separate local build from the same Manager source patched, signed, installed and launched YouTube 20.40.45 using only GmsCore support and Spoof video streams. The header displayed Javo and the APK contained the Javo launcher icon, settings title and bundled product logos. The online home feed still displayed its YouTube illustration. An earlier local attempt timed out starting the patcher and the rerun passed. Playback and account sign-in are outside this test. [Local test evidence](../evidence/alpha7-real-youtube.json) · [Home screen screenshot](../evidence/screenshots/alpha7-real-video-api29.png)
+
+The Core audit verified the certificate, APK Signature Scheme v2, runtime flags and restricted permissions. The owner reported that Play Protect scanned this Core and allowed installation. Google controls scan prompts on other devices.
+
+The source ZIP passed integrity and SHA-256 checks for all 7,246 inventoried entries. The release job checked the digest of every uploaded asset before publishing. [Release receipt](../evidence/release-alpha7.json) · [Download release](https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.7)
+
+## Alpha.6 verification report
 
 The private workflow built these development APKs and bound the results below to their exact hashes. [Verification run](https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42152158095)
 

@@ -1,0 +1,52 @@
+{
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.7",
+  "draft": false,
+  "testedCommit": "9e47507d290319e50ad01be496379ae75e4ee24a",
+  "verificationRun": 42360099255,
+  "hostChecksPassed": 102,
+  "managerAndroidApis": [
+    29,
+    35
+  ],
+  "coreAndroidApis": [
+    29,
+    35
+  ],
+  "sourceZipSha256": "fdf71654e6511c62fd5db40276c00d2f2a9008abd2f731537f9f3faca4d6080b",
+  "sourceEntriesVerifiedByWorkflow": 7246,
+  "managerApkSha256": "9483510aef1f781caf806120e97564c1a61af98373f412673fa9a1dc8b995035",
+  "managerSignerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+  "coreApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+  "coreSignatureSchemeV2Verified": true,
+  "managerBrowserRegression": "503 retry and successful handoff despite late source errors on Android 10 and 15",
+  "mandatoryBrandingFixtureChecks": "Javo app label, launcher icon, settings, YouTube header variants and bundled product logo tested on both APIs",
+  "assets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "size": 10619,
+      "digest": "sha256:93843caf4bc60fae1702b84aba36b47c66535a72d46bdbce780488086317068a"
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "size": 92219219,
+      "digest": "sha256:4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.7-debug.apk",
+      "size": 62611216,
+      "digest": "sha256:9483510aef1f781caf806120e97564c1a61af98373f412673fa9a1dc8b995035"
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "size": 318352003,
+      "digest": "sha256:fdf71654e6511c62fd5db40276c00d2f2a9008abd2f731537f9f3faca4d6080b"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 405,
+      "digest": "sha256:d92b61f132b9aaf022aab0f0b7edc56b259a166a51dac44188ceaab77f88fbe6"
+    }
+  ],
+  "playback": "not-tested",
+  "accountLogin": "not-tested"
+}

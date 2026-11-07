@@ -1,6 +1,6 @@
 # Javo ReVanced 0.1.0-alpha.7
 
-Javo Manager applies Javo Video and Javo Music names and launcher icons automatically when patching the corresponding YouTube packages. Video's standard and premium header wordmarks use the Javo mark in light and dark themes. Where upstream settings are present, the Manager applies the Javo settings name and icon. The separate branding RVP is for external patchers. The Manager takes care of branding when an existing patch selection includes the old Javo branding, Custom branding, or Change header patches. Repatch and install the new output to see the changes.
+Javo Manager applies Javo Video and Javo Music names and launcher icons automatically when patching the corresponding YouTube packages. Video's bundled product logos and standard and premium header wordmarks use the Javo mark in light and dark themes. Where upstream settings are present, the Manager applies the Javo settings name and icon. The separate branding RVP is for external patchers. The Manager takes care of branding when an existing patch selection includes the old Javo branding, Custom branding, or Change header patches. Repatch and install the new output to see the changes.
 
 APKMirror's browser screen now offers a retry when the main page returns a temporary server error. Once the trusted file address is handed to the Manager, the browser shows the handoff and ignores late page errors. The Manager then verifies the input before patching. The same session supports the native file picker if the site is unavailable.
 
