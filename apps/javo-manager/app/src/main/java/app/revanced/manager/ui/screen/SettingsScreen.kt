@@ -224,8 +224,7 @@ fun SettingsScreen(onBackClick: () -> Unit, navigate: (Settings.Destination) -> 
                         onClick = {
                             batteryOptimizationsLauncher.launch(
                                 Intent(
-                                    android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                                    Uri.fromParts("package", context.packageName, null)
+                                    android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
                                 )
                             )
                         }

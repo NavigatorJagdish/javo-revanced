@@ -10,6 +10,7 @@ Full corresponding source is included for the imported Manager and Core forks. T
 | ReVanced GmsCore / microG | Apache-2.0 plus per-component files | apps/javo-core/LICENSE and LICENSES/ |
 | ARSCLib 1.3.8 | Apache-2.0, REAndroid | Manager assets/third_party/ARSCLib-LICENSE.txt |
 | ReVanced Manager Downloaders adaptations | GPL-3.0, pinned source attribution | evidence/apkmirror-fix-provenance.json |
+| NewPipe Extractor v0.26.5 | GPL-3.0-or-later | [Corresponding upstream source](https://github.com/TeamNewPipe/NewPipeExtractor/tree/v0.26.5) |
 | Javo modifications | GPL-3.0-only, except retained upstream terms | Modified-file inventory in evidence/source-modifications.json |
 | Original reference images | Supplied by owner; ownership beyond that is not independently verified | assets/references/ |
 | Javo vector artwork | Original vector interpretations of owner-supplied references, distributed with this source | assets/logos/ |

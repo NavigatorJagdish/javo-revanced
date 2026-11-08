@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import app.revanced.library.mostCommonCompatibleVersions
 import app.revanced.manager.R
+import app.javo.security.UpdateSecurity
 import app.revanced.manager.data.room.AppDatabase
 import app.revanced.manager.data.room.bundles.PatchBundleEntity
 import app.revanced.manager.data.room.sources.SourceProperties
@@ -78,7 +79,7 @@ class PatchBundleRepository(
                 file,
                 SourceInfo.API.SENTINEL,
                 autoUpdate,
-                PatchBundleLoader
+                VerifiedRemoteBundle
             ) { getPatchesUpdate() }
 
             is SourceInfo.Remote -> JsonPatchBundle(
@@ -90,7 +91,7 @@ class PatchBundleRepository(
                 file,
                 source.url.toString(),
                 autoUpdate,
-                PatchBundleLoader
+                VerifiedRemoteBundle
             )
         }
     }
@@ -205,5 +206,21 @@ class PatchBundleRepository(
 
     private companion object PatchBundleLoader : Loader<PatchBundle> {
         override fun load(file: File) = PatchBundle(file.absolutePath)
+    }
+
+    private object VerifiedRemoteBundle : Loader<PatchBundle> {
+        // Digest of the signature-checked upstream 6.2.1 bundle in official-patches-signature.json.
+        private const val APPROVED = "50f41e4656b7374a1c8fe5579fd107f697f86d7f13fc6cd194cf3821761dc4b4"
+
+        override fun verifyDownload(file: File) {
+            require(file.length() in 1..32L * 1024 * 1024 && UpdateSecurity.sha256(file) == APPROVED) {
+                "This remote patch bundle has not been verified for this Manager release."
+            }
+        }
+
+        override fun load(file: File): PatchBundle {
+            verifyDownload(file)
+            return PatchBundle(file.absolutePath)
+        }
     }
 }

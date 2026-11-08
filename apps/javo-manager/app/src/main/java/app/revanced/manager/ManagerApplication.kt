@@ -8,7 +8,6 @@ import app.revanced.manager.data.platform.Filesystem
 import app.revanced.manager.di.*
 import app.revanced.manager.domain.manager.PreferencesManager
 import app.revanced.manager.domain.repository.DownloadedAppRepository
-import app.revanced.manager.domain.repository.DownloaderRepository
 import app.revanced.manager.domain.repository.PatchBundleRepository
 import app.revanced.manager.util.tag
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +30,6 @@ class ManagerApplication : Application() {
     private val scope = MainScope()
     private val prefs: PreferencesManager by inject()
     private val patchBundleRepository: PatchBundleRepository by inject()
-    private val downloaderRepository: DownloaderRepository by inject()
     private val downloadedAppsRepository: DownloadedAppRepository by inject()
     private val fs: Filesystem by inject()
 
@@ -75,15 +73,8 @@ class ManagerApplication : Application() {
             prefs.preload()
         }
         scope.launch(Dispatchers.Default) {
-            downloaderRepository.reload()
-        }
-        scope.launch(Dispatchers.Default) {
-            arrayOf(patchBundleRepository, downloaderRepository).forEach {
-                with(it) {
-                    reload()
-                    updateCheck(force = false)
-                }
-            }
+            patchBundleRepository.reload()
+            patchBundleRepository.updateCheck(force = false)
         }
         scope.launch(Dispatchers.Default) {
             downloadedAppsRepository.cleanUp()

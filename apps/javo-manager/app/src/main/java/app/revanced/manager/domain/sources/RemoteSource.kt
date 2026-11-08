@@ -13,6 +13,10 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
+import java.io.FilterOutputStream
+import java.io.OutputStream
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import kotlinx.datetime.LocalDateTime
 
 typealias RemotePatchBundle = RemoteSource<PatchBundle>
@@ -47,10 +51,16 @@ sealed class RemoteSource<T>(
         copy(error, name, this.autoUpdate, this.versionHash, this.releasedAt)
 
     private suspend fun download(info: ReVancedAsset) = withContext(Dispatchers.IO) {
-        outputStream().use {
-            http.streamTo(it) {
-                url(info.downloadUrl)
+        val staged = File.createTempFile("source-", ".download", checkNotNull(file.parentFile))
+        try {
+            LimitedOutputStream(staged.outputStream().buffered()).use {
+                http.streamTo(it) { url(info.downloadUrl) }
             }
+            loader.verifyDownload(staged)
+            check(staged.setReadOnly()) { "Could not protect the verified patch bundle" }
+            Files.move(staged.toPath(), file.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING)
+        } finally {
+            staged.delete()
         }
 
         UpdateResult(info.version, info.createdAt)
@@ -69,6 +79,25 @@ sealed class RemoteSource<T>(
 
     companion object {
         const val updateFailMsg = "Failed to update"
+    }
+
+    private class LimitedOutputStream(output: OutputStream) : FilterOutputStream(output) {
+        private var remaining = 32L * 1024 * 1024
+
+        override fun write(value: Int) {
+            reserve(1)
+            out.write(value)
+        }
+
+        override fun write(bytes: ByteArray, offset: Int, length: Int) {
+            reserve(length)
+            out.write(bytes, offset, length)
+        }
+
+        private fun reserve(length: Int) {
+            require(length in 0..remaining) { "Remote patch bundle exceeds 32 MiB" }
+            remaining -= length
+        }
     }
 }
 

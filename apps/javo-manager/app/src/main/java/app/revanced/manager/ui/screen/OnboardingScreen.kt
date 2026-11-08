@@ -3,7 +3,6 @@ package app.revanced.manager.ui.screen
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
@@ -89,7 +88,6 @@ fun OnboardingScreen(
 
     var managerUpdatesEnabled by rememberSaveable { mutableStateOf(true) }
     var patchesUpdatesEnabled by rememberSaveable { mutableStateOf(true) }
-    var downloaderUpdatesEnabled by rememberSaveable { mutableStateOf(true) }
     var showSkipPermissionsDialog by remember { mutableStateOf(false) }
 
     val installAppsLauncher = rememberLauncherForActivityResult(RequestInstallAppsContract) {
@@ -134,7 +132,6 @@ fun OnboardingScreen(
                         vm.applyAutoUpdatePrefs(
                             managerEnabled = managerUpdatesEnabled,
                             patchesEnabled = patchesUpdatesEnabled,
-                            downloadersEnabled = downloaderUpdatesEnabled,
                         )
                     }
                     vm.advance()
@@ -193,8 +190,7 @@ fun OnboardingScreen(
                         onRequestBatteryOptimization = {
                             batteryOptimizationLauncher.launch(
                                 Intent(
-                                    Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-                                    Uri.fromParts("package", context.packageName, null)
+                                    Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
                                 )
                             )
                         }
@@ -203,10 +199,8 @@ fun OnboardingScreen(
                     OnboardingStep.Updates -> UpdatesStepContent(
                         managerEnabled = managerUpdatesEnabled,
                         patchesEnabled = patchesUpdatesEnabled,
-                        downloadersEnabled = downloaderUpdatesEnabled,
                         onManagerEnabledChange = { managerUpdatesEnabled = it },
                         onPatchesEnabledChange = { patchesUpdatesEnabled = it },
-                        onDownloadersEnabledChange = { downloaderUpdatesEnabled = it },
                     )
 
                     OnboardingStep.Apps -> AppsStepContent(

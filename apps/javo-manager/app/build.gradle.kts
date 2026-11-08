@@ -31,6 +31,10 @@ val arsclibAndroid by tasks.registering(Jar::class) {
 }
 
 dependencies {
+    implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.5") {
+        // The patch-signing library already uses protobuf-java, which includes the lite API.
+        exclude(group = "com.google.protobuf", module = "protobuf-javalite")
+    }
     arsclibSource("io.github.reandroid:ARSCLib:1.3.8")
     implementation(files(arsclibAndroid.flatMap { it.archiveFile }))
     // AndroidX Core
@@ -78,6 +82,8 @@ dependencies {
 
     // ReVanced
     implementation(libs.revanced.patcher)
+    // Match Patcher's runtime dexlib2; Session also uses its public bytecode interfaces.
+    implementation("com.android.tools.smali:smali-dexlib2:3.0.9")
     implementation(libs.revanced.library)
 
     // Downloaders
@@ -199,6 +205,7 @@ android {
 
     buildTypes {
         release {
+            isDebuggable = false
             // Causes patching to not work properly, if enabled.
             isMinifyEnabled = false
             isShrinkResources = false
@@ -217,6 +224,7 @@ android {
             }
         }
     }
+    testBuildType = "release"
 
     applicationVariants.all {
         outputs.all {

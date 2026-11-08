@@ -7,7 +7,13 @@ root = Path(__file__).resolve().parents[2]
 catalog = json.loads((root / 'infrastructure/release/catalog.json').read_text())
 integration = json.loads((root / 'evidence/manager-patch-integration.json').read_text())
 audit = json.loads((root / 'evidence/core-security-audit.json').read_text())
+manager_audit = json.loads((root / 'evidence/manager-security-audit.json').read_text())
 artifacts = {item['id']: item for item in catalog['artifacts']}
+if (manager_audit['apkSha256'] != artifacts['manager']['sha256']
+    or manager_audit['signerSha256'] != artifacts['manager']['signerSha256']
+    or manager_audit['debuggable'] or manager_audit['allowBackup'] is not False
+    or manager_audit['usesCleartextTraffic'] is not False or not manager_audit['signatureV2Verified']):
+    raise ValueError('Manager security audit must match this APK')
 if (audit['apkSha256'] != artifacts['core']['sha256']
     or audit['signerSha256'] != artifacts['core']['signerSha256']
     or not audit['signatureSchemeV2Verified'] or not audit['forbiddenPermissionsAbsent']):
@@ -36,6 +42,8 @@ for result, api in [(integration, 29), (integration35, 35)]:
         raise ValueError(f'Android {api} mandatory branding evidence is missing')
     if not products['video']['videoHeaderVerified']:
         raise ValueError(f'Android {api} Javo Video header evidence is missing')
+    if not all(result.get('mediaSave', {}).get(key) is True for key in ('mp4','m4a','invalidFileRemoved')):
+        raise ValueError(f'Android {api} MP4/M4A Downloads evidence is missing')
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())
 check_list = '\n'.join('- ' + str(check) + '.' for check in checks)
@@ -54,7 +62,7 @@ The private workflow built these development APKs and bound the results below to
 | --- | --- | --- |
 {rows}
 
-Manager uses a debug certificate. Core uses release runtime flags with a test certificate. Production signing and the signed production update feed require an owner-managed signing identity.
+Both APKs disable runtime debugging. Manager retains its established development certificate, and Core uses a test certificate. The Manager APK audit verifies its signature and that app backup, cleartext traffic, unrestricted storage and broad app visibility are disabled. APKMirror is built in; the Manager no longer loads downloader plugins from remote APKs. Default patch updates accept only the verified bundle digest. Play Protect classification is pending.
 
 ## Core changes
 
@@ -72,6 +80,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
+- On both emulator APIs, the built-in saver copied an MP4 and an M4A over HTTPS to Downloads, checked the track types, matched the original bytes, and removed a rejected file.
 - Built-in Javo launcher icon and settings branding were verified for both fixture outputs, along with the Javo Video header. The production browser test showed a fixture HTTP 503, retried with the native button, captured the file URL and ignored a late 503 after handoff.
 - {catalog_result}
 

@@ -3,6 +3,7 @@ package app.javo.integration
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import app.javo.security.UpdateSecurity
 import app.revanced.library.ApkUtils
@@ -17,14 +18,26 @@ import org.json.JSONObject
 import org.json.JSONArray
 import java.io.File
 import java.security.MessageDigest
+import app.revanced.manager.domain.repository.DownloaderRepository
+import org.koin.core.context.GlobalContext
 
 /** Exercises the production bundle loader, Session and signer against first-party code only. */
 class PatchIntegrationInstrumentation : Instrumentation() {
     private var realInput: String? = null
     private var liveMirror = false
-    override fun onCreate(arguments: Bundle?) { realInput=arguments?.getString("realInput"); liveMirror=arguments?.getString("liveMirror")=="1"; super.onCreate(arguments); start() }
+    private var liveMedia: String? = null
+    private var outputId: String? = null
+    override fun onCreate(arguments: Bundle?) {
+        realInput = arguments?.getString("realInput")
+        liveMirror = arguments?.getString("liveMirror") == "1"
+        liveMedia = arguments?.getString("liveMedia")
+        outputId = arguments?.getString("fixtureOutputId")
+        super.onCreate(arguments)
+        start()
+    }
     override fun onStart() {
         if (liveMirror) { diagnoseLiveMirror(this); return }
+        liveMedia?.let { checkLiveMedia(this, it); return }
         realInput?.let { checkRealYoutube(this, File(it)); return }
         val report = JSONObject().put("fixture", "first-party; no YouTube code")
             .put("playback", "not-tested").put("accountLogin", "not-tested")
@@ -34,6 +47,12 @@ class PatchIntegrationInstrumentation : Instrumentation() {
         }
         try {
             report.put("managerApkSha256",UpdateSecurity.sha256(File(targetContext.applicationInfo.sourceDir)))
+            val downloader = runBlocking { GlobalContext.get().get<DownloaderRepository>().loadedDownloadersFlow.first().single() }
+            check(downloader.packageName == targetContext.packageName && downloader.className == "app.javo.apkmirror.BuiltIn")
+            report.put("builtInApkMirror", true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                report.put("mediaSave", runBlocking { checkMediaSave(this@PatchIntegrationInstrumentation) })
+            }
             fun asset(name: String) = File(folder, name).also { file ->
                 if (file.exists()) { file.setWritable(true); check(file.delete()) }
                 context.assets.open(name).use { input -> file.outputStream().use { input.copyTo(it) } }
@@ -153,6 +172,17 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 .put("signedApkSha256",MessageDigest.getInstance("SHA-256").digest(signed.readBytes()).joinToString("") { "%02x".format(it) })
                 .put("success",true))
             key.delete()
+            }
+            // Only the separate test APK exports fixtures. The release APK cannot export its private data via run-as.
+            outputId?.let { id ->
+                require(id.matches(Regex("[a-f0-9]{32}")))
+                val output = checkNotNull(targetContext.getExternalFilesDir(null)).resolve("javo-fixture-$id")
+                check(output.mkdirs())
+                for (product in listOf("video", "music")) {
+                    val file = "$product-patched-signed.apk"
+                    File(folder, file).copyTo(output.resolve(file))
+                }
+                report.put("fixtureOutputDirectory", output.absolutePath)
             }
             report.put("success",true)
             File(folder,"result.json").writeText(report.toString(2))

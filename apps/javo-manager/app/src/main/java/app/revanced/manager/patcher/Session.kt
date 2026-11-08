@@ -12,6 +12,16 @@ import app.revanced.patcher.patch.Patch
 import app.revanced.patcher.patch.PatchResult
 import app.revanced.patcher.patcher
 import app.revanced.patcher.patch.resourcePatch
+import app.revanced.patcher.patch.bytecodePatch
+import app.revanced.patcher.extensions.addInstructions
+import app.revanced.patcher.extensions.replaceInstruction
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.reference.FieldReference
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
+import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import app.javo.branding.BrandingResources
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -116,7 +126,8 @@ class Session(
                                 patchingLogger.info("Using built-in Javo branding in place of ${patch.name}")
                                 indices[patch]?.let { onEvent(ProgressEvent.Completed(StepId.ExecutePatch(it))) }
                             }
-                            setOf(branding) + selectedPatches.filterNot { it.name in conflicting }
+                            val defaults = if (product == "Video") videoDefaults(selectedPatches, patchingLogger) else null
+                            setOfNotNull(branding, defaults) + selectedPatches.filterNot { it.name in conflicting }
                         }
                     }
                 }
@@ -142,6 +153,68 @@ class Session(
                     writingLogger.info("Patched apk saved to $patched")
                     withContext(Dispatchers.IO) {
                         Files.move(patched.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun videoDefaults(selected: PatchList, log: Logger): Patch? {
+        val downloads = selected.singleOrNull { it.name == "Downloads" }
+        val quality = selected.singleOrNull { it.name == "Video quality" }
+        if (downloads == null && quality == null) return null
+        return bytecodePatch {
+            afterDependents {
+                val settings = classDefs["Lapp/revanced/extension/youtube/settings/Settings;"]
+                val initializer = settings?.let { classDefs.getOrReplaceMutable(it) }
+                    ?.methods?.singleOrNull { it.name == "<clinit>" }
+                val code = initializer?.implementation?.instructions
+                if (initializer != null && code != null) {
+                    fun indexOfString(value: String) = code.indices.filter { index ->
+                        ((code[index] as? ReferenceInstruction)?.reference as? StringReference)?.string == value
+                    }.singleOrNull()
+
+                    fun settingDefault(key: String, field: String, type: String, boxed: String,
+                        before: (Int) -> String, after: (Int) -> String): Boolean {
+                        val index = indexOfString(key)?.plus(1) ?: return false
+                        val call = code.getOrNull(index) ?: return false
+                        val args = call as? FiveRegisterInstruction ?: return false
+                        val method = (call as? ReferenceInstruction)?.reference as? MethodReference ?: return false
+                        val output = (code.getOrNull(index + 1) as? ReferenceInstruction)?.reference as? FieldReference
+                        if (call.opcode != Opcode.INVOKE_DIRECT || args.registerCount != 3 ||
+                            method.name != "<init>" || method.definingClass != "Lapp/revanced/extension/shared/settings/$type;" ||
+                            method.parameterTypes.map { it.toString() } != listOf("Ljava/lang/String;", "Ljava/lang/$boxed;") ||
+                            output?.definingClass != settings?.type || output?.name != field) return false
+                        val value = args.registerE
+                        initializer.addInstructions(index + 1, after(value))
+                        initializer.addInstructions(index, before(value))
+                        return true
+                    }
+
+                    if (downloads != null) {
+                        val slot = indexOfString("com.deniscerri.ytdl")
+                        val register = slot?.let { (code[it] as? OneRegisterInstruction)?.registerA }
+                        if (slot != null && register != null) {
+                            initializer.replaceInstruction(slot, "const-string/jumbo v$register, \"app.javo.manager\"")
+                            log.info("Javo Manager is the default video saver")
+                            if (settingDefault("revanced_external_downloader_action_button", "EXTERNAL_DOWNLOADER_ACTION_BUTTON",
+                                    "BooleanSetting", "Boolean",
+                                    { "sget-object v$it, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;" },
+                                    { "sget-object v$it, Ljava/lang/Boolean;->FALSE:Ljava/lang/Boolean;" })) {
+                                log.info("Javo Video download action is enabled")
+                            }
+                        }
+                    }
+                    if (quality != null) {
+                        fun boxedInt(register: Int, value: Int) = """
+                            const/16 v$register, $value
+                            invoke-static {v$register}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+                            move-result-object v$register
+                        """.trimIndent()
+                        if (settingDefault("revanced_video_quality_default_mobile", "VIDEO_QUALITY_DEFAULT_MOBILE",
+                                "IntegerSetting", "Integer", { boxedInt(it, 480) }, { boxedInt(it, -2) })) {
+                            log.info("Javo cellular playback defaults to 480p")
+                        }
                     }
                 }
             }

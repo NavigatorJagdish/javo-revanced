@@ -1,9 +1,12 @@
 """Run Manager's production patch/sign path on an isolated first-party fixture."""
 from pathlib import Path
-import hashlib,json,os,re,shutil,subprocess
+import argparse,hashlib,json,re,shutil,subprocess,uuid
 
 ROOT=Path(__file__).resolve().parents[2]
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--manager-apk',type=Path)
+    args=parser.parse_args()
     adb=shutil.which('adb') or str(ROOT/'tools/android-sdk/platform-tools/adb.exe')
     def invoke(*parts):
         p=subprocess.run([adb,*map(str,parts)],capture_output=True,timeout=300)
@@ -15,14 +18,16 @@ def main():
     evidence=ROOT/'evidence';evidence.mkdir(exist_ok=True)
     path=evidence/'manager-patch-integration.json'
     path.write_text(json.dumps({'success':False,'status':'started'})+'\n')
-    test_apks=list((ROOT/'apps/javo-manager/app/build/outputs/apk/androidTest/debug').glob('*.apk'))
+    test_apks=list((ROOT/'apps/javo-manager/app/build/outputs/apk/androidTest/release').glob('*.apk'))
     if len(test_apks)!=1:raise RuntimeError('Expected one Android instrumentation APK')
     run('install','-t','-r',test_apks[0])
-    # Never accept a result left by an earlier instrumentation invocation.
-    run('shell','run-as','app.javo.manager','rm','-f','files/integration/result.json')
-    output=run('shell','am','instrument','-w','app.javo.manager.test/app.javo.integration.PatchIntegrationInstrumentation')
+    output_id=uuid.uuid4().hex
+    output=run('shell','am','instrument','-w','-e','fixtureOutputId',output_id,
+               'app.javo.manager.test/app.javo.integration.PatchIntegrationInstrumentation')
     (evidence/'manager-patch-instrumentation.log').write_bytes(output)
-    report=json.loads(run('exec-out','run-as','app.javo.manager','cat','files/integration/result.json'))
+    result=re.search(rb'^INSTRUMENTATION_RESULT: result=(\{[^\r\n]+\})',output,re.MULTILINE)
+    if not result:raise RuntimeError(output.decode(errors='replace'))
+    report=json.loads(result[1])
     instrumentation_success=report.get('success') is True
     report['instrumentationSuccess']=instrumentation_success
     report['success']=False
@@ -32,14 +37,18 @@ def main():
     path.write_text(json.dumps(report,indent=2)+'\n')
     if not instrumentation_success:raise RuntimeError(report.get('failure','Instrumentation did not pass'))
     if not re.search(rb'INSTRUMENTATION_CODE:\s*-1\b',output):raise RuntimeError('Instrumentation did not finish successfully')
-    manager_apks=list((ROOT/'deliverables/apks').glob('javo-manager-*.apk'))
+    manager_apks=[args.manager_apk] if args.manager_apk else list((ROOT/'deliverables/apks').glob('javo-manager-*.apk'))
     if len(manager_apks)!=1:raise RuntimeError('Expected exactly one verified Manager APK')
     with manager_apks[0].open('rb') as stream:manager_digest=hashlib.file_digest(stream,'sha256').hexdigest()
     if report.get('managerApkSha256')!=manager_digest:raise RuntimeError('Instrumentation ran against a different Manager APK')
+    directory=report.get('fixtureOutputDirectory')
+    if directory!=f'/storage/emulated/0/Android/data/app.javo.manager/files/javo-fixture-{output_id}':
+        raise RuntimeError(f'Unexpected fixture output directory: {directory}')
     for product in report['products']:
         identifier=product['id'];package=product['packageName']
         fixture=ROOT/f'tools/integration-fixture/{identifier}-patched-signed.apk';fixture.parent.mkdir(parents=True,exist_ok=True)
-        fixture.write_bytes(run('exec-out','run-as','app.javo.manager','cat',f'files/integration/{identifier}-patched-signed.apk'))
+        if identifier not in ('video','music'):raise RuntimeError('Unexpected fixture product')
+        run('pull',f'{directory}/{identifier}-patched-signed.apk',fixture)
         if hashlib.sha256(fixture.read_bytes()).hexdigest()!=product['signedApkSha256']:raise RuntimeError('Extracted fixture differs from patched/signed output')
         result=run('install','-r',fixture)
         (evidence/f'manager-{identifier}-fixture-install.log').write_bytes(result)

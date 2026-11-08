@@ -4,6 +4,12 @@ package app.revanced.manager.ui.component.patches
 
 import android.os.Parcelable
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import android.widget.Toast
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -154,18 +160,22 @@ private fun OptionItemCheckbox(
 @Composable
 private fun rememberFilePicker(
     fs: Filesystem,
-    onFileDialogRequest: () -> Unit,
+    onSelected: (String) -> Unit,
 ): () -> Unit {
-    val (contract, permissionName) = remember(fs) { fs.permissionContract() }
-    val launcher = rememberLauncherForActivityResult(contract) { granted ->
-        if (granted) onFileDialogRequest()
-    }
-    return remember(launcher, permissionName, fs) {
-        {
-            if (fs.hasStoragePermission()) onFileDialogRequest()
-            else launcher.launch(permissionName)
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) scope.launch {
+            try {
+                onSelected(fs.importPatchOption(uri))
+            } catch (error: CancellationException) {
+                throw error
+            } catch (_: Exception) {
+                Toast.makeText(context, R.string.javo_patch_option_import_error, Toast.LENGTH_LONG).show()
+            }
         }
     }
+    return { launcher.launch(arrayOf("*/*")) }
 }
 
 @Composable
@@ -228,22 +238,12 @@ fun <T : Any> OptionItem(
     }
 
     val fs: Filesystem = koinInject()
-    var showFileDialog by rememberSaveable { mutableStateOf(false) }
-    val openFilePicker = rememberFilePicker(fs) { showFileDialog = true }
-
-    if (showFileDialog) {
-        PathSelectorDialog(root = fs.externalFilesDir()) { path ->
-            showFileDialog = false
-            path?.let {
-                val str = it.toString()
-                localText = str
-
-                @Suppress("UNCHECKED_CAST")
-                val typed = str as T
-                localValue = typed
-                if (checked) setValue(typed)
-            }
-        }
+    val openFilePicker = rememberFilePicker(fs) { path ->
+        localText = path
+        @Suppress("UNCHECKED_CAST")
+        val typed = path as T
+        localValue = typed
+        if (checked) setValue(typed)
     }
 
     SafeGuardBlocker {
@@ -871,17 +871,8 @@ private fun ListItemEditDialog(
     onSubmit: (Serializable) -> Unit,
 ) {
     val fs: Filesystem = koinInject()
-    var showFileDialog by rememberSaveable { mutableStateOf(false) }
-    val openFilePicker = rememberFilePicker(fs) { showFileDialog = true }
-
     var updateValue: ((String) -> Unit)? by remember { mutableStateOf(null) }
-
-    if (showFileDialog) {
-        PathSelectorDialog(root = fs.externalFilesDir()) { path ->
-            showFileDialog = false
-            path?.let { updateValue?.invoke(it.toString()) }
-        }
-    }
+    val openFilePicker = rememberFilePicker(fs) { path -> updateValue?.invoke(path) }
 
 
     when (type) {

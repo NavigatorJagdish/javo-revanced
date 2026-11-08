@@ -10,6 +10,7 @@ import java.io.OutputStream
 
 fun interface Loader<T> {
     fun load(file: File): T
+    fun verifyDownload(file: File) {}
 }
 
 typealias PatchBundleSource = Source<PatchBundle>

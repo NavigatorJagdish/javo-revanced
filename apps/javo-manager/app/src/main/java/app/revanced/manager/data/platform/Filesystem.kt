@@ -1,16 +1,15 @@
 package app.revanced.manager.data.platform
 
-import android.Manifest
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Environment
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import app.revanced.manager.util.RequestManageStorageContract
 import java.io.File
-import java.nio.file.Path
+import android.net.Uri
+import android.provider.OpenableColumns
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import java.nio.file.Files
 
 class Filesystem(private val app: Application) {
     val contentResolver = app.contentResolver // TODO: move Content Resolver operations to here.
@@ -31,21 +30,35 @@ class Filesystem(private val app: Application) {
      */
     val uiTempDir: File = File(app.filesDir, "ui_ephemeral").apply { mkdirs() }
 
-    fun externalFilesDir(): Path = Environment.getExternalStorageDirectory().toPath()
-
-    private fun usesManagePermission() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-
-    private val storagePermissionName =
-        if (usesManagePermission()) Manifest.permission.MANAGE_EXTERNAL_STORAGE else Manifest.permission.READ_EXTERNAL_STORAGE
-
-    fun permissionContract(): Pair<ActivityResultContract<String, Boolean>, String> {
-        val contract =
-            if (usesManagePermission()) RequestManageStorageContract() else ActivityResultContracts.RequestPermission()
-        return contract to storagePermissionName
+    /** Only the document chosen in Android's picker is copied into the app's storage. */
+    suspend fun importPatchOption(uri: Uri): String = withContext(Dispatchers.IO) {
+        val name = contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+            ?.use { if (it.moveToFirst()) it.getString(0) else null }
+            ?.replace(Regex("[^A-Za-z0-9._-]"), "_")?.take(120)
+            ?.takeUnless { it.isBlank() || it == "." || it == ".." } ?: "selected-file"
+        val root = File(app.filesDir, "patch_options").apply { mkdirs() }
+        val folder = Files.createTempDirectory(root.toPath(), "option-").toFile()
+        val output = folder.resolve(name)
+        var copied = false
+        try {
+            checkNotNull(contentResolver.openInputStream(uri)).use { input ->
+                output.outputStream().buffered().use { target ->
+                    val buffer = ByteArray(64 * 1024)
+                    var total = 0L
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+                        val count = input.read(buffer)
+                        if (count < 0) break
+                        total += count
+                        require(total <= 64L * 1024 * 1024) { "The selected file exceeds 64 MiB." }
+                        target.write(buffer, 0, count)
+                    }
+                }
+            }
+            copied = true
+            output.absolutePath
+        } finally {
+            if (!copied) { output.delete(); folder.delete() }
+        }
     }
-
-    fun hasStoragePermission() =
-        if (usesManagePermission()) Environment.isExternalStorageManager() else app.checkSelfPermission(
-            storagePermissionName
-        ) == PackageManager.PERMISSION_GRANTED
 }

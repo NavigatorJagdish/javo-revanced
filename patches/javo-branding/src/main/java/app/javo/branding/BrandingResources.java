@@ -36,6 +36,21 @@ public final class BrandingResources {
         if(!current.equals(packageId) && !current.equals(renamed)) throw new SecurityException("Unexpected source package");
         var app=(Element)doc.getElementsByTagName("application").item(0);
         if(app==null || icon==null)throw new IOException("Missing application or branding icon");
+        if (packageId.equals("com.google.android.youtube")) {
+            var root = doc.getDocumentElement();
+            var queries = doc.getElementsByTagName("queries");
+            var query = queries.getLength() == 0 ? doc.createElement("queries") : (Element)queries.item(0);
+            if (query.getParentNode() == null) root.insertBefore(query, app);
+            var packages = query.getElementsByTagName("package");
+            boolean visible = false;
+            for (int i = 0; i < packages.getLength(); i++)
+                visible |= ((Element)packages.item(i)).getAttributeNS(ANDROID,"name").equals("app.javo.manager");
+            if (!visible) {
+                var manager = doc.createElement("package");
+                manager.setAttributeNS(ANDROID,"android:name","app.javo.manager");
+                query.appendChild(manager);
+            }
+        }
         app.setAttributeNS(ANDROID,"android:label",displayName);
         app.setAttributeNS(ANDROID,"android:icon","@drawable/javo_brand_icon");
         app.setAttributeNS(ANDROID,"android:roundIcon","@drawable/javo_brand_icon");

@@ -1,5 +1,7 @@
 package app.revanced.manager.ui.screen.settings
 
+import android.content.Intent
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -68,6 +70,7 @@ import app.revanced.manager.ui.component.sources.ImportSourceDialog
 import app.revanced.manager.ui.component.sources.ImportSourceDialogStrings
 import app.revanced.manager.ui.viewmodel.DownloadsViewModel
 import app.revanced.manager.util.relativeTime
+import app.revanced.manager.video.VideoDownloadActivity
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -87,11 +90,9 @@ private enum class DownloadsTab(
 @Composable
 fun DownloadsSettingsScreen(
     onBackClick: () -> Unit,
-    onDownloaderClick: (Int) -> Unit,
     viewModel: DownloadsViewModel = koinViewModel()
 ) {
     val downloadedApps by viewModel.downloadedApps.collectAsStateWithLifecycle(emptyList())
-    val downloaderSources by viewModel.downloaderSources.collectAsStateWithLifecycle(emptyMap())
 
     val pagerState = rememberPagerState(pageCount = { DownloadsTab.entries.size })
     val scope = rememberCoroutineScope()
@@ -111,7 +112,6 @@ fun DownloadsSettingsScreen(
         canScroll = { canScroll }
     )
     val currentTab = DownloadsTab.entries[pagerState.currentPage]
-    var showImportDialog by rememberSaveable { mutableStateOf(false) }
     var showDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showDeleteConfirmationDialog) {
@@ -121,21 +121,6 @@ fun DownloadsSettingsScreen(
             title = stringResource(R.string.downloader_delete_apps_title),
             description = stringResource(R.string.downloader_delete_apps_description),
             icon = Icons.Outlined.Delete
-        )
-    }
-
-    if (showImportDialog) {
-        ImportSourceDialog(
-            strings = ImportSourceDialogStrings.DOWNLOADERS,
-            onDismiss = { showImportDialog = false },
-            onLocalSubmit = { uri ->
-                showImportDialog = false
-                viewModel.createLocalSource(uri)
-            },
-            onRemoteSubmit = { url, autoUpdate ->
-                showImportDialog = false
-                viewModel.createRemoteSource(url, autoUpdate)
-            }
         )
     }
 
@@ -166,26 +151,6 @@ fun DownloadsSettingsScreen(
                     }
                 }
             )
-        },
-        bottomBar = {
-            if (pagerState.currentPage != DownloadsTab.Downloaders.ordinal) return@Scaffold
-
-            BottomContentBar(modifier = Modifier.navigationBarsPadding()) {
-                FilledTonalButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    onClick = { showImportDialog = true },
-                    shapes = ButtonDefaults.shapes()
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(R.string.add)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = stringResource(R.string.downloader_add))
-                }
-            }
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
@@ -221,9 +186,7 @@ fun DownloadsSettingsScreen(
                 ) { page ->
                     when (DownloadsTab.entries[page]) {
                         DownloadsTab.Downloaders -> DownloadersTabContent(
-                            sources = downloaderSources,
                             listState = downloaderListState,
-                            onDownloaderClick = onDownloaderClick,
                         )
 
                         DownloadsTab.Apps -> AppsTabContent(
@@ -251,25 +214,27 @@ private fun rememberSelectedListState(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun DownloadersTabContent(
-    sources: Map<Int, Source<DownloaderPackage>>,
-    listState: LazyListState,
-    onDownloaderClick: (Int) -> Unit
+    listState: LazyListState
 ) {
+    val context = LocalContext.current
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumnWithScrollbar(
             modifier = Modifier.weight(1f),
             state = listState
         ) {
-            sources.entries
-                .sortedBy { it.key }
-                .forEach { (uid, source) ->
-                    item(key = uid) {
-                        DownloaderItem(
-                            source = source,
-                            onClick = { onDownloaderClick(uid) }
-                        )
-                    }
-                }
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.javo_apkmirror_builtin)) },
+                    supportingContent = { Text(stringResource(R.string.javo_apkmirror_builtin_summary)) }
+                )
+            }
+            item {
+                ListItem(
+                    modifier = Modifier.clickable { context.startActivity(Intent(context, VideoDownloadActivity::class.java)) },
+                    headlineContent = { Text(stringResource(R.string.javo_save_mp4)) },
+                    supportingContent = { Text(stringResource(R.string.javo_media_hint)) },
+                )
+            }
         }
     }
 }

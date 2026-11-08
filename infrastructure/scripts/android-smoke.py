@@ -8,6 +8,7 @@ def main():
     parser.add_argument('package',choices=['app.javo.manager','app.revanced.android.gms'])
     parser.add_argument('apk',type=Path)
     parser.add_argument('--serial')
+    parser.add_argument('--upgrade-from', type=Path, nargs='*', default=[])
     args=parser.parse_args()
     product='manager' if args.package=='app.javo.manager' else 'core'
     evidence=ROOT/'evidence';shots=evidence/'screenshots';shots.mkdir(parents=True,exist_ok=True)
@@ -39,9 +40,16 @@ def main():
         report['bootCompleted']=run('shell','getprop','sys.boot_completed').decode().strip()=='1'
         if not report['bootCompleted']:raise RuntimeError('Emulator has not completed boot')
         run('logcat','-c')
+        if args.upgrade_from:
+            if len(args.upgrade_from) != 1:
+                raise RuntimeError('Expected exactly one previous APK')
+            previous = run('install', '-r', str(args.upgrade_from[0].resolve())).decode()
+            if 'Success' not in previous:
+                raise RuntimeError('Could not install previous APK')
         install=run('install','-r',str(apk)).decode()
         (evidence/f'{product}-emulator-install.txt').write_text(install,encoding='utf-8')
         if 'Success' not in install:raise RuntimeError('APK installation did not succeed')
+        report['inPlaceUpgradeVerified'] = bool(args.upgrade_from)
         paths=run('shell','pm','path',args.package).decode().splitlines()
         remote=next(p.removeprefix('package:') for p in paths if p.startswith('package:') and p.endswith('/base.apk'))
         try:

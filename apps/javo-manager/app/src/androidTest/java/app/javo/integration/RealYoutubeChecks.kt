@@ -24,7 +24,8 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
     val report=JSONObject().put("success",false).put("playback","not-tested").put("accountLogin","not-tested")
     val started=System.currentTimeMillis()
     try {
-        check(input.canonicalPath.startsWith(target.filesDir.canonicalPath+File.separator))
+        check(input.canonicalPath.startsWith(target.filesDir.canonicalPath+File.separator) ||
+            target.getExternalFilesDir(null)?.canonicalPath?.let { input.canonicalPath.startsWith(it + File.separator) } == true)
         report.put("managerApkSha256",UpdateSecurity.sha256(File(target.applicationInfo.sourceDir)))
             .put("sourceApkSha256",UpdateSecurity.sha256(input))
         @Suppress("DEPRECATION")
@@ -44,7 +45,7 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
                 values.values.any { it.manifestAttributes?.name=="ReVanced Patches" }
             } }
             val official=bundles.entries.first { it.value.manifestAttributes?.name=="ReVanced Patches" }.key
-            val selection=mapOf(official to setOf("GmsCore support","Spoof video streams"))
+            val selection=mapOf(official to setOf("GmsCore support","Spoof video streams","Downloads","Video quality"))
             val metadata=withTimeout(60_000) { repository.bundleInfoFlow.first { it.keys.containsAll(selection.keys) } }
             for ((uid,names) in selection) {
                 check(metadata.getValue(uid).patches.filter { it.supports(original.packageName,original.versionName) }
@@ -57,6 +58,10 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
                 })
             }
         }
+        val patchLog = File(folder,"progress.log").readText()
+        check("Javo Manager is the default video saver" in patchLog && "Javo Video download action is enabled" in patchLog)
+        check("Javo cellular playback defaults to 480p" in patchLog)
+        report.put("javoDownloadDefaultPatched",true).put("cellular480pDefaultPatched",true)
         report.put("separateProcessPatch",true)
         val signed=File(folder,"youtube-signed.apk")
         val key=File(folder,"local-test.keystore")
@@ -89,6 +94,7 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
             .put("mandatorySettingsAndIconVerified",true).put("lightAndDarkHeaderVerified",true)
             .put("bundledProductLogoVerified",true)
             .put("signedOutput",true).put("signedApkSha256",UpdateSecurity.sha256(signed)).put("success",true)
+        target.getExternalFilesDir(null)?.let { signed.copyTo(File(it, "local-javo-video-test.apk"), overwrite = true) }
         key.delete()
     } catch(error:Throwable) {
         report.put("failure",error.stackTraceToString())

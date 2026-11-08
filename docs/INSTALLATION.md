@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.7** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager development certificate aur Core test certificate use karte hain. Release ZIP mein APKs aur unki verification reports milengi.
+Ye guide **v0.1.0-alpha.8** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager development certificate aur Core test certificate use karte hain. Release ZIP mein APKs aur unki verification reports milengi.
 
 ## 1. GitHub se files download karein
 
@@ -16,7 +16,7 @@ Agar GitHub par **404** aaye, pehle account aur repository access check karein. 
 
 ## Manager update
 
-Alpha.6 se alpha.7 Manager APK seedha update karein. Alpha.5 ya purani build se signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
+Alpha.6 ya alpha.7 se alpha.8 Manager APK seedha update karein. Alpha.5 ya purani build se signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
 
 ## 2. Manager install karein
 
@@ -40,12 +40,24 @@ Play Protect scan maange to scan complete hone dein. Scan safe result de aur And
 3. **Patch** tap karein. Manager YouTube output mein **Javo Video** aur Music output mein **Javo Music** branding khud lagata hai. Alag branding bundle import karne ki zaroorat nahi hai.
 4. Signing complete hone par **Install** tap karein. Non-root install ke liye **Default** choose karein. APK ki copy rakhne ke liye **Save APK** use karein.
 
+## Video ya audio phone par save karein
+
+1. Javo Video mein ek video kholein: **Share → Save with Javo**. Ya Manager ke **Downloads → Downloaders → Save with Javo** screen mein link paste karein.
+2. **Save video (MP4)** ya **Save audio (M4A)** tap karein aur screen khuli rakhein. File **Files → Downloads** mein milegi. Android 8–9 par system file picker mein **Downloads** choose karein.
+3. Javo Video ka download control use karna ho to repatch karte waqt **Downloads** patch select karein. Patched app ke **Settings → Javo Video settings → Player → Downloads** mein download control enable karein. Purani settings mein downloader package override ho to use `app.javo.manager` set karein. Share method pehle se kaam karta hai.
+
+Sirf aisi media save karein jise download karne ki permission ho. MP4 ke liye ek hi stream mein sound aur video hona chahiye; M4A ke liye compatible audio stream chahiye. Quality aur availability source par depend karti hai. Private, restricted, protected aur playlist downloads supported nahi hain.
+
+## Video chalte waqt ruk jaaye
+
+Manager mein recommended YouTube version ko **GmsCore support** aur **Spoof video streams** ke saath repatch karein. **Settings → Javo Video settings → Miscellaneous → Spoof video streams** mein pehle **Android VR** try karein. Video phir bhi rukta hai to available alternate client try karke app restart karein. Slower mobile data par video quality **480p** try karein. [Upstream playback troubleshooting](https://github.com/ReVanced/revanced-documentation/blob/main/docs/revanced-resources/troubleshooting.md#32-youtube-or-youtube-music-playback-does-not-work)
+
 ## 5. Common errors
 
 | Problem | Kya check karein |
 | --- | --- |
 | APK install nahi hota | Download dobara verify karein. Android version, installer permission aur existing app ka signing conflict check karein. |
-| Purana app abhi bhi ReVanced naam dikhata hai | Alpha.7 Manager mein original compatible APK phir se patch karein. Usi patch-signing keystore se bana output install karein. |
+| Purana app abhi bhi ReVanced naam dikhata hai | Naye Manager mein original compatible APK phir se patch karein. Usi patch-signing keystore se bana output install karein. |
 | **Incompatible patch** ya patching failure | Selected bundle ki version requirement check karein aur **Save logs** se error report save karein. |
 | Patched app purani copy ko update nahi kar paata | Same package ke update ke liye matching signing key chahiye. Manager mein **Settings → Import & export → Export keystore** se apni patch signing key ka private backup rakh sakte hain. |
 | Google login ya playback issue | APK version aur **GmsCore support** patch ki compatibility check karein. Is alpha mein account aur playback testing pending hai. |
@@ -55,16 +67,16 @@ Play Protect scan maange to scan complete hone dein. Scan safe result de aur And
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.7-debug.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.8-development.apk, .\javo-core-0.3.13.2.250932-javo.2-test.apk -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.7
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-manager-0.1.0-alpha.7-debug.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-core-0.3.13.2.250932-javo.2-test.apk
-[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-revanced-development.zip
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.8
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-manager-0.1.0-alpha.8-development.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-core-0.3.13.2.250932-javo.2-test.apk
+[zip]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-revanced-development.zip
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/SHA256SUMS
 
 
 ## Alpha 2 ke changes

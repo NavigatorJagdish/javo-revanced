@@ -1,6 +1,6 @@
 # JAVO REVANCED
 
-Get the complete ZIP, Manager APK, Core APK, and branding bundle from the [private GitHub Releases page](https://github.com/NavigatorJagdish/javo-revanced/releases). Sign in with an account that has access to this repository.
+[**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Complete ZIP and checksums**][release-download]
 
 Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, import the branding bundle, and troubleshoot common setup issues.
 
@@ -8,7 +8,11 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 Independent Android ecosystem regenerated from the owner's master prompt and four design references. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.7 applies Javo branding automatically during YouTube and YouTube Music patching. APKMirror server errors can be retried in the source screen, and the Manager takes over once it has the file address. The Core binary is reused from verified alpha.2 after matching its source tree. See the [alpha.7 release notes](docs/RELEASE_ALPHA7.md).
+Alpha.8 adds MP4 video and M4A audio saving to the phone's Downloads folder and hardens Manager's release build. Javo branding is applied automatically during patching. The Core binary is reused from verified alpha.2. See the [alpha.8 release notes](docs/RELEASE_ALPHA8.md).
+
+[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-manager-0.1.0-alpha.8-development.apk
+[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-core-0.3.13.2.250932-javo.2-test.apk
+[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases
 
 ## Included
 

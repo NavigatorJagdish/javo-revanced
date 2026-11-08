@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-alpha.8
+
+- Save supported MP4 video and M4A audio to Downloads from the Android share menu or Manager.
+- Route Javo Video's download control to Manager and start at a lower mobile-data quality when the corresponding patches are included.
+- Ship a non-debug Manager with narrower permissions, built-in APKMirror and a pinned default patch bundle.
+
 ## 0.1.0-alpha.7
 
 - Apply Javo launcher and interface branding automatically when patching YouTube or YouTube Music.

@@ -13,6 +13,9 @@ Second \"item\" text"</string>
 
 -->
 <resources>
+    <string name="javo_patch_option_import_error">Could not copy the selected file. Choose a file up to 64 MiB.</string>
+    <string name="javo_apkmirror_builtin">APKMirror</string>
+    <string name="javo_apkmirror_builtin_summary">APKMirror is included in Manager. Choose a supported app to open its download page.</string>
     <string name="app_name">Javo ReVanced Manager</string>
     <string name="patcher">Patcher</string>
     <string name="patches">Patches</string>
@@ -616,4 +619,16 @@ Tap them for more details.</string>
         <item quantity="other">%d selected</item>
     </plurals>
     <string name="javo_download_import">Importing selected APK…</string>
+    <string name="javo_save_mp4">Save with Javo</string>
+    <string name="javo_media_hint">Save videos you have permission to download. Keep this screen open until the file is saved.</string>
+    <string name="javo_media_link">YouTube, MP4 or M4A link</string>
+    <string name="javo_media_video">Save video (MP4)</string>
+    <string name="javo_media_audio">Save audio (M4A)</string>
+    <string name="javo_media_preparing">Finding a compatible file…</string>
+    <string name="javo_media_choose_downloads">Choose Downloads in the file picker.</string>
+    <string name="javo_media_saving">Saving and checking the file…</string>
+    <string name="javo_media_saved">Saved in Downloads.</string>
+    <string name="javo_media_saved_location">Saved in the folder you chose.</string>
+    <string name="javo_media_invalid">Share one YouTube video or paste a direct HTTPS link that matches the format.</string>
+    <string name="javo_media_failed">Could not save this file. Check your connection or try another video or format.</string>
 </resources>

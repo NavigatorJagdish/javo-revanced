@@ -62,6 +62,21 @@ jobs:
             evidence/java-download-tests.log
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
+  publication-audit:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
+    permissions:
+      contents: read
+      actions: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Inventory visibility risks without exposing credential contents
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python infrastructure/scripts/publication-audit.py
   manager:
     permissions:
       contents: read
@@ -88,7 +103,7 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
         with:
           path: ~/.android/debug.keystore
@@ -104,22 +119,22 @@ jobs:
           set -euo pipefail
           chmod +x gradlew
           mkdir -p ../../evidence
-          ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:lintDebug --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-build.log
+          ./gradlew :app:assembleRelease :app:testReleaseUnitTest :app:lintRelease --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-build.log
       - name: Verify Manager APK
         run: |
           set -euo pipefail
           sdkmanager 'build-tools;34.0.0'
-          python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/debug/*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
-      - uses: actions/upload-artifact@v4
+          python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/release/*.apk --sdk "$ANDROID_HOME" --product manager --signing development
+          python infrastructure/scripts/audit-manager-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME"
+      - name: Verify the published Manager update signer
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
-        continue-on-error: true
-        with:
-          name: javo-manager-development-identity
-          include-hidden-files: true
-          if-no-files-found: error
-          overwrite: true
-          retention-days: 90
-          path: ~/.android/debug.keystore
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p tools/manager-baseline
+          gh release download v0.1.0-alpha.7 --pattern javo-manager-0.1.0-alpha.7-debug.apk --dir tools/manager-baseline
+          python infrastructure/scripts/audit-manager-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --baseline tools/manager-baseline/*.apk
       - name: Build standalone branding bundle for external patchers
         working-directory: apps/javo-manager
         run: |
@@ -143,8 +158,9 @@ jobs:
         run: |
           set -euo pipefail
           sdkmanager 'platforms;android-35'
+          command -v ffmpeg >/dev/null || (sudo apt-get update && sudo apt-get install -y ffmpeg)
           python ../../infrastructure/scripts/build-integration-fixture.py --sdk "$ANDROID_HOME"
-          ./gradlew :app:assembleDebugAndroidTest --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-instrumentation-build.log
+          ./gradlew :app:assembleReleaseAndroidTest --no-daemon --console=plain 2>&1 | tee ../../evidence/manager-instrumentation-build.log
       - name: Free temporary runner disk after all APK compilation
         run: python infrastructure/scripts/release-emulator-space.py
       - name: Allow the runner user to use hardware emulation
@@ -158,7 +174,7 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: |
-            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+            if compgen -G 'tools/manager-baseline/*.apk' >/dev/null; then python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk --upgrade-from tools/manager-baseline/*.apk; else python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk; fi
             python infrastructure/scripts/android-integration.py
       - name: Preserve Android 15 Manager evidence
         run: |
@@ -175,7 +191,7 @@ jobs:
           ram-size: 4096M
           disable-animations: true
           script: |
-            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
+            if compgen -G 'tools/manager-baseline/*.apk' >/dev/null; then python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk --upgrade-from tools/manager-baseline/*.apk; else python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk; fi
             python infrastructure/scripts/android-integration.py
       - uses: actions/cache/save@v4
         with:
@@ -322,7 +338,7 @@ jobs:
         run: |
           set -euo pipefail
           sdkmanager 'build-tools;34.0.0'
-          python infrastructure/scripts/verify-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --product manager --signing debug
+          python infrastructure/scripts/verify-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --product manager --signing development
           python infrastructure/scripts/verify-apk.py deliverables/apks/javo-core-*.apk --sdk "$ANDROID_HOME" --product core --signing test
           node --test tests/*.test.mjs
           node apps/javo-website/build.mjs
@@ -347,7 +363,7 @@ jobs:
       actions: read
     env:
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: v0.1.0-alpha.7
+      RELEASE_TAG: v0.1.0-alpha.8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -373,7 +389,7 @@ jobs:
             fi
             jq -e --arg sha "$GITHUB_SHA" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
           else
-            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.7' --notes-file docs/RELEASE_ALPHA7.md
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.8' --notes-file docs/RELEASE_ALPHA8.md
           fi
           mkdir -p tools/release-assets
           cp deliverables/javo-revanced-development.zip deliverables/apks/*.apk deliverables/bundles/*.rvp tools/release-assets/

@@ -369,10 +369,7 @@ private fun ReVancedManager(vm: MainViewModel) {
 
             deepLinkedComposable<Settings.Downloads>("settings/downloads") {
                 DownloadsSettingsScreen(
-                    onBackClick = navController::popBackStackSafe,
-                    onDownloaderClick = { uid ->
-                        navController.navigateSafe(Settings.DownloadersInfo(uid))
-                    }
+                    onBackClick = navController::popBackStackSafe
                 )
             }
 

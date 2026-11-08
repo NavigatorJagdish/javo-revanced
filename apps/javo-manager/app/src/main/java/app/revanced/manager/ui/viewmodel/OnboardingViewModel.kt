@@ -11,7 +11,6 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.ViewModel
 import app.revanced.manager.domain.sources.Extensions.asRemoteOrNull
 import app.revanced.manager.domain.manager.PreferencesManager
-import app.revanced.manager.domain.repository.DownloaderRepository
 import app.revanced.manager.domain.repository.PatchBundleRepository
 import app.revanced.manager.patcher.aapt.Aapt
 import app.revanced.manager.util.PM
@@ -29,7 +28,6 @@ class OnboardingViewModel(
     private val app: Application,
     private val prefs: PreferencesManager,
     private val pm: PM,
-    private val downloaderRepository: DownloaderRepository,
     private val patchBundleRepository: PatchBundleRepository,
 ) : ViewModel() {
     private val powerManager = app.getSystemService<PowerManager>()!!
@@ -58,7 +56,7 @@ class OnboardingViewModel(
         private set
 
     val allPermissionsGranted
-        get() = canInstallUnknownApps && isNotificationsEnabled && isBatteryOptimizationExempt
+        get() = canInstallUnknownApps && isNotificationsEnabled
 
     init {
         refreshPermissionStates()
@@ -82,7 +80,7 @@ class OnboardingViewModel(
         currentStep = previousStep(currentStep)
     }
 
-    suspend fun applyAutoUpdatePrefs(managerEnabled: Boolean, patchesEnabled: Boolean, downloadersEnabled: Boolean) {
+    suspend fun applyAutoUpdatePrefs(managerEnabled: Boolean, patchesEnabled: Boolean) {
         prefs.managerAutoUpdates.update(managerEnabled)
 
         with(patchBundleRepository) {
@@ -95,14 +93,6 @@ class OnboardingViewModel(
             update(src)
         }
 
-        with(downloaderRepository) {
-            val src = downloaderSources
-                .first()[0]
-                ?.asRemoteOrNull ?: return@with
-
-            src.setAutoUpdate(downloadersEnabled)
-            update(src)
-        }
     }
 
     suspend fun completeOnboarding() {

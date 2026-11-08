@@ -2,7 +2,6 @@ package app.revanced.manager.ui.screen.onboarding
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Source
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.runtime.Composable
@@ -18,10 +17,8 @@ import app.revanced.manager.ui.component.settings.SettingsListItem
 fun UpdatesStepContent(
     managerEnabled: Boolean,
     patchesEnabled: Boolean,
-    downloadersEnabled: Boolean,
     onManagerEnabledChange: (Boolean) -> Unit,
     onPatchesEnabledChange: (Boolean) -> Unit,
-    onDownloadersEnabledChange: (Boolean) -> Unit,
 ) {
     ListSection(contentPadding = PaddingValues(0.dp)) {
         UpdatesItem(
@@ -35,12 +32,6 @@ fun UpdatesStepContent(
             icon = Icons.Outlined.Source,
             checked = patchesEnabled,
             onCheckedChange = onPatchesEnabledChange
-        )
-        UpdatesItem(
-            headline = stringResource(R.string.auto_updates_dialog_downloaders),
-            icon = Icons.Outlined.Download,
-            checked = downloadersEnabled,
-            onCheckedChange = onDownloadersEnabledChange
         )
     }
 }
