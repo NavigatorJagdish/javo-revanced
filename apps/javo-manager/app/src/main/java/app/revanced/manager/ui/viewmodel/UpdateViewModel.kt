@@ -151,7 +151,7 @@ class UpdateViewModel(
                 }
             }
 
-            installUpdate()
+            state = State.CAN_INSTALL
         }
     }
 
@@ -163,6 +163,8 @@ class UpdateViewModel(
             val session = withContext(Dispatchers.IO) {
                 ackpineInstaller.createSession(Uri.fromFile(location)) {
                     confirmation = Confirmation.IMMEDIATE
+                    requireUserAction = true
+                    requestUpdateOwnership = false
                 }
             }
 

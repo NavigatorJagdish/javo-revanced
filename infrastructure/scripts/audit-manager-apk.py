@@ -1,4 +1,4 @@
-"""Audit the merged Manager APK and optionally prove signing continuity with alpha.7."""
+"""Audit the merged Manager APK and optionally prove signing continuity with alpha.8."""
 import argparse
 import hashlib
 import json
@@ -15,6 +15,7 @@ FORBIDDEN = {
     "BIND_NOTIFICATION_LISTENER_SERVICE", "SYSTEM_ALERT_WINDOW", "QUERY_ALL_PACKAGES",
     "MANAGE_EXTERNAL_STORAGE", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE",
     "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+    "ENFORCE_UPDATE_OWNERSHIP", "UPDATE_PACKAGES_WITHOUT_USER_ACTION",
 }
 
 
@@ -77,9 +78,10 @@ def main():
     candidate["playProtectVerdict"] = "Google classification pending"
     if args.baseline:
         baseline = inspect(args.baseline, args.sdk)
-        receipt = json.loads((ROOT / "evidence/release-alpha7.json").read_text(encoding="utf-8"))
-        if baseline["apkSha256"] != receipt["managerApkSha256"] or baseline["signerSha256"] != receipt["managerSignerSha256"]:
-            raise RuntimeError("The baseline does not match the published alpha.7")
+        receipt = json.loads((ROOT / "evidence/release-alpha8.json").read_text(encoding="utf-8"))
+        published = next(asset for asset in receipt["assets"] if asset["name"].startswith("javo-manager-"))
+        if baseline["apkSha256"] != published["sha256"] or baseline["signerSha256"] != receipt["managerSignerSha256"]:
+            raise RuntimeError("The baseline does not match the published alpha.8")
         if candidate["signerSha256"] != baseline["signerSha256"]:
             raise RuntimeError("Manager signing identity changed")
         candidate["publishedBaseline"] = baseline

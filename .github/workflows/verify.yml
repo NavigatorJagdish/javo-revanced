@@ -103,16 +103,6 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
-      - uses: actions/cache/restore@v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
-        with:
-          path: ~/.android/debug.keystore
-          key: javo-manager-development-signing-v1
-      - name: Restore the private stable development signing identity
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: python infrastructure/scripts/restore-manager-signing.py
       - name: Compile, unit test and lint Manager
         working-directory: apps/javo-manager
         run: |
@@ -126,15 +116,6 @@ jobs:
           sdkmanager 'build-tools;34.0.0'
           python infrastructure/scripts/verify-apk.py apps/javo-manager/app/build/outputs/apk/release/*.apk --sdk "$ANDROID_HOME" --product manager --signing development
           python infrastructure/scripts/audit-manager-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME"
-      - name: Verify the published Manager update signer
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          mkdir -p tools/manager-baseline
-          gh release download v0.1.0-alpha.7 --pattern javo-manager-0.1.0-alpha.7-debug.apk --dir tools/manager-baseline
-          python infrastructure/scripts/audit-manager-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --baseline tools/manager-baseline/*.apk
       - name: Build standalone branding bundle for external patchers
         working-directory: apps/javo-manager
         run: |
@@ -174,7 +155,7 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: |
-            if compgen -G 'tools/manager-baseline/*.apk' >/dev/null; then python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk --upgrade-from tools/manager-baseline/*.apk; else python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk; fi
+            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
       - name: Preserve Android 15 Manager evidence
         run: |
@@ -191,7 +172,7 @@ jobs:
           ram-size: 4096M
           disable-animations: true
           script: |
-            if compgen -G 'tools/manager-baseline/*.apk' >/dev/null; then python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk --upgrade-from tools/manager-baseline/*.apk; else python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk; fi
+            python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
       - uses: actions/cache/save@v4
         with:
@@ -229,16 +210,6 @@ jobs:
           chmod +x gradlew
           mkdir -p ../../evidence
           ./gradlew :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
-      - name: Reuse the working Core signing identity after matching its source tree
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          git fetch --depth=1 origin 624a2ae8974c9c9e93af76300e187694e6174eca
-          git diff --exit-code FETCH_HEAD HEAD -- apps/javo-core
-          mkdir -p tools/core-alpha2
-          gh release download v0.1.0-alpha.2 --pattern javo-revanced-development.zip --dir tools/core-alpha2
-          python infrastructure/scripts/reuse-verified-core.py
       - name: Verify Core APK
         run: |
           set -euo pipefail
@@ -354,51 +325,3 @@ jobs:
             deliverables/SHA256SUMS
             deliverables/apks/*.apk
             deliverables/bundles/*.rvp
-  release:
-    needs: [sources, package]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: read
-    env:
-      GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: v0.1.0-alpha.8
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.sources.outputs.commit }}
-          persist-credentials: false
-      - uses: actions/cache/restore@v4
-        with:
-          key: ${{ needs.package.outputs.cache-key }}
-          fail-on-cache-miss: true
-          path: |
-            deliverables/javo-revanced-development.zip
-            deliverables/SHA256SUMS
-            deliverables/apks/*.apk
-            deliverables/bundles/*.rvp
-      - name: Publish the verified alpha update
-        run: |
-          set -euo pipefail
-          test "$(gh api "repos/$GITHUB_REPOSITORY" --jq .private)" = true
-          if gh release view "$RELEASE_TAG" --json isDraft,targetCommitish > "$RUNNER_TEMP/existing.json"; then
-            if jq -e '.isDraft == false' "$RUNNER_TEMP/existing.json"; then
-              echo 'This release is already published.'
-              exit 0
-            fi
-            jq -e --arg sha "$GITHUB_SHA" '.targetCommitish == $sha' "$RUNNER_TEMP/existing.json"
-          else
-            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --prerelease --title 'Javo ReVanced 0.1.0-alpha.8' --notes-file docs/RELEASE_ALPHA8.md
-          fi
-          mkdir -p tools/release-assets
-          cp deliverables/javo-revanced-development.zip deliverables/apks/*.apk deliverables/bundles/*.rvp tools/release-assets/
-          (cd tools/release-assets && sha256sum *.apk *.rvp *.zip > SHA256SUMS)
-          gh release upload "$RELEASE_TAG" tools/release-assets/* --clobber
-          release_id="$(gh release view "$RELEASE_TAG" --json databaseId --jq .databaseId)"
-          gh api "repos/$GITHUB_REPOSITORY/releases/$release_id" > "$RUNNER_TEMP/asset-info.json"
-          for asset in tools/release-assets/*; do
-            digest="sha256:$(sha256sum "$asset" | cut -d ' ' -f 1)"
-            jq -e --arg name "$(basename "$asset")" --arg digest "$digest" '.assets | any(.name == $name and .state == "uploaded" and .digest == $digest)' "$RUNNER_TEMP/asset-info.json"
-          done
-          gh release edit "$RELEASE_TAG" --draft=false

@@ -53,10 +53,8 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.RECEIVE_SMS;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class SelfCheckFragment extends AbstractSelfCheckFragment {
@@ -75,8 +73,6 @@ public class SelfCheckFragment extends AbstractSelfCheckFragment {
             if (SDK_INT >= 29) {
                 permissions.add(ACCESS_BACKGROUND_LOCATION);
             }
-            permissions.add(READ_EXTERNAL_STORAGE);
-            permissions.add(WRITE_EXTERNAL_STORAGE);
             permissions.add(GET_ACCOUNTS);
             if (SDK_INT >= 33) {
                 permissions.add(POST_NOTIFICATIONS);

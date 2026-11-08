@@ -7,6 +7,8 @@ inputs/*-upstream.zip
 **/dist/
 **/*.jks
 **/*.keystore
+**/*.p12
+**/*.dpapi
 **/.env
 __pycache__/
 /deliverables/

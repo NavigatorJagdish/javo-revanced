@@ -519,6 +519,8 @@ class PatcherViewModel(
         val session = withContext(Dispatchers.IO) {
             ackpineInstaller.createSession(Uri.fromFile(file)) {
                 confirmation = Confirmation.IMMEDIATE
+                requireUserAction = true
+                requestUpdateOwnership = false
             }
         }
         withContext(Dispatchers.Main) {

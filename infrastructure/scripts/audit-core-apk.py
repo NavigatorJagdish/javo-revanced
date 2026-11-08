@@ -7,10 +7,12 @@ import os
 import re
 import shutil
 import subprocess
+import zipfile
 
 parser = argparse.ArgumentParser()
 parser.add_argument('apk', type=Path)
 parser.add_argument('--sdk', type=Path, required=True)
+parser.add_argument('--release', action='store_true', help='Require the pinned offline release signer.')
 args = parser.parse_args()
 build_tools = args.sdk / 'build-tools/34.0.0'
 tool = build_tools / ('aapt2.exe' if os.name == 'nt' else 'aapt2')
@@ -23,9 +25,11 @@ signature = subprocess.run(
      '--print-certs', str(args.apk)], check=True, capture_output=True, text=True
 ).stdout
 signer = re.search(r'^Signer #1 certificate SHA-256 digest: ([a-f0-9]{64})$', signature, re.MULTILINE)
-expected_signer = '98cbe3dc2314dbd5ebe25af31c85814e7a570952ba568c66e0814fc3e56f18df'
-if not signer or signer[1] != expected_signer or 'Number of signers: 1' not in signature.splitlines():
-    raise RuntimeError('Core signing identity differs from the verified development release')
+expected_signer = '47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873'
+if not signer or 'Number of signers: 1' not in signature.splitlines():
+    raise RuntimeError('Expected a single verified Core signer')
+if args.release and signer[1] != expected_signer:
+    raise RuntimeError('Core signing identity differs from the pinned offline release signer')
 if 'Verified using v2 scheme (APK Signature Scheme v2): true' not in signature.splitlines():
     raise RuntimeError('Core requires a verified APK Signature Scheme v2 signature')
 
@@ -49,21 +53,34 @@ forbidden = {
     'android.permission.SEND_SMS', 'android.permission.SYSTEM_ALERT_WINDOW',
     'android.permission.FAKE_PACKAGE_SIGNATURE', 'android.permission.BIND_ACCESSIBILITY_SERVICE',
     'android.permission.BIND_NOTIFICATION_LISTENER_SERVICE', 'android.permission.REQUEST_INSTALL_PACKAGES',
+    'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE',
 }
 violations = sorted(forbidden.intersection(requested))
 if violations:
     raise RuntimeError('Core requests out-of-scope permissions: ' + ', '.join(violations))
-for flag in ('debuggable', 'allowBackup'):
+for flag in ('debuggable', 'allowBackup', 'usesCleartextTraffic'):
     if not re.search(r'android:' + flag + r'\([^\n]+?\)=(?:false|\(type 0x12\)0x0)\b', manifest):
         # Non-debuggable is the default when omitted from a release manifest.
         if flag == 'debuggable' and 'android:debuggable' not in manifest:
             continue
         raise RuntimeError('Core must disable ' + flag)
+network = subprocess.run(
+    [str(tool), 'dump', 'xmltree', str(args.apk), '--file', 'res/xml/network_security_config.xml'],
+    check=True, capture_output=True, text=True,
+).stdout
+# A network security config takes precedence over usesCleartextTraffic on Android 7+.
+network_flags = re.findall(r'cleartextTrafficPermitted[^\n=]*=(.*)', network)
+if network_flags != ['false'] and network_flags != ['(type 0x12)0x0']:
+    raise RuntimeError('Core network config must deny cleartext and contain no exceptions')
+with zipfile.ZipFile(args.apk) as archive:
+    if len(archive.namelist()) != len(set(archive.namelist())) or archive.testzip() is not None:
+        raise RuntimeError('Core APK archive failed integrity checks')
 report = {
     'package': 'app.revanced.android.gms', 'apkSha256': hashlib.sha256(args.apk.read_bytes()).hexdigest(),
     'signerSha256': signer[1], 'signatureSchemeV2Verified': True, 'targetSdk': int(target_sdk[1]),
     'requestedPermissions': requested,
     'forbiddenPermissionsAbsent': True, 'debuggable': False, 'allowBackup': False,
+    'usesCleartextTraffic': False, 'offlineReleaseSignerVerified': args.release,
     'playProtectVerdict': 'requires-device-or-Google-classification-check',
 }
 root = Path(__file__).resolve().parents[2]
