@@ -18,4 +18,9 @@ test('rejects oversized metadata before parsing',()=>assert.throws(()=>verifyEnv
 test('checksum catches altered bytes',()=>{const bytes=Buffer.from('genuine test bytes');const hash=createHash('sha256').update(bytes).digest('hex');verifyChecksum(bytes,hash);assert.throws(()=>verifyChecksum(Buffer.from('altered'),hash));});
 for(const url of ['file:///tmp/a.apk','javascript:alert(1)','https://example.org:8080/a.apk','https://example.org/a.apk#fragment'])test('rejects unsafe update URL '+url,()=>assert.throws(()=>httpsUrl(url)));
 test('empty catalog is valid without fake artifacts',()=>validateCatalog({schemaVersion:1,artifacts:[],limitations:[]}));
+test('accepts a verified development APK in the download catalog',()=>{
+  const artifact={id:'manager',displayName:'Javo Manager',version:'0.1.0-alpha.8',signing:'development',
+    verification:'signature-and-package-verified',path:'/downloads/files/javo-manager.apk',sha256:'a'.repeat(64),minSdk:26};
+  assert.equal(validateCatalog({schemaVersion:1,limitations:[],artifacts:[artifact]}).artifacts[0].signing,'development');
+});
 test('rejects a catalog with unverified downloads',()=>assert.throws(()=>validateCatalog({schemaVersion:1,limitations:[],artifacts:[{id:'manager',displayName:'Manager',version:'1',signing:'production',verification:'not-tested'}]})));
