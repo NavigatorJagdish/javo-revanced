@@ -23,7 +23,6 @@ import app.revanced.manager.downloader.Scope
 import app.revanced.manager.util.PM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -41,6 +40,11 @@ class DownloadedAppRepository(
     private val dir = app.getDir("downloaded-apps", Context.MODE_PRIVATE)
     private val dao = db.downloadedAppDao()
     private val webImports = File(app.cacheDir, "javo-web-imports").canonicalFile
+
+    private sealed interface TransferEvent {
+        data class Stage(val value: ApkDownloadStage) : TransferEvent
+        data class Progress(val bytes: Pair<Long, Long?>) : TransferEvent
+    }
 
     private fun importedArchive(data: Parcelable): File? {
         val url = (data as? DownloadUrl)?.url ?: return null
@@ -103,7 +107,9 @@ class DownloadedAppRepository(
 
             try {
                 withTimeout(timeoutMillis) {
-                    channelFlow {
+                    channelFlow<TransferEvent> {
+                        suspend fun stage(value: ApkDownloadStage) = send(TransferEvent.Stage(value))
+                        suspend fun progress(value: Pair<Long, Long?>) = send(TransferEvent.Progress(value))
                         val scope = object : OutputDownloadScope, Scope by downloader.scopeImpl {
                             override suspend fun reportSize(size: Long) {
                                 require(size > 0) { "Size must be greater than zero" }
@@ -113,7 +119,7 @@ class DownloadedAppRepository(
                                         size
                                     )
                                 ) { "Download size has already been set" }
-                                send(downloadedBytes.get() to size)
+                                progress(downloadedBytes.get() to size)
                             }
                         }
 
@@ -124,7 +130,7 @@ class DownloadedAppRepository(
                             downloadContext.ensureActive()
                             val newValue = downloadedBytes.addAndGet(bytes)
                             val totalSize = downloadSize.get()
-                            if (!managedMirror) trySend(newValue to totalSize.takeIf { it > 0 })
+                            if (!managedMirror) trySend(TransferEvent.Progress(newValue to totalSize.takeIf { it > 0 }))
                         }
 
                         targetFile.outputStream(StandardOpenOption.CREATE_NEW).buffered().use {
@@ -139,21 +145,24 @@ class DownloadedAppRepository(
                                     }
                             }
                             if (selectedArchive != null) {
-                                ApkMirrorTransfer.importArchive(selectedArchive!!, stream, onStage)
-                                send(selectedArchive!!.length() to selectedArchive!!.length())
+                                ApkMirrorTransfer.importArchive(selectedArchive!!, stream, ::stage)
                             } else if (managedMirror) {
                                 ApkMirrorTransfer.download(data as DownloadUrl, stream,
-                                    onProgress = { send(it) }, onStage = onStage)
+                                    onProgress = ::progress, onStage = ::stage)
                             } else {
-                                onStage(ApkDownloadStage.DOWNLOADING)
+                                stage(ApkDownloadStage.DOWNLOADING)
                                 downloader.impl.download(scope, data, stream)
                             }
                         }
-                        if (!managedMirror) send(downloadedBytes.get() to downloadSize.get().takeIf { it > 0 })
+                        if (!managedMirror) progress(downloadedBytes.get() to downloadSize.get().takeIf { it > 0 })
                     }
-                        .conflate()
                         .flowOn(Dispatchers.IO)
-                        .collect { (downloaded, size) -> onDownload(downloaded to size) }
+                        .collect { event ->
+                            when (event) {
+                                is TransferEvent.Stage -> onStage(event.value)
+                                is TransferEvent.Progress -> onDownload(event.bytes)
+                            }
+                        }
                 }
             } catch (error: TimeoutCancellationException) {
                 currentCoroutineContext().ensureActive()
@@ -161,8 +170,10 @@ class DownloadedAppRepository(
             }
 
             if (downloadedBytes.get() < 1) error("Downloader did not download anything.")
-            val pkgInfo =
-                pm.getPackageInfo(targetFile.toFile()) ?: error("Downloaded APK file is invalid")
+            onStage(ApkDownloadStage.VALIDATING)
+            val pkgInfo = withContext(Dispatchers.IO) {
+                pm.getPackageInfo(targetFile.toFile())
+            } ?: error("Downloaded APK file is invalid")
             if (pkgInfo.packageName != expectedPackageName) error("Downloaded APK has the wrong package name. Expected: $expectedPackageName, Actual: ${pkgInfo.packageName}")
             expectedVersion?.let {
                 if (

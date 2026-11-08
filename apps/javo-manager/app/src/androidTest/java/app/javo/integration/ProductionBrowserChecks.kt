@@ -170,7 +170,7 @@ internal fun checkProductionBrowser(test:Instrumentation,bundle:File):JSONArray 
                 val output=repository.download(loaded,DownloadUrl(selected.first),"com.google.android.youtube","fixture-1",true,true,{}, { stages.add(it) })
                 check(output.exists() && !copied.exists())
                 java.util.zip.ZipFile(output).use { check(it.getEntry("assets/javo-transfer-stress.bin").size==32L*1024*1024) }
-                check(stages==listOf(ApkDownloadStage.IMPORTING,ApkDownloadStage.MERGING,ApkDownloadStage.WRITING))
+                check(stages==listOf(ApkDownloadStage.IMPORTING,ApkDownloadStage.MERGING,ApkDownloadStage.WRITING,ApkDownloadStage.VALIDATING))
                 try {
                     repository.download(loaded,DownloadUrl(source.toURI().toString()),"com.google.android.youtube","fixture-1",true,true,{})
                     error("File outside private import directory was accepted")

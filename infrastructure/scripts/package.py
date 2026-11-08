@@ -7,7 +7,7 @@ OUT=ROOT/'deliverables';OUT.mkdir(exist_ok=True)
 ROOT_ONLY_DIRS={'tools','deliverables','.agents','.codex','.aws'}
 CACHE_DIRS={'node_modules','.gradle','.git','__pycache__','.cxx','.kotlin'}
 SKIP_NAMES={'local.properties','.env','.env.local','key.properties','source-inventory.json','javo-ci-source.zip','javo-ci-source.zip.sha256'}
-SKIP_EXT={'.jks','.keystore','.p12','.key'}
+SKIP_EXT={'.jks','.keystore','.p12','.key','.dpapi'}
 def source_files(root=ROOT):
     for directory,dirs,names in os.walk(root):
         parent=Path(directory).relative_to(root)

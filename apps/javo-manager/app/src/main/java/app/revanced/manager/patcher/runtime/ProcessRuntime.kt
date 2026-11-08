@@ -14,11 +14,13 @@ import app.revanced.manager.patcher.runtime.process.IPatcherProcess
 import app.revanced.manager.patcher.LibraryResolver
 import app.revanced.manager.patcher.ProgressEvent
 import app.revanced.manager.patcher.ProgressEventParcel
+import app.revanced.manager.patcher.StepId
 import app.revanced.manager.patcher.logger.Logger
 import app.revanced.manager.patcher.runtime.process.Parameters
 import app.revanced.manager.patcher.runtime.process.PatchConfiguration
 import app.revanced.manager.patcher.runtime.process.PatcherProcess
 import app.revanced.manager.patcher.toEvent
+import app.revanced.manager.patcher.toRemoteError
 import app.revanced.manager.util.Options
 import app.revanced.manager.util.PM
 import app.revanced.manager.util.PatchSelection
@@ -26,6 +28,7 @@ import app.revanced.manager.util.tag
 import com.github.pgreze.process.Redirect
 import com.github.pgreze.process.process
 import java.io.IOException
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -35,6 +38,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withTimeout
 import org.koin.core.component.inject
 
@@ -113,6 +117,8 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
 
         val connection = async(start = CoroutineStart.UNDISPATCHED) { awaitBinderConnection() }
         val patching = CompletableDeferred<Unit>()
+        val prepared = CompletableDeferred<Unit>()
+        val preparingStep = AtomicReference<StepId>(StepId.LoadPatches)
         launch(Dispatchers.IO) {
             val result = process(
                 APP_PROCESS_BIN_PATH,
@@ -150,7 +156,14 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
                 override fun log(level: String, msg: String) = logger.log(enumValueOf(level), msg)
 
                 override fun event(event: ProgressEventParcel?) {
-                    event?.let { onEvent(it.toEvent()) }
+                    val update = event?.toEvent() ?: return
+                    if (update is ProgressEvent.Started && update.stepId == StepId.ReadAPK) {
+                        preparingStep.set(StepId.ReadAPK)
+                    }
+                    onEvent(update)
+                    if (update is ProgressEvent.Completed && update.stepId == StepId.ReadAPK) {
+                        prepared.complete(Unit)
+                    }
                 }
 
                 override fun finished(exceptionStackTrace: String?) {
@@ -184,8 +197,30 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
             binder.start(parameters, eventHandler)
         }
 
-        // Wait until patching finishes.
-        withTimeout(20 * 60 * 1000L) { patching.await() }
+        // Bound the isolated preparation stage independently of the full patch run.
+        // If the child stops earlier, propagate its real result rather than a timeout.
+        try {
+            withTimeout(8 * 60 * 1000L) {
+                select<Unit> {
+                    patching.onAwait { }
+                    prepared.onAwait { }
+                }
+            }
+        } catch (error: TimeoutCancellationException) {
+            currentCoroutineContext().ensureActive()
+            val failure = IOException(
+                "Preparing the APK took longer than 8 minutes. Retry with a supported standalone APK, check free storage, or save the logs.",
+                error
+            )
+            onEvent(ProgressEvent.Failed(preparingStep.get(), failure.toRemoteError()))
+            throw failure
+        }
+        try {
+            withTimeout(12 * 60 * 1000L) { patching.await() }
+        } catch (error: TimeoutCancellationException) {
+            currentCoroutineContext().ensureActive()
+            throw IOException("Patching did not finish within 12 minutes after preparation. Save the logs before retrying.", error)
+        }
     }
 
     companion object : LibraryResolver() {
@@ -205,5 +240,4 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
      */
     class RemoteFailureException(val originalStackTrace: String) : Exception()
 }
-
 

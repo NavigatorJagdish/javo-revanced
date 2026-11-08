@@ -64,13 +64,25 @@ for flag in ('debuggable', 'allowBackup', 'usesCleartextTraffic'):
         if flag == 'debuggable' and 'android:debuggable' not in manifest:
             continue
         raise RuntimeError('Core must disable ' + flag)
+network_id = re.search(r'android:networkSecurityConfig\([^\n]+?\)=@(0x[0-9a-f]+)', manifest)
+if not network_id:
+    raise RuntimeError('Core APK does not reference its network security config')
+resources = dump('resources')
+network_file = re.search(
+    r'^\s*resource ' + re.escape(network_id[1]) +
+    r' xml/network_security_config\s*\n\s*\(\) \(file\) (\S+) type=XML\s*$',
+    resources, re.MULTILINE,
+)
+if not network_file:
+    raise RuntimeError('Could not locate the Core network security config in the APK')
 network = subprocess.run(
-    [str(tool), 'dump', 'xmltree', str(args.apk), '--file', 'res/xml/network_security_config.xml'],
+    [str(tool), 'dump', 'xmltree', str(args.apk), '--file', network_file[1]],
     check=True, capture_output=True, text=True,
 ).stdout
 # A network security config takes precedence over usesCleartextTraffic on Android 7+.
 network_flags = re.findall(r'cleartextTrafficPermitted[^\n=]*=(.*)', network)
-if network_flags != ['false'] and network_flags != ['(type 0x12)0x0']:
+if (network_flags not in (['false'], ['(type 0x12)0x0'])
+        or 'E: base-config' not in network or 'E: domain-config' in network):
     raise RuntimeError('Core network config must deny cleartext and contain no exceptions')
 with zipfile.ZipFile(args.apk) as archive:
     if len(archive.namelist()) != len(set(archive.namelist())) or archive.testzip() is not None:

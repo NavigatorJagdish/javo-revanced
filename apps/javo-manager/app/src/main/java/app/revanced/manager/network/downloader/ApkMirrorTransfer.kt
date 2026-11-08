@@ -18,7 +18,7 @@ import java.io.OutputStream
 import java.nio.file.Files
 import java.util.zip.ZipFile
 
-enum class ApkDownloadStage { DOWNLOADING, IMPORTING, MERGING, WRITING }
+enum class ApkDownloadStage { DOWNLOADING, IMPORTING, MERGING, WRITING, VALIDATING }
 
 object ApkMirrorTransfer {
     private const val MAX_BYTES = 2L * 1024 * 1024 * 1024
@@ -33,29 +33,33 @@ object ApkMirrorTransfer {
         try {
             val archive = File(work, "download.zip")
             onStage(ApkDownloadStage.DOWNLOADING)
-            val (stream, total) = request.toDownloadResult()
-            stream.use { input ->
-                require(total == null || total <= MAX_BYTES) { "Download is too large" }
-                archive.outputStream().buffered().use { target ->
-                    val buffer = ByteArray(64 * 1024)
-                    var bytes = 0L
-                    var lastReport = 0L
-                    while (true) {
-                        currentCoroutineContext().ensureActive()
-                        val count = input.read(buffer)
-                        if (count == -1) break
-                        bytes += count
-                        if (bytes > MAX_BYTES) throw IOException("Download exceeds 2 GiB")
-                        target.write(buffer, 0, count)
-                        val now = System.nanoTime()
-                        if (now - lastReport >= 250_000_000L) {
-                            onProgress(bytes to total)
-                            lastReport = now
+            try {
+                val (stream, total) = request.toDownloadResult()
+                stream.use { input ->
+                    require(total == null || total <= MAX_BYTES) { "Download is too large" }
+                    archive.outputStream().buffered().use { target ->
+                        val buffer = ByteArray(64 * 1024)
+                        var bytes = 0L
+                        var lastReport = 0L
+                        while (true) {
+                            currentCoroutineContext().ensureActive()
+                            val count = input.read(buffer)
+                            if (count == -1) break
+                            bytes += count
+                            if (bytes > MAX_BYTES) throw IOException("Download exceeds 2 GiB")
+                            target.write(buffer, 0, count)
+                            val now = System.nanoTime()
+                            if (now - lastReport >= 250_000_000L) {
+                                onProgress(bytes to total)
+                                lastReport = now
+                            }
                         }
+                        if (bytes == 0L || (total != null && bytes != total)) throw IOException("Download is incomplete")
+                        onProgress(bytes to total)
                     }
-                    if (bytes == 0L || (total != null && bytes != total)) throw IOException("Download is incomplete")
-                    onProgress(bytes to total)
                 }
+            } catch (error: java.net.SocketTimeoutException) {
+                throw IOException("The APK source stopped responding. Retry the download or use a file from Downloads.", error)
             }
             processArchive(archive, output, work, onStage)
         } finally {
@@ -79,7 +83,15 @@ object ApkMirrorTransfer {
         ZipFile(archive).use { zip ->
             if (zip.getEntry("AndroidManifest.xml") != null) {
                 onStage(ApkDownloadStage.WRITING)
-                archive.inputStream().use { it.copyTo(output) }
+                archive.inputStream().use { input ->
+                    val buffer = ByteArray(64 * 1024)
+                    while (true) {
+                        currentCoroutineContext().ensureActive()
+                        val count = input.read(buffer)
+                        if (count == -1) break
+                        output.write(buffer, 0, count)
+                    }
+                }
             } else {
                 onStage(ApkDownloadStage.MERGING)
                 val splits = File(work, "splits").also { it.mkdirs() }

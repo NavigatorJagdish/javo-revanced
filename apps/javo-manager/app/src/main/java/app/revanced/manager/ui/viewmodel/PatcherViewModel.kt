@@ -243,7 +243,7 @@ class PatcherViewModel(
         workManager.getWorkInfoByIdLiveData(patcherWorkerId.uuid).map { workInfo: WorkInfo? ->
             when (workInfo?.state) {
                 WorkInfo.State.SUCCEEDED -> true
-                WorkInfo.State.FAILED -> false
+                WorkInfo.State.FAILED, WorkInfo.State.CANCELLED -> false
                 else -> null
             }
         }
@@ -307,7 +307,8 @@ class PatcherViewModel(
 
                 is ProgressEvent.Progress -> currentStep.withState(
                     message = event.message ?: currentStep.message,
-                    progress = event.current?.let { event.current to event.total } ?: currentStep.progress
+                    progress = event.current?.let { it to event.total }
+                        ?: currentStep.progress.takeUnless { event.stepId == StepId.DownloadAPK && event.message != null }
                 )
 
                 is ProgressEvent.Log -> currentStep.withState(
@@ -321,7 +322,7 @@ class PatcherViewModel(
 
                 is ProgressEvent.Failed -> currentStep.withState(
                     State.FAILED,
-                    message = event.error.stackTrace,
+                    message = event.error.message ?: event.error.stackTrace,
                     progress = null
                 ).let { step ->
                     if (step.id is StepId.ExecutePatch) step.copy(hide = false) else step

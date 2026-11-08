@@ -75,7 +75,7 @@ internal suspend fun checkHttpsDownload(context: Context, bundle: File, target: 
             "com.google.android.youtube", "fixture-1", true, true,
             onDownload = { progress = it }, onStage = { stages.add(it) }
         )
-        check(stages == listOf(ApkDownloadStage.DOWNLOADING, ApkDownloadStage.MERGING, ApkDownloadStage.WRITING))
+        check(stages == listOf(ApkDownloadStage.DOWNLOADING, ApkDownloadStage.MERGING, ApkDownloadStage.WRITING, ApkDownloadStage.VALIDATING))
         check(progress?.first == bundle.length() && progress?.second == null)
         java.util.zip.ZipFile(file).use { check(it.getEntry("assets/javo-transfer-stress.bin").size == 32L * 1024 * 1024) }
         file.copyTo(target, overwrite = true)

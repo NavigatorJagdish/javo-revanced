@@ -167,9 +167,10 @@ class PatcherWorker(
                             ApkDownloadStage.IMPORTING -> R.string.javo_download_import
                             ApkDownloadStage.MERGING -> R.string.javo_download_merge
                             ApkDownloadStage.WRITING -> R.string.javo_download_write
+                            ApkDownloadStage.VALIDATING -> R.string.javo_download_validate
                         }
                         args.onEvent(ProgressEvent.Progress(
-                            stepId = StepId.DownloadAPK, current = 0, total = null,
+                            stepId = StepId.DownloadAPK,
                             message = applicationContext.getString(text)
                         ))
                     },

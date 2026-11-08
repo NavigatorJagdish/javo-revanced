@@ -2,6 +2,7 @@
     <string name="javo_download_transfer">Downloading APK data</string>
     <string name="javo_download_merge">Download complete. Merging split APKs…</string>
     <string name="javo_download_write">Preparing the downloaded APK</string>
+    <string name="javo_download_validate">Checking APK package and version</string>
     <string name="javo_workspace">YOUR PATCHING WORKSPACE</string>
     <string name="javo_slogan" translatable="false">Patch. Manage. Customize. Control.</string>
     <string name="javo_loaded_patches">%1$d patches loaded</string>
