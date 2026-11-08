@@ -201,14 +201,20 @@ internal object VideoDownload {
                 }
                 val data = ByteBuffer.allocateDirect(8 * 1024 * 1024)
                 val info = MediaCodec.BufferInfo()
+                // AAC priming and MP4 edit lists can give a real first sample a negative timestamp.
+                // Track index, not timestamp, is the end-of-stream signal across Android versions.
+                val firstTime = readers.filter { it.sampleTrackIndex >= 0 }.minOfOrNull { it.sampleTime } ?: 0L
+                val offsetUs = Math.negateExact(firstTime.coerceAtMost(0L))
                 muxer.start()
                 val samples = intArrayOf(0, 0)
                 while (true) {
                     currentCoroutineContext().ensureActive()
+                    val hasVideo = readers[0].sampleTrackIndex >= 0
+                    val hasAudio = readers[1].sampleTrackIndex >= 0
+                    if (!hasVideo && !hasAudio) break
                     val videoTime = readers[0].sampleTime
                     val audioTime = readers[1].sampleTime
-                    if (videoTime < 0 && audioTime < 0) break
-                    val i = if (videoTime >= 0 && (audioTime < 0 || videoTime <= audioTime)) 0 else 1
+                    val i = if (hasVideo && (!hasAudio || videoTime <= audioTime)) 0 else 1
                     val reader = readers[i]
                     val flags = reader.sampleFlags
                     check(flags and MediaExtractor.SAMPLE_FLAG_ENCRYPTED == 0) { "Protected media cannot be saved." }
@@ -219,7 +225,7 @@ internal object VideoDownload {
                     val count = reader.readSampleData(data, 0)
                     check(count in 1..data.capacity()) { "Could not read a media sample." }
                     val keyFrame = if (flags and MediaExtractor.SAMPLE_FLAG_SYNC != 0) MediaCodec.BUFFER_FLAG_KEY_FRAME else 0
-                    info.set(0, count, reader.sampleTime, keyFrame)
+                    info.set(0, count, Math.addExact(reader.sampleTime, offsetUs).coerceAtLeast(0L), keyFrame)
                     muxer.writeSampleData(targetTracks[i], data, info)
                     samples[i]++
                     reader.advance()
