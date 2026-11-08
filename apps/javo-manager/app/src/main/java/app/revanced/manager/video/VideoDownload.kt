@@ -23,6 +23,7 @@ import org.schabi.newpipe.extractor.stream.DeliveryMethod
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
 import java.io.IOException
+import java.io.OutputStream
 import java.net.URI
 import javax.net.ssl.HttpsURLConnection
 
@@ -110,37 +111,8 @@ internal object VideoDownload {
             val resolver = context.contentResolver
             var completed = false
             try {
-                open(source.url, allowedHost = { !source.youtube || isGoogleVideo(it) }).use { connection ->
-                    val reply = connection.value
-                    if (reply.responseCode != 200) throw IOException("Video source returned HTTP ${reply.responseCode}.")
-                    val size = reply.contentLengthLong.takeIf { it > 0 }
-                    if (size != null && size > VIDEO_LIMIT) throw IOException("The video exceeds 2 GiB.")
-                    DataInputStream(reply.inputStream.buffered()).use { input ->
-                        val header = ByteArray(12).also(input::readFully)
-                        if (!header.copyOfRange(4, 8).contentEquals("ftyp".toByteArray(Charsets.US_ASCII))) {
-                            throw IOException("The response is not an MP4 file.")
-                        }
-                        checkNotNull(resolver.openOutputStream(destination, "w")).buffered().use { output ->
-                            output.write(header)
-                            var bytes = header.size.toLong()
-                            val buffer = ByteArray(64 * 1024)
-                            var lastUpdate = 0L
-                            while (true) {
-                                currentCoroutineContext().ensureActive()
-                                val count = input.read(buffer)
-                                if (count < 0) break
-                                bytes += count
-                                if (bytes > VIDEO_LIMIT) throw IOException("The video exceeds 2 GiB.")
-                                output.write(buffer, 0, count)
-                                if (bytes - lastUpdate >= 256 * 1024) {
-                                    progress(bytes, size)
-                                    lastUpdate = bytes
-                                }
-                            }
-                            if (size != null && bytes != size) throw IOException("The video transfer ended early.")
-                            progress(bytes, size)
-                        }
-                    }
+                checkNotNull(resolver.openOutputStream(destination, "w")).buffered().use { output ->
+                    transfer(source, output, progress)
                 }
                 validateTracks(context, destination, source.format)
                 if (createdInDownloads && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -153,6 +125,77 @@ internal object VideoDownload {
                 if (!completed) runCatching { resolver.delete(destination, null, null) }
             }
         }
+
+    private suspend fun transfer(source: FileSource, output: OutputStream, progress: (Long, Long?) -> Unit) {
+        var bytes = 0L
+        var size: Long? = null
+        var tag: String? = null
+        var retries = 0
+        var lastUpdate = 0L
+        val buffer = ByteArray(64 * 1024)
+        fun write(data: ByteArray, count: Int) {
+            try {
+                output.write(data, 0, count)
+            } catch (error: IOException) {
+                // A file-write failure can leave an unknown offset; retry network reads only.
+                throw IllegalStateException("Could not write the destination file.", error)
+            }
+        }
+        while (true) {
+            currentCoroutineContext().ensureActive()
+            val offset = bytes
+            val headers = if (offset == 0L) emptyMap() else buildMap {
+                put("Range", listOf("bytes=$offset-"))
+                tag?.let { put("If-Range", listOf(it)) }
+            }
+            try {
+                open(source.url, headers = headers, allowedHost = { !source.youtube || isGoogleVideo(it) }).use { conn ->
+                    val reply = conn.value
+                    if (offset == 0L) {
+                        check(reply.responseCode == 200) { "Media source returned HTTP ${reply.responseCode}." }
+                        size = reply.contentLengthLong.takeIf { it > 0 }
+                        check((size ?: 0) <= VIDEO_LIMIT) { "The media exceeds 2 GiB." }
+                        tag = reply.getHeaderField("ETag")?.takeIf { it.startsWith("\"") && it.endsWith("\"") }
+                    } else {
+                        val total = checkNotNull(size)
+                        check(reply.responseCode == 206 &&
+                            reply.getHeaderField("Content-Range") == "bytes $offset-${total - 1}/$total" &&
+                            (tag == null || tag == reply.getHeaderField("ETag"))) { "Media source could not resume safely." }
+                    }
+                    DataInputStream(reply.inputStream.buffered()).use { input ->
+                        if (offset == 0L) {
+                            val header = ByteArray(12).also(input::readFully)
+                            check(header.copyOfRange(4, 8).contentEquals("ftyp".toByteArray(Charsets.US_ASCII))) {
+                                "The response is not MP4 media."
+                            }
+                            write(header, header.size)
+                            bytes += header.size
+                        }
+                        while (true) {
+                            currentCoroutineContext().ensureActive()
+                            val count = input.read(buffer)
+                            if (count < 0) break
+                            check(bytes + count <= VIDEO_LIMIT && (size == null || bytes + count <= size!!)) {
+                                "The media exceeded its declared size."
+                            }
+                            write(buffer, count)
+                            bytes += count
+                            if (bytes - lastUpdate >= 256 * 1024) {
+                                progress(bytes, size)
+                                lastUpdate = bytes
+                            }
+                        }
+                        if (size != null && bytes != size) throw IOException("The media transfer ended early.")
+                    }
+                }
+                progress(bytes, size)
+                return
+            } catch (error: IOException) {
+                val canResume = size?.let { bytes in 1L until it } == true && (source.youtube || tag != null)
+                if (++retries > 2 || (bytes != 0L && !canResume)) throw error
+            }
+        }
+    }
 
     private fun validateTracks(context: Context, uri: Uri, format: Format) {
         val extractor = MediaExtractor()
@@ -205,7 +248,7 @@ internal object VideoDownload {
                 connection.setRequestProperty("User-Agent", USER_AGENT)
                 connection.setRequestProperty("Accept-Encoding", "identity")
                 headers.forEach { (key, values) ->
-                    if (key.lowercase() in setOf("accept", "accept-language", "content-type", "origin", "referer", "user-agent") ||
+                    if (key.lowercase() in setOf("accept", "accept-language", "content-type", "origin", "referer", "user-agent", "range", "if-range") ||
                         key.startsWith("X-YouTube-", ignoreCase = true) ||
                         key.equals("X-Goog-Visitor-Id", ignoreCase = true)) {
                         values.firstOrNull()?.let { connection.setRequestProperty(key, it) }

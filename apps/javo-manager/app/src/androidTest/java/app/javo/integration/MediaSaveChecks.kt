@@ -67,14 +67,21 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
     val tls = SSLContext.getInstance("TLS").apply { init(km.keyManagers, tm.trustManagers, null) }
     val server = tls.serverSocketFactory.createServerSocket(0, 4, InetAddress.getByName("127.0.0.1"))
     val failure = AtomicReference<Throwable?>()
+    val resumed = java.util.concurrent.atomic.AtomicBoolean(false)
     val worker = Thread {
         try {
-            repeat(3) {
+            repeat(4) {
                 server.accept().use { socket ->
                     socket.soTimeout = 20_000
                     val reader = socket.getInputStream().bufferedReader()
                     val path = checkNotNull(reader.readLine()).split(' ')[1]
-                    while (!reader.readLine().isNullOrEmpty()) Unit
+                    val headers = buildList {
+                        while (true) {
+                            val line = reader.readLine()
+                            if (line.isNullOrEmpty()) break
+                            add(line)
+                        }
+                    }
                     val data = when (path) {
                         "/video.mp4" -> fixtures.getValue(VideoDownload.Format.VIDEO)
                         "/audio.m4a" -> fixtures.getValue(VideoDownload.Format.AUDIO)
@@ -82,8 +89,24 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
                         else -> error("Unexpected test request")
                     }
                     val output = socket.getOutputStream()
-                    output.write("HTTP/1.1 200 OK\r\nContent-Length: ${data.size}\r\nConnection: close\r\n\r\n".toByteArray())
-                    output.write(data)
+                    if (path == "/audio.m4a") {
+                        val offset = data.size / 2
+                        val etag = "\"javo-fixture-v1\""
+                        if (headers.any { it.equals("Range: bytes=$offset-", ignoreCase = true) }) {
+                            check(headers.any { it.equals("If-Range: $etag", ignoreCase = true) })
+                            output.write(("HTTP/1.1 206 Partial Content\r\nETag: $etag\r\nContent-Length: ${data.size - offset}\r\n" +
+                                "Content-Range: bytes $offset-${data.lastIndex}/${data.size}\r\nConnection: close\r\n\r\n").toByteArray())
+                            output.write(data, offset, data.size - offset)
+                            resumed.set(true)
+                        } else {
+                            output.write(("HTTP/1.1 200 OK\r\nETag: $etag\r\nContent-Length: ${data.size}\r\n" +
+                                "Connection: close\r\n\r\n").toByteArray())
+                            output.write(data, 0, offset)
+                        }
+                    } else {
+                        output.write("HTTP/1.1 200 OK\r\nContent-Length: ${data.size}\r\nConnection: close\r\n\r\n".toByteArray())
+                        output.write(data)
+                    }
                     output.flush()
                 }
             }
@@ -125,7 +148,9 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
         worker.join(5_000)
         check(!worker.isAlive)
         failure.get()?.let { throw AssertionError("Media fixture server failed", it) }
-        return report.put("invalidFileRemoved", true).put("source", "first-party HTTPS fixtures")
+        check(resumed.get())
+        return report.put("invalidFileRemoved", true).put("interruptedAudioResumed", true)
+            .put("source", "first-party HTTPS fixtures")
     } finally {
         HttpsURLConnection.setDefaultSSLSocketFactory(original)
         server.close()

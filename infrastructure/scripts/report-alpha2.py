@@ -42,7 +42,7 @@ for result, api in [(integration, 29), (integration35, 35)]:
         raise ValueError(f'Android {api} mandatory branding evidence is missing')
     if not products['video']['videoHeaderVerified']:
         raise ValueError(f'Android {api} Javo Video header evidence is missing')
-    if not all(result.get('mediaSave', {}).get(key) is True for key in ('mp4','m4a','invalidFileRemoved')):
+    if not all(result.get('mediaSave', {}).get(key) is True for key in ('mp4','m4a','invalidFileRemoved','interruptedAudioResumed')):
         raise ValueError(f'Android {api} MP4/M4A Downloads evidence is missing')
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())
@@ -80,7 +80,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
-- On both emulator APIs, the built-in saver copied an MP4 and an M4A over HTTPS to Downloads, checked the track types, matched the original bytes, and removed a rejected file.
+- On both emulator APIs, the built-in saver copied an MP4 and an M4A over HTTPS to Downloads, resumed an interrupted audio transfer, checked the track types, matched the original bytes, and removed a rejected file.
 - Built-in Javo launcher icon and settings branding were verified for both fixture outputs, along with the Javo Video header. The production browser test showed a fixture HTTP 503, retried with the native button, captured the file URL and ignored a late 503 after handoff.
 - {catalog_result}
 
