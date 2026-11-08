@@ -117,8 +117,7 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
         HttpsURLConnection.setDefaultSSLSocketFactory(tls.socketFactory)
         check(VideoDownload.input("Video https://youtu.be/aqz-KE-bpKQ?si=fixture").query == "v=aqz-KE-bpKQ")
         // Exercise the extractor's real URL parser without calling a third-party service.
-        check(org.schabi.newpipe.extractor.ServiceList.YouTube
-            .getStreamExtractor("https://www.youtube.com/watch?v=aqz-KE-bpKQ").id == "aqz-KE-bpKQ")
+        check(VideoDownload.youtubeExtractor(VideoDownload.input("https://youtu.be/aqz-KE-bpKQ")).id == "aqz-KE-bpKQ")
         check(runCatching { VideoDownload.input("https://youtube.com/playlist?list=fixture") }.isFailure)
         check(runCatching { VideoDownload.input("http://example.org/file.mp4") }.isFailure)
         check(runCatching { VideoDownload.resolve("https://example.org/file.mp4", VideoDownload.Format.AUDIO) }.isFailure)

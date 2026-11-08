@@ -36,6 +36,8 @@ internal object VideoDownload {
     private val extractorHosts = youtubeHosts + setOf("youtubei.googleapis.com", "www.youtube-nocookie.com", "s.ytimg.com")
     private val engine by lazy { NewPipe.init(YouTubeConnection()); ServiceList.YouTube }
 
+    internal fun youtubeExtractor(uri: URI) = engine.getStreamExtractor(uri.toString())
+
     enum class Format(val extension: String, val mimeType: String) {
         VIDEO("mp4", "video/mp4"),
         AUDIO("m4a", "audio/mp4"),
@@ -70,7 +72,7 @@ internal object VideoDownload {
             require(uri.path.endsWith("." + format.extension, true)) { "Choose the format that matches the link." }
             return@withContext FileSource(uri, uri.path.substringAfterLast('/').dropLast(4), false, format)
         }
-        val extractor = engine.getStreamExtractor(uri.toString())
+        val extractor = youtubeExtractor(uri)
         extractor.fetchPage()
         val stream = when (format) {
             Format.VIDEO -> extractor.videoStreams.filter {
