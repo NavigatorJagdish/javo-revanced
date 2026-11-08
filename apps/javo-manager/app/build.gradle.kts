@@ -31,6 +31,8 @@ val arsclibAndroid by tasks.registering(Jar::class) {
 }
 
 dependencies {
+    // Required by NewPipe Extractor on Android versions below API 33.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.5") {
         // The patch-signing library already uses protobuf-java, which includes the lite API.
         exclude(group = "com.google.protobuf", module = "protobuf-javalite")
@@ -235,6 +237,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
