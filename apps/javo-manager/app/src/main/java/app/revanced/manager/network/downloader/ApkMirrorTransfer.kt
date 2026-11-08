@@ -83,15 +83,7 @@ object ApkMirrorTransfer {
         ZipFile(archive).use { zip ->
             if (zip.getEntry("AndroidManifest.xml") != null) {
                 onStage(ApkDownloadStage.WRITING)
-                archive.inputStream().use { input ->
-                    val buffer = ByteArray(64 * 1024)
-                    while (true) {
-                        currentCoroutineContext().ensureActive()
-                        val count = input.read(buffer)
-                        if (count == -1) break
-                        output.write(buffer, 0, count)
-                    }
-                }
+                copyToOutput(archive, output)
             } else {
                 onStage(ApkDownloadStage.MERGING)
                 val splits = File(work, "splits").also { it.mkdirs() }
@@ -118,11 +110,28 @@ object ApkMirrorTransfer {
                         }
                         currentCoroutineContext().ensureActive()
                         onStage(ApkDownloadStage.WRITING)
-                        merged.writeApk(output)
+                        // ARSCLib's OutputStream overload buffers entries in heap to
+                        // compute ZIP sizes. Its file writer uses a seekable disk buffer.
+                        val mergedFile = File(work, "merged.apk")
+                        merged.writeApk(mergedFile)
+                        copyToOutput(mergedFile, output)
                     } finally {
                         if (merged !in bundle.modules) merged.close()
                     }
                 }
+            }
+        }
+    }
+
+    private suspend fun copyToOutput(file: File, output: OutputStream) {
+        val context = currentCoroutineContext()
+        file.inputStream().use { input ->
+            val buffer = ByteArray(64 * 1024)
+            while (true) {
+                context.ensureActive()
+                val count = input.read(buffer)
+                if (count == -1) break
+                output.write(buffer, 0, count)
             }
         }
     }

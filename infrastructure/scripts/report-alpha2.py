@@ -62,13 +62,13 @@ The private workflow built these development APKs and bound the results below to
 | --- | --- | --- |
 {rows}
 
-Both APKs disable runtime debugging. Manager retains its established development certificate, and Core uses a test certificate. The Manager APK audit verifies its signature and that app backup, cleartext traffic, unrestricted storage and broad app visibility are disabled. APKMirror is built in; the Manager no longer loads downloader plugins from remote APKs. Default patch updates accept only the verified bundle digest. Play Protect classification is pending.
+Both CI APKs disable runtime debugging and use disposable verification keys. The Manager APK audit verifies its signature and that app backup, cleartext traffic, unrestricted storage, broad app visibility, and unattended update permissions are disabled. APKMirror is built in; the Manager no longer loads downloader plugins from remote APKs. Default patch updates accept only the verified bundle digest. Play Protect classification is pending.
 
 ## Core changes
 
 The non-system build removes SMS, overlay and ROM signature-spoofing permission requests. The merged APK audit confirms the restricted permissions are absent, backup is disabled and debugging is disabled. SMS retrieval and overlay-dependent features are outside this build's scope. The self-check lists declared permissions. Raw account, token, request and result logging is removed from the two modified authorization service entry points.
 
-The APK audit verified the expected Core signing certificate, APK Signature Scheme v2 and target SDK {audit['targetSdk']}. The reporter said the Core APK passed their phone's scan and installed. Google Play Protect may scan sideloaded apps on other devices. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en)
+The Core APK audit verified a single APK Signature Scheme v2 signer and target SDK {audit['targetSdk']}. The audit also checks the absence of broad storage permissions and cleartext exceptions. The release certificate and Play Protect verdict are separate from CI's build. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en)
 
 ## Manager download changes
 
@@ -76,7 +76,7 @@ APKMirror transfers have connection and read timeouts, bounded redirects, browse
 
 ## Tests from this build
 
-- 102 host checks passed, comprising 31 Node, 13 Java security, six Java branding, 13 Java download, 21 Java browser policy and 18 Python checks.
+- Host checks passed for the website, signed updates, branding, downloads, browser policy and release evidence. See the per-suite logs for counts.
 - Manager and Core build and lint tasks passed. Module unit-test tasks can report NO-SOURCE.
 - Both delivered APKs installed and launched on API29 and API35 in the workflow's Android emulators. Exact installed hashes matched and no app crashes were observed. See each runtime report for its Android version.
 - Both first-party branding fixtures followed the Manager patch, rebuild, sign, install and launch path. The video fixture used the two-split merge output.
@@ -88,7 +88,7 @@ Android download regression checks passed.
 
 {check_list}
 
-The integration also transfers a 32 MiB asset APKM over a local HTTPS redirect without Content-Length, preserves its session cookie, imports the patch bundle and runs Video patching in the separate process. A deliberate child-process termination verifies prompt failure. A real WebView fixture checks ad hiding and standalone variant navigation. Core reuses the verified alpha.2 binary after matching its source tree and repeats installation and launch checks.
+The integration also transfers a 32 MiB asset APKM over a local HTTPS redirect without Content-Length, preserves its session cookie, validates the merged APK and runs Video patching in the separate process. A deliberate child-process termination verifies prompt failure. A real WebView fixture checks ad hiding and standalone variant navigation. Core is built from the current source and checked for installation and launch.
 
 ## Scope and remaining verification
 
@@ -98,7 +98,7 @@ Core retains app.revanced.android.gms for patch compatibility. An existing insta
 
 ## Package
 
-The ZIP includes the five pinned upstream source trees, master prompt, four visual references, branding assets, 17-page static website, installation guide, APKs, branding RVP and build evidence. The website remains a static deliverable. GitHub downloads require access to the private repository.
+The CI ZIP includes source, reference files, branding assets, the static website, the installation guide, test-signed APKs, the branding bundle and build evidence. Use the public GitHub Release assets for distribution APKs.
 
 Use apks/ for installation files, bundles/ for the standalone branding RVP for external patchers, website/ for the built site, docs/ for setup and evidence/ for test reports and screenshots. SHA256SUMS accompanies the release assets.
 """

@@ -34,7 +34,8 @@ if 'Verified using v2 scheme (APK Signature Scheme v2): true' not in signature.s
     raise RuntimeError('Core requires a verified APK Signature Scheme v2 signature')
 
 def dump(*parts):
-    return subprocess.run([str(tool), 'dump', *parts, str(args.apk)], check=True, capture_output=True, text=True).stdout
+    return subprocess.run([str(tool), 'dump', *parts, str(args.apk)], check=True, capture_output=True,
+                          encoding='utf-8', errors='replace').stdout
 
 permissions = dump('permissions')
 badging = dump('badging')
