@@ -2,8 +2,10 @@ package app.revanced.manager.video
 
 import android.content.ContentValues
 import android.content.Context
+import android.media.MediaCodec
 import android.media.MediaExtractor
 import android.media.MediaFormat as AndroidMediaFormat
+import android.media.MediaMuxer
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -22,9 +24,11 @@ import org.schabi.newpipe.extractor.downloader.Response
 import org.schabi.newpipe.extractor.stream.DeliveryMethod
 import java.io.ByteArrayOutputStream
 import java.io.DataInputStream
+import java.io.File
 import java.io.IOException
 import java.io.OutputStream
 import java.net.URI
+import java.nio.ByteBuffer
 import javax.net.ssl.HttpsURLConnection
 
 internal object VideoDownload {
@@ -43,7 +47,10 @@ internal object VideoDownload {
         AUDIO("m4a", "audio/mp4"),
     }
 
-    data class FileSource(val url: URI, val title: String, val youtube: Boolean, val format: Format)
+    data class FileSource(
+        val url: URI, val title: String, val youtube: Boolean, val format: Format,
+        val companionAudio: URI? = null,
+    )
 
     fun input(text: String): URI {
         val value = Regex("https://[^\\s<>]+").find(text.trim().take(8192))?.value
@@ -74,18 +81,32 @@ internal object VideoDownload {
         }
         val extractor = youtubeExtractor(uri)
         extractor.fetchPage()
-        val stream = when (format) {
+        fun audio() = extractor.audioStreams.filter {
+            it.isUrl && it.format == MediaFormat.M4A && it.deliveryMethod == DeliveryMethod.PROGRESSIVE_HTTP &&
+                it.codec.orEmpty().startsWith("mp4a")
+        }.maxByOrNull { it.averageBitrate }
+        fun mediaUrl(address: String): URI = checkedUri(address).also {
+            require(isGoogleVideo(it.host)) { "The video service returned an unexpected file host." }
+        }
+        val combined = when (format) {
             Format.VIDEO -> extractor.videoStreams.filter {
                 it.isUrl && !it.isVideoOnly && it.format == MediaFormat.MPEG_4 &&
                     it.deliveryMethod == DeliveryMethod.PROGRESSIVE_HTTP
             }.maxByOrNull { it.height }
-            Format.AUDIO -> extractor.audioStreams.filter {
-                it.isUrl && it.format == MediaFormat.M4A && it.deliveryMethod == DeliveryMethod.PROGRESSIVE_HTTP
-            }.maxByOrNull { it.averageBitrate }
-        } ?: throw IOException("This video does not offer a downloadable ${format.extension.uppercase()} stream.")
-        val url = checkedUri(stream.content)
-        require(isGoogleVideo(url.host)) { "The video service returned an unexpected file host." }
-        FileSource(url, extractor.name, true, format)
+            Format.AUDIO -> audio()
+        }
+        if (combined != null) return@withContext FileSource(mediaUrl(combined.content), extractor.name, true, format)
+        if (format == Format.VIDEO) {
+            val video = extractor.videoOnlyStreams.filter {
+                it.isUrl && it.format == MediaFormat.MPEG_4 && it.deliveryMethod == DeliveryMethod.PROGRESSIVE_HTTP &&
+                    it.codec.orEmpty().startsWith("avc1") && it.height in 1..1080
+            }.maxByOrNull { it.height }
+            val sound = if (video != null) audio() else null
+            if (video != null && sound != null) {
+                return@withContext FileSource(mediaUrl(video.content), extractor.name, true, format, mediaUrl(sound.content))
+            }
+        }
+        throw IOException("This video does not offer a downloadable ${format.extension.uppercase()} stream.")
     }
 
     fun filename(title: String, format: Format): String {
@@ -114,7 +135,8 @@ internal object VideoDownload {
             var completed = false
             try {
                 checkNotNull(resolver.openOutputStream(destination, "w")).buffered().use { output ->
-                    transfer(source, output, progress)
+                    if (source.companionAudio != null) transferSplit(context, source, output, progress)
+                    else transfer(source, output, progress)
                 }
                 validateTracks(context, destination, source.format)
                 if (createdInDownloads && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -128,7 +150,93 @@ internal object VideoDownload {
             }
         }
 
-    private suspend fun transfer(source: FileSource, output: OutputStream, progress: (Long, Long?) -> Unit) {
+    private suspend fun transferSplit(
+        context: Context, source: FileSource, output: OutputStream, progress: (Long, Long?) -> Unit,
+    ) {
+        val scratch = java.nio.file.Files.createTempDirectory(context.cacheDir.toPath(), "javo-media-").toFile()
+        val video = File(scratch, "video.mp4")
+        val audio = File(scratch, "audio.m4a")
+        val combined = File(scratch, "combined.mp4")
+        try {
+            video.outputStream().buffered().use { transfer(source, it, { bytes, _ -> progress(bytes, null) }) }
+            val videoSize = video.length()
+            val audioSource = source.copy(url = checkNotNull(source.companionAudio), format = Format.AUDIO, companionAudio = null)
+            audio.outputStream().buffered().use {
+                transfer(audioSource, it, { bytes, total -> progress(videoSize + bytes, total?.plus(videoSize)) },
+                    limit = VIDEO_LIMIT - videoSize)
+            }
+            muxMp4(video, audio, combined)
+            check(combined.length() in 13..VIDEO_LIMIT) { "The combined video exceeds the file limit." }
+            combined.inputStream().buffered().use { input ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) {
+                    currentCoroutineContext().ensureActive()
+                    val count = input.read(buffer)
+                    if (count < 0) break
+                    output.write(buffer, 0, count)
+                }
+            }
+            progress(combined.length(), combined.length())
+        } finally {
+            combined.delete()
+            audio.delete()
+            video.delete()
+            scratch.delete()
+        }
+    }
+
+    private suspend fun muxMp4(video: File, audio: File, output: File) {
+        val readers = listOf(MediaExtractor(), MediaExtractor())
+        try {
+            val muxer = MediaMuxer(output.path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+            try {
+                val targetTracks = listOf(video to "video/avc", audio to "audio/mp4a-latm").mapIndexed { i, (file, mime) ->
+                    val reader = readers[i]
+                    reader.setDataSource(file.path)
+                    val track = (0 until reader.trackCount).firstOrNull {
+                        reader.getTrackFormat(it).getString(AndroidMediaFormat.KEY_MIME) == mime
+                    } ?: throw IOException("A compatible media track is missing.")
+                    reader.selectTrack(track)
+                    muxer.addTrack(reader.getTrackFormat(track))
+                }
+                val data = ByteBuffer.allocateDirect(8 * 1024 * 1024)
+                val info = MediaCodec.BufferInfo()
+                muxer.start()
+                val samples = intArrayOf(0, 0)
+                while (true) {
+                    currentCoroutineContext().ensureActive()
+                    val videoTime = readers[0].sampleTime
+                    val audioTime = readers[1].sampleTime
+                    if (videoTime < 0 && audioTime < 0) break
+                    val i = if (videoTime >= 0 && (audioTime < 0 || videoTime <= audioTime)) 0 else 1
+                    val reader = readers[i]
+                    val flags = reader.sampleFlags
+                    check(flags and MediaExtractor.SAMPLE_FLAG_ENCRYPTED == 0) { "Protected media cannot be saved." }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        check(reader.sampleSize in 1..data.capacity().toLong()) { "A media sample exceeds the size limit." }
+                    }
+                    data.clear()
+                    val count = reader.readSampleData(data, 0)
+                    check(count in 1..data.capacity()) { "Could not read a media sample." }
+                    val keyFrame = if (flags and MediaExtractor.SAMPLE_FLAG_SYNC != 0) MediaCodec.BUFFER_FLAG_KEY_FRAME else 0
+                    info.set(0, count, reader.sampleTime, keyFrame)
+                    muxer.writeSampleData(targetTracks[i], data, info)
+                    samples[i]++
+                    reader.advance()
+                }
+                check(samples.all { it > 0 }) { "The video or audio track is empty." }
+                muxer.stop()
+            } finally {
+                muxer.release()
+            }
+        } finally {
+            readers.forEach { it.release() }
+        }
+    }
+
+    private suspend fun transfer(
+        source: FileSource, output: OutputStream, progress: (Long, Long?) -> Unit, limit: Long = VIDEO_LIMIT,
+    ) {
         var bytes = 0L
         var size: Long? = null
         var tag: String? = null
@@ -156,7 +264,7 @@ internal object VideoDownload {
                     if (offset == 0L) {
                         check(reply.responseCode == 200) { "Media source returned HTTP ${reply.responseCode}." }
                         size = reply.contentLengthLong.takeIf { it > 0 }
-                        check((size ?: 0) <= VIDEO_LIMIT) { "The media exceeds 2 GiB." }
+                        check((size ?: 0) <= limit) { "The media exceeds the file size limit." }
                         tag = reply.getHeaderField("ETag")?.takeIf { it.startsWith("\"") && it.endsWith("\"") }
                     } else {
                         val total = checkNotNull(size)
@@ -177,7 +285,7 @@ internal object VideoDownload {
                             currentCoroutineContext().ensureActive()
                             val count = input.read(buffer)
                             if (count < 0) break
-                            check(bytes + count <= VIDEO_LIMIT && (size == null || bytes + count <= size!!)) {
+                            check(bytes + count <= limit && (size == null || bytes + count <= size!!)) {
                                 "The media exceeded its declared size."
                             }
                             write(buffer, count)

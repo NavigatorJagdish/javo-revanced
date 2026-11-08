@@ -42,7 +42,7 @@ for result, api in [(integration, 29), (integration35, 35)]:
         raise ValueError(f'Android {api} mandatory branding evidence is missing')
     if not products['video']['videoHeaderVerified']:
         raise ValueError(f'Android {api} Javo Video header evidence is missing')
-    if not all(result.get('mediaSave', {}).get(key) is True for key in ('mp4','m4a','invalidFileRemoved','interruptedAudioResumed')):
+    if not all(result.get('mediaSave', {}).get(key) is True for key in ('mp4','m4a','invalidFileRemoved','interruptedAudioResumed','separateTracksMuxed')):
         raise ValueError(f'Android {api} MP4/M4A Downloads evidence is missing')
 run_url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID']
 rows = '\n'.join(f"| {item['displayName']} {item['version']} | {item['applicationId']} | `{item['sha256']}` |" for item in artifacts.values())

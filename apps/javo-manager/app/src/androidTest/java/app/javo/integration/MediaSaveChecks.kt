@@ -57,6 +57,7 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
     val fixtures = formats.associateWith { format ->
         test.context.assets.open("javo-fixture.${format.extension}").use { it.readBytes() }
     }
+    val videoOnly = test.context.assets.open("javo-fixture-video-only.mp4").use { it.readBytes() }
     val keys = KeyStore.getInstance("PKCS12").apply {
         test.context.assets.open("transfer-test.p12").use { load(it, "fixture-test".toCharArray()) }
     }
@@ -70,7 +71,7 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
     val resumed = java.util.concurrent.atomic.AtomicBoolean(false)
     val worker = Thread {
         try {
-            repeat(4) {
+            repeat(6) {
                 server.accept().use { socket ->
                     socket.soTimeout = 20_000
                     val reader = socket.getInputStream().bufferedReader()
@@ -85,6 +86,8 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
                     val data = when (path) {
                         "/video.mp4" -> fixtures.getValue(VideoDownload.Format.VIDEO)
                         "/audio.m4a" -> fixtures.getValue(VideoDownload.Format.AUDIO)
+                        "/split-video.mp4" -> videoOnly
+                        "/split-audio.m4a" -> fixtures.getValue(VideoDownload.Format.AUDIO)
                         "/invalid.mp4" -> fixtures.getValue(VideoDownload.Format.AUDIO)
                         else -> error("Unexpected test request")
                     }
@@ -137,6 +140,13 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
                 report.put(format.extension, true)
             } finally { context.contentResolver.delete(uri, null, null) }
         }
+        val split = VideoDownload.FileSource(URI("https://localhost:${server.localPort}/split-video.mp4"),
+            "Javo separate tracks fixture", false, VideoDownload.Format.VIDEO,
+            URI("https://localhost:${server.localPort}/split-audio.m4a"))
+        val joined = VideoDownload.save(context, split, null) { _, _ -> }
+        try {
+            check(context.contentResolver.openInputStream(joined)!!.use { it.readBytes().size } > videoOnly.size)
+        } finally { context.contentResolver.delete(joined, null, null) }
         val invalid = VideoDownload.FileSource(URI("https://localhost:${server.localPort}/invalid.mp4"),
             "Javo invalid track fixture", false, VideoDownload.Format.VIDEO)
         check(runCatching { VideoDownload.save(context, invalid, null) { _, _ -> } }.isFailure)
@@ -152,6 +162,7 @@ internal suspend fun checkMediaSave(test: Instrumentation): JSONObject {
         failure.get()?.let { throw AssertionError("Media fixture server failed", it) }
         check(resumed.get())
         return report.put("invalidFileRemoved", true).put("interruptedAudioResumed", true)
+            .put("separateTracksMuxed", true)
             .put("source", "first-party HTTPS fixtures")
     } finally {
         HttpsURLConnection.setDefaultSSLSocketFactory(original)

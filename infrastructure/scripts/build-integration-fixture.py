@@ -70,6 +70,8 @@ def main():
     run('ffmpeg','-hide_banner','-loglevel','error','-y','-f','lavfi','-i',
         'color=c=black:s=160x96:r=24:d=1','-i',audio,'-c:v','libx264','-pix_fmt','yuv420p',
         '-c:a','copy','-shortest','-movflags','+faststart',out/'javo-fixture.mp4')
+    run('ffmpeg','-hide_banner','-loglevel','error','-y','-i',out/'javo-fixture.mp4',
+        '-map','0:v:0','-c:v','copy','-an','-movflags','+faststart',out/'javo-fixture-video-only.mp4')
     if args.fixture_only:
         print('Built first-party Video/Music test fixtures. No patches executed.');return
     shutil.copyfile(ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp',out/'javo-branding.rvp')

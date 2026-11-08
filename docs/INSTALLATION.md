@@ -46,7 +46,7 @@ Play Protect scan maange to scan complete hone dein. Scan safe result de aur And
 2. **Save video (MP4)** ya **Save audio (M4A)** tap karein aur screen khuli rakhein. File **Files → Downloads** mein milegi. Android 8–9 par system file picker mein **Downloads** choose karein.
 3. Javo Video ka download control use karna ho to repatch karte waqt **Downloads** patch select karein. Patched app ke **Settings → Javo Video settings → Player → Downloads** mein download control enable karein. Purani settings mein downloader package override ho to use `app.javo.manager` set karein. Share method pehle se kaam karta hai.
 
-Sirf aisi media save karein jise download karne ki permission ho. MP4 ke liye ek hi stream mein sound aur video hona chahiye; M4A ke liye compatible audio stream chahiye. Quality aur availability source par depend karti hai. Private, restricted, protected aur playlist downloads supported nahi hain.
+Sirf aisi media save karein jise download karne ki permission ho. Jahan compatible video aur audio alag milte hain, Manager phone par dono ko jod kar ek MP4 banata hai. M4A ke liye compatible audio stream chahiye. Quality aur availability source par depend karti hai. Private, restricted, protected aur playlist downloads supported nahi hain.
 
 ## Video chalte waqt ruk jaaye
 
