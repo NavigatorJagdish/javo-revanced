@@ -1,0 +1,32 @@
+{
+  "platform": "Android 10 emulator",
+  "scope": "Live sample downloads saved to MediaStore Downloads and removed after verification. Local candidate APK hash is separate from the final GitHub release.",
+  "results": [
+    {
+      "success": false,
+      "managerApkSha256": "5c9f221b2fe25f4ce4ae02004b22f8b4c6e9d4bd5ba63886a7ec6e9fb2cda893",
+      "mp4": 28523658,
+      "failureType": "TimeoutCancellationException",
+      "failure": "Timed out waiting for 180000 ms",
+      "input": "Big Buck Bunny",
+      "videoId": "aqz-KE-bpKQ"
+    },
+    {
+      "success": true,
+      "managerApkSha256": "5c9f221b2fe25f4ce4ae02004b22f8b4c6e9d4bd5ba63886a7ec6e9fb2cda893",
+      "mp4": 11167987,
+      "m4a": 3060436,
+      "input": "Blender Studio Spring showreel",
+      "videoId": "R7TLwKwixZA"
+    },
+    {
+      "success": true,
+      "managerApkSha256": "b7f30808dfd14238b3414bab07a2b5199e7b67fe0302795ff4c35e2999efecb4",
+      "mp4": 11167987,
+      "m4a": 3060436,
+      "input": "Blender Studio Spring showreel",
+      "videoId": "R7TLwKwixZA",
+      "sourceCommit": "0a44b5f3123b2eda8f9224f0227c679c5364ec28"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "tag": "v0.1.0-alpha.8",
+  "publishedAt": "2026-11-08T10:07:16Z",
+  "sourceCommit": "dcbe332583aa5c84a0f9f8d154763116e90dd048",
+  "verifiedAndroidSourceCommit": "0a44b5f3123b2eda8f9224f0227c679c5364ec28",
+  "packagingRun": "https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42469983955",
+  "workflowRun": "https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42468669833",
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.8",
+  "managerSignerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+  "assets": [
+    {
+      "name": "javo-branding-0.1.0-alpha.1.rvp",
+      "sha256": "546f49fe1412d3bd58ed5f8e22df49d054664ddfe7f1f59e9a353baaa9344e8f",
+      "size": 10935,
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-branding-0.1.0-alpha.1.rvp"
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.2-test.apk",
+      "sha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
+      "size": 92219219,
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-core-0.3.13.2.250932-javo.2-test.apk"
+    },
+    {
+      "name": "javo-manager-0.1.0-alpha.8-development.apk",
+      "sha256": "6db38937a455e53ed8f51f8ea004637bd881332f33a35fd73ab31be6f69454a5",
+      "size": 51195030,
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-manager-0.1.0-alpha.8-development.apk"
+    },
+    {
+      "name": "javo-revanced-development.zip",
+      "sha256": "c5a035858447de6006ed6e9e20e56095fd70d3b05fff4c937204349572b7e643",
+      "size": 295678727,
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-revanced-development.zip"
+    },
+    {
+      "name": "SHA256SUMS",
+      "sha256": "e5372b239a4179524472a574a33911dac2208c584af702b40ebd5021da3dbb2f",
+      "size": 411,
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/SHA256SUMS"
+    }
+  ],
+  "verified": [
+    "APK signature and package identity",
+    "No broad Android storage, installed-app inventory, or battery-exemption permission in Manager",
+    "Alpha.7 Manager updates in place on Android 10 and 15",
+    "First-party MP4 and M4A Downloads, interrupted audio resume, separate-track MP4, invalid-file cleanup",
+    "First-party patch, sign, install and launch",
+    "Core unchanged from the verified alpha.2 binary; install and launch on Android 10 and 15"
+  ],
+  "limits": [
+    "Google Play Protect classification pending",
+    "No sustained playback measurement on a physical Android phone",
+    "Live media availability and speed vary with link and connection"
+  ]
+}

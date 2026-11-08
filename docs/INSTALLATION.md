@@ -4,7 +4,7 @@ Ye guide **v0.1.0-alpha.8** ke liye hai. Manager ke liye Android 8.0 ya naya ver
 
 ## 1. GitHub se files download karein
 
-Private repository ka access rakhne wale GitHub account se sign in karein. Phone par setup karne ke liye individual files download karein. Complete ZIP tab chahiye jab aap source code, website aur test reports bhi rakhna chahte hain.
+Phone par setup karne ke liye individual APK files download karein. Complete ZIP tab chahiye jab aap source code, website aur test reports bhi rakhna chahte hain.
 
 | File | Kab chahiye | Download |
 | --- | --- | --- |
@@ -12,7 +12,7 @@ Private repository ka access rakhne wale GitHub account se sign in karein. Phone
 | Core APK | Jab aapki selected patch setup mein **GmsCore support** chahiye | [Core APK][core] |
 | Complete ZIP | Source, website, APKs aur evidence ke liye | [Project ZIP][zip] |
 
-Agar GitHub par **404** aaye, pehle account aur repository access check karein. Saari files release ke **Assets** section mein bhi milengi. [GitHub Release][release]
+Agar direct link nahi khule, [GitHub Release][release] ke **Assets** section se file download karein.
 
 ## Manager update
 

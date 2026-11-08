@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "playback": "not-tested",
+  "accountLogin": "not-tested",
+  "managerApkSha256": "30ab54a0e477c2dfd8889c31a343f9cf52c10b6d431f714e3baa0d8147746e10",
+  "sourceApkSha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1",
+  "selectedPatches": [
+    "GmsCore support",
+    "Spoof video streams",
+    "Downloads",
+    "Video quality"
+  ],
+  "javoDownloadDefaultPatched": true,
+  "cellular480pDefaultPatched": true,
+  "separateProcessPatch": true,
+  "patchedPackage": "app.revanced.android.youtube",
+  "brandingLabelVerified": true,
+  "mandatorySettingsAndIconVerified": true,
+  "lightAndDarkHeaderVerified": true,
+  "bundledProductLogoVerified": true,
+  "signedOutput": true,
+  "signedApkSha256": "cd1d29fe6230e87506e10b193515141dbcf49ace92c7c19f2ac06003744c5a9a",
+  "elapsedSeconds": 619,
+  "inputVersion": "20.40.45",
+  "verificationPlatform": "Android 10 emulator",
+  "signedOutputInstalled": true,
+  "buildScope": "Local alpha.8 candidate; recorded Manager hash is separate from the final GitHub release."
+}

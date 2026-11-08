@@ -8,11 +8,11 @@ Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to in
 
 Independent Android ecosystem regenerated from the owner's master prompt and four design references. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.8 adds MP4 video and M4A audio saving to the phone's Downloads folder and hardens Manager's release build. Javo branding is applied automatically during patching. The Core binary is reused from verified alpha.2. See the [alpha.8 release notes](docs/RELEASE_ALPHA8.md).
+Alpha.8 adds MP4 video and M4A audio saving to the phone's Downloads folder and hardens Manager's release build. Javo branding is applied automatically during patching. The Core binary is reused from verified alpha.2. See the [release notes](docs/RELEASE_ALPHA8.md) and [APK checksums and test evidence](evidence/release-alpha8.json).
 
 [manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-manager-0.1.0-alpha.8-development.apk
-[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.7/javo-core-0.3.13.2.250932-javo.2-test.apk
-[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases
+[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-core-0.3.13.2.250932-javo.2-test.apk
+[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.8
 
 ## Included
 
