@@ -4,55 +4,19 @@
   "generatedAt": "2026-11-03",
   "artifacts": [
     {
-      "id": "core",
-      "displayName": "Javo Core",
-      "applicationId": "app.revanced.android.gms",
-      "version": "0.3.13.2.250932-javo.2",
-      "versionCode": 250932005,
-      "minSdk": 19,
-      "channel": "development",
-      "signing": "test",
-      "verification": "signature-and-package-verified",
-      "sha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f",
-      "signerSha256": "98cbe3dc2314dbd5ebe25af31c85814e7a570952ba568c66e0814fc3e56f18df",
-      "size": 92219219,
-      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.2-test.apk",
-      "runtimeVerified": false,
-      "architectures": [
-        "arm64-v8a",
-        "armeabi-v7a",
-        "x86",
-        "x86_64"
-      ],
-      "runtimeSmoke": {
-        "device": "emulator-5554",
-        "package": "app.revanced.android.gms",
-        "processRunning": true,
-        "crashObserved": false,
-        "installedArtifactMatchesDeliverable": true,
-        "authentication": "not-tested",
-        "pushDelivery": "not-tested",
-        "playback": "not-tested",
-        "androidApi": 35,
-        "architecture": "x86_64",
-        "bootCompleted": true,
-        "installedApkSha256": "4316c1a5778e66fadd7d3d28fe689a2d74fb7c601ec36504998622cd78aaa55f"
-      }
-    },
-    {
       "id": "manager",
       "displayName": "Javo Manager",
       "applicationId": "app.javo.manager",
-      "version": "0.1.0-alpha.6",
-      "versionCode": 100006,
+      "version": "0.1.0-alpha.9",
+      "versionCode": 100009,
       "minSdk": 26,
       "channel": "development",
-      "signing": "debug",
+      "signing": "development",
       "verification": "signature-and-package-verified",
-      "sha256": "fcec4cf8210fb1334fb90949f2213a4d2056ecabdda2819678bd5317423d5a13",
+      "sha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4",
       "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
-      "size": 62599908,
-      "path": "/downloads/files/javo-manager-0.1.0-alpha.6-debug.apk",
+      "size": 51239373,
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.9-development.apk",
       "runtimeVerified": false,
       "architectures": [
         "arm64-v8a",
@@ -60,7 +24,7 @@
         "x86_64"
       ],
       "runtimeSmoke": {
-        "device": "emulator-5554",
+        "device": "emulator-5560",
         "package": "app.javo.manager",
         "processRunning": true,
         "crashObserved": false,
@@ -71,7 +35,45 @@
         "androidApi": 29,
         "architecture": "x86_64",
         "bootCompleted": true,
-        "installedApkSha256": "fcec4cf8210fb1334fb90949f2213a4d2056ecabdda2819678bd5317423d5a13"
+        "inPlaceUpgradeVerified": true,
+        "installedApkSha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4"
+      }
+    },
+    {
+      "id": "core",
+      "displayName": "Javo Core",
+      "applicationId": "app.revanced.android.gms",
+      "version": "0.3.13.2.250932-javo.3",
+      "versionCode": 250932006,
+      "minSdk": 19,
+      "channel": "development",
+      "signing": "production",
+      "verification": "signature-and-package-verified",
+      "sha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd",
+      "signerSha256": "47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873",
+      "size": 92206574,
+      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.3-production.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5560",
+        "package": "app.revanced.android.gms",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "inPlaceUpgradeVerified": false,
+        "installedApkSha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd"
       }
     }
   ],

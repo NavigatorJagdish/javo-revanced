@@ -8,3 +8,5 @@
 Use the files under **Assets** and compare their hashes with `SHA256SUMS`. These changes reduce the apps' permissions and network exposure. Google Play Protect's classification of these APKs has not been verified on a device with Google Play enabled. If it blocks an APK after scanning, stop the installation and record the filename, Android version, and exact warning. See [Google's app verification appeal](https://support.google.com/googleplay/android-developer/answer/2992033?hl=en).
 
 Patched video or music APKs are generated locally and have their own signatures and hashes. A verdict about a locally patched APK must be investigated separately.
+
+The final signed Manager updated in place from alpha.8 and completed the controlled Android 10 download, merge, patch, sign, install and launch checks. The final signed Core installed and launched on Android 10. The [release evidence](../evidence/release-alpha9.json) records the APK hashes, signing certificates and scope.

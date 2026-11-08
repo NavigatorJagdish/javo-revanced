@@ -1,18 +1,18 @@
 # JAVO REVANCED
 
-[**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Complete ZIP and checksums**][release-download]
+[**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Release assets and checksums**][release-download]
 
-Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, import the branding bundle, and troubleshoot common setup issues.
+Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, set up Core, and troubleshoot patching.
 
 **Patch. Manage. Customize. Control.**
 
 Independent Android ecosystem regenerated from the owner's master prompt and four design references. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.8 adds MP4 video and M4A audio saving to the phone's Downloads folder and hardens Manager's release build. Javo branding is applied automatically during patching. The Core binary is reused from verified alpha.2. See the [release notes](docs/RELEASE_ALPHA8.md) and [APK checksums and test evidence](evidence/release-alpha8.json).
+Alpha.9 requires Android confirmation for Manager installs, reduces Core's permissions, and improves APK download and preparation status. Core uses a new release certificate; see the migration steps before replacing an installed Core. Google Play Protect's verdict remains unverified. See the [release notes](docs/RELEASE_ALPHA9.md) and [APK checksums and test evidence](evidence/release-alpha9.json).
 
-[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-manager-0.1.0-alpha.8-development.apk
-[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.8/javo-core-0.3.13.2.250932-javo.2-test.apk
-[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.8
+[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-manager-0.1.0-alpha.9-development.apk
+[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-core-0.3.13.2.250932-javo.3-production.apk
+[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.9
 
 ## Included
 

@@ -1,0 +1,48 @@
+{
+  "tag": "v0.1.0-alpha.9",
+  "sourceCommit": "d10b75a4f15935f6965809b03d4d0e3051b52d87",
+  "workflowRun": "https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42503007330",
+  "assets": [
+    {
+      "name": "javo-manager-0.1.0-alpha.9-development.apk",
+      "size": 51239373,
+      "sha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4",
+      "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+      "androidSmokeApi": 29,
+      "inPlaceUpgradeVerified": true
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.3-production.apk",
+      "size": 92206574,
+      "sha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd",
+      "signerSha256": "47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873",
+      "androidSmokeApi": 29,
+      "inPlaceUpgradeVerified": false
+    }
+  ],
+  "managerRemovedPermissions": [
+    "android.permission.ENFORCE_UPDATE_OWNERSHIP",
+    "android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION"
+  ],
+  "coreLegacyStoragePermissionsAbsent": true,
+  "coreCleartextTrafficAllowed": false,
+  "managerFixtureIntegration": {
+    "androidApi": 29,
+    "passed": true,
+    "products": [
+      "video",
+      "music"
+    ]
+  },
+  "apkMergeMemoryRegression": {
+    "archiveEntryMiB": 32,
+    "jvmMaxHeapMiB": 16,
+    "priorStreamWriter": "OutOfMemoryError reproduced on Android and JVM",
+    "newDiskWriter": "Preserved entry with bounded JVM heap"
+  },
+  "limits": [
+    "No Play Protect verdict on a Google Play enabled device",
+    "No new account sign-in, push delivery, or playback verification",
+    "APKMirror network regression uses a controlled HTTPS fixture; live third-party availability can vary"
+  ]
+}
