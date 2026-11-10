@@ -1,7 +1,0 @@
-PASS labels/icons changed while preserving package, permission and service
-PASS wrong package rejected without modifying manifest
-PASS prior GmsCore package rename remains compatible and preserved
-PASS XML external entities rejected
-PASS alternate-encoding DTD rejected
-PASS external document type rejected before network resolution
-6 branding resource checks passed; APK patch execution not covered
