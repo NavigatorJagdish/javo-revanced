@@ -1,5 +1,13 @@
 # Security policy
 
+## APK distribution under review
+
+Users reported Play Protect warnings for both alpha.10 APKs. The current download page and README pause recommendations to install these builds. Keep Play Protect enabled. Use the official Google review process if a verified APK is blocked. [Google Play Protect warning guide](https://developers.google.com/android/play-protect/warning-dev-guidance)
+
+A release requires signed APK integrity checks, a matching source revision, dependency and permission review, clean install and update tests, application workflow tests, and a verified Play Protect result for the exact final APKs. Record the Android version, install source, artifact SHA-256 and outcome for each file. A successful emulator build or Windows antivirus scan does not answer the Play Protect question.
+
+Publish corresponding licensed source, changelogs, approved screenshots and sanitized test summaries. Keep the project brief, original reference files, raw logs, test account data, local settings, tokens and signing material in private storage. Deleting a file from the current branch does not remove copies in older tags, release archives, forks or clones.
+
 Never publish passwords, private signing keys or access tokens in issues, logs or source. For a private report, use an owner-controlled private channel.
 
 If Play Protect blocks an installation, keep Play Protect enabled and stop the installation. Record the exact warning, Android version, app version, APK filename and SHA-256. A locally patched video or music APK differs from the GitHub Manager and Core APKs; include its own SHA-256 and selected patch versions if that is the APK affected. Do not attach third-party APKs or logs with account information to public issues.

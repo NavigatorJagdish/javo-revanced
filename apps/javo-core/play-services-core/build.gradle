@@ -121,8 +121,8 @@ android {
     defaultConfig {
         applicationId = "app.revanced.android.gms"
 
-        versionName "${version}-javo.4"
-        versionCode appVersionCode + 3
+        versionName "${version}-javo.5"
+        versionCode appVersionCode + 4
 
         minSdkVersion androidMinSdk
         targetSdkVersion androidTargetSdk

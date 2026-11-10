@@ -1,8 +1,8 @@
 #!/system/bin/sh
 DIR=${0%/*}
 
-package_name="__PKG_NAME__"
-version="__VERSION__"
+package_name=__PKG_NAME__
+version=__VERSION__
 
 rm "$DIR/log"
 
@@ -20,18 +20,18 @@ echo "stock_path: $stock_path"
 echo "base_version: $version"
 echo "stock_version: $stock_version"
 
-if mount | grep -q "$stock_path" ; then
+if [ -z "$stock_path" ]; then
+  echo "Not mounting as app info could not be loaded"
+  exit 1
+fi
+
+if mount | grep -Fq -- "$stock_path" ; then
   echo "Not mounting as stock path is already mounted"
   exit 1
 fi
 
 if [ "$version" != "$stock_version" ]; then
   echo "Not mounting as versions don't match"
-  exit 1
-fi
-
-if [ -z "$stock_path" ]; then
-  echo "Not mounting as app info could not be loaded"
   exit 1
 fi
 

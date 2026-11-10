@@ -47,6 +47,8 @@ jobs:
           python -m unittest discover -s tests -p 'test_*.py' -v 2>&1 | tee evidence/runtime-evidence-tests.log
           javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java tests/UpdateSecurityTest.java patches/javo-branding/src/main/java/app/javo/branding/BrandingResources.java tests/BrandingResourcesTest.java apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/DownloadConnection.java tests/DownloadConnectionTest.java apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/webview/ApkMirrorPolicy.java tests/ApkMirrorPolicyTest.java
           java -cp tools/java-tests UpdateSecurityTest | tee evidence/java-security-tests.log
+          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/RootArguments.java tests/RootArgumentsTest.java
+          java -cp tools/java-tests RootArgumentsTest
           java -cp tools/java-tests BrandingResourcesTest | tee evidence/java-branding-tests.log
           java -cp tools/java-tests DownloadConnectionTest | tee evidence/java-download-tests.log
           java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log

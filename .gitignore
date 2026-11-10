@@ -1,5 +1,6 @@
 /tools/
-inputs/*-upstream.zip
+/inputs/
+/assets/references/
 **/.gradle/
 **/build/
 **/local.properties
@@ -9,7 +10,12 @@ inputs/*-upstream.zip
 **/*.keystore
 **/*.p12
 **/*.dpapi
+**/*.pfx
+**/*.pkcs12
+**/*.jceks
+**/*.key
 **/.env
+**/.env.*
 __pycache__/
 /deliverables/
 /apks/

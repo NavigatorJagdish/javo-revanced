@@ -1,8 +1,8 @@
 # Javo ReVanced for Android
 
-[**Public Javo website**][website] · [**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Release assets and checksums**][release-download]
+[**Public Javo website**][website] · [**Security and release status**](SECURITY.md)
 
-Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, set up Core, and troubleshoot patching.
+APK downloads are under review after Play Protect warnings were reported for Manager and Core. The [installation guide (Hinglish)](docs/INSTALLATION.md) explains how to identify and report the warning.
 
 **Patch. Manage. Customize. Control.**
 
@@ -12,9 +12,6 @@ Alpha.10 gives Manager 20 minutes after preparation to patch and write the APK. 
 
 [website]: https://navigatorjagdish.github.io/javo-revanced/
 
-[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-manager-0.1.0-alpha.10-development.apk
-[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-core-0.3.13.2.250932-javo.4-production.apk
-[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.10
 
 ## Included
 

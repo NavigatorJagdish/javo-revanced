@@ -1,28 +1,30 @@
 """Build a source/evidence/website archive, excluding caches and signing secrets."""
 from pathlib import Path
-import zipfile,hashlib,json,os
+import zipfile,hashlib,json,os,re
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'deliverables';OUT.mkdir(exist_ok=True)
-ROOT_ONLY_DIRS={'tools','deliverables','.agents','.codex','.aws'}
+ROOT_ONLY_DIRS={'tools','deliverables','inputs','.agents','.codex','.aws'}
 CACHE_DIRS={'node_modules','.gradle','.git','__pycache__','.cxx','.kotlin'}
 SKIP_NAMES={'local.properties','.env','.env.local','key.properties','source-inventory.json','javo-ci-source.zip','javo-ci-source.zip.sha256'}
-SKIP_EXT={'.jks','.keystore','.p12','.key','.dpapi'}
+SKIP_EXT={'.jks','.keystore','.p12','.pfx','.pkcs12','.jceks','.key','.dpapi'}
+PUBLIC_EVIDENCE={'upstream-lock.json','source-modifications.json'}
 def source_files(root=ROOT):
     for directory,dirs,names in os.walk(root):
         parent=Path(directory).relative_to(root)
         def included(d):
             if d in CACHE_DIRS or (Path(directory)/d).is_symlink():return False
+            child=parent/d
             if parent==Path('.') and d in ROOT_ONLY_DIRS:return False
+            if child==Path('assets/references') or (parent==Path('evidence')):return False
             # Java/Kotlin packages can legitimately be called tools or build.
             if d in {'build','dist'} and 'src' not in parent.parts:return False
             return True
         dirs[:]=sorted(d for d in dirs if included(d))
         for name in sorted(names):
             p=Path(directory)/name;rel=p.relative_to(root)
-            if name in SKIP_NAMES or p.suffix.lower() in SKIP_EXT or p.is_symlink():continue
-            # Downloaded third-party binaries are inspection inputs, not redistributed deliverables.
-            if rel.parts[0]=='inputs' and name!='MASTER_PROMPT.txt':continue
+            if name in SKIP_NAMES or name.startswith('.env.') or p.suffix.lower() in SKIP_EXT or p.is_symlink():continue
+            if parent==Path('evidence') and name not in PUBLIC_EVIDENCE and not re.fullmatch(r'release-alpha\d+\.json',name):continue
             yield p,rel.as_posix()
 def verify_branding_evidence(bundle,integration,catalog):
     if integration.get('success') is not True or integration.get('bundleSha256')!=hashlib.sha256(bundle.read_bytes()).hexdigest():
@@ -38,9 +40,14 @@ def verify_branding_evidence(bundle,integration,catalog):
 
 def package():
     files=list(source_files())
-    for p in sorted((ROOT/'apps/javo-website/dist').rglob('*')):
-        if p.is_file():files.append((p,'website/'+p.relative_to(ROOT/'apps/javo-website/dist').as_posix()))
     catalog=json.loads((ROOT/'infrastructure/release/catalog.json').read_text())
+    dist=ROOT/'apps/javo-website/dist'
+    approved_downloads={a['path'].lstrip('/') for a in catalog['artifacts']}
+    for p in sorted(dist.rglob('*')):
+        if not p.is_file() or p.is_symlink():continue
+        relative=p.relative_to(dist).as_posix()
+        if relative.startswith('downloads/files/') and relative not in approved_downloads:continue
+        files.append((p,'website/'+relative))
     for a in catalog['artifacts']:
         p=OUT/'apks'/Path(a['path']).name
         digest=hashlib.sha256(p.read_bytes()).hexdigest()

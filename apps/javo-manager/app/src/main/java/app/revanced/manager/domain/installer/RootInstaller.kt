@@ -5,6 +5,9 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import app.javo.security.RootArguments.packageName as validatedPackageName
+import app.javo.security.RootArguments.propertyValue
+import app.javo.security.RootArguments.shellLiteral
 import app.revanced.manager.IRootSystemService
 import app.revanced.manager.service.ManagerRootService
 import app.revanced.manager.util.PM
@@ -54,7 +57,7 @@ class RootInstaller(
         await()
     }
 
-    suspend fun execute(vararg commands: String): Shell.Result {
+    private suspend fun execute(vararg commands: String): Shell.Result {
         val stdout = mutableListOf<String>()
         val stderr = mutableListOf<String>()
         return getShell().newJob().add(*commands).to(stdout, stderr).exec()
@@ -67,11 +70,12 @@ class RootInstaller(
     } ?: false
 
     suspend fun isAppInstalled(packageName: String) =
-        awaitRemoteFS().getFile("$modulesPath/$packageName-revanced").exists()
+        moduleDirectory(packageName).let { awaitRemoteFS().getFile(it).exists() }
 
     suspend fun isAppMounted(packageName: String) = withContext(Dispatchers.IO) {
+        validatedPackageName(packageName)
         pm.getPackageInfo(packageName)?.applicationInfo?.sourceDir?.let {
-            execute("mount | grep \"$it\"").isSuccess
+            execute("mount | grep -F -- ${shellLiteral(it)}").isSuccess
         } ?: false
     }
 
@@ -81,9 +85,9 @@ class RootInstaller(
         withContext(Dispatchers.IO) {
             val stockAPK = pm.getPackageInfo(packageName)?.applicationInfo?.sourceDir
                 ?: throw Exception("Failed to load application info")
-            val patchedAPK = "$modulesPath/$packageName-revanced/$packageName.apk"
+            val patchedAPK = "${moduleDirectory(packageName)}/$packageName.apk"
 
-            execute("mount -o bind \"$patchedAPK\" \"$stockAPK\"").assertSuccess("Failed to mount APK")
+            execute("mount -o bind ${shellLiteral(patchedAPK)} ${shellLiteral(stockAPK)}").assertSuccess("Failed to mount APK")
         }
     }
 
@@ -94,7 +98,7 @@ class RootInstaller(
             val stockAPK = pm.getPackageInfo(packageName)?.applicationInfo?.sourceDir
                 ?: throw Exception("Failed to load application info")
 
-            execute("umount -l \"$stockAPK\"").assertSuccess("Failed to unmount APK")
+            execute("umount -l ${shellLiteral(stockAPK)}").assertSuccess("Failed to unmount APK")
         }
     }
 
@@ -105,17 +109,31 @@ class RootInstaller(
         version: String,
         label: String
     ) = withContext(Dispatchers.IO) {
+        val modulePath = moduleDirectory(packageName)
+        // Render before changing the installed app. Untrusted metadata stays in data fields.
+        val service = app.assets.open("root/service.sh").bufferedReader().use { reader ->
+            renderTemplate(reader.readText(), mapOf(
+                "__PKG_NAME__" to shellLiteral(packageName),
+                "__VERSION__" to shellLiteral(version),
+            ))
+        }
+        val properties = app.assets.open("root/module.prop").bufferedReader().use { reader ->
+            renderTemplate(reader.readText(), mapOf(
+                "__PKG_NAME__" to packageName,
+                "__VERSION__" to propertyValue(version),
+                "__LABEL__" to propertyValue(label),
+            ))
+        }
+        val stockPath = stockAPK?.absolutePath?.let(::shellLiteral)
         val remoteFS = awaitRemoteFS()
-        val assets = app.assets
-        val modulePath = "$modulesPath/$packageName-revanced"
 
         unmount(packageName)
 
         stockAPK?.let { stockApp ->
             // TODO: get user id programmatically
-            execute("pm uninstall -k --user 0 $packageName")
+            execute("pm uninstall -k --user 0 ${shellLiteral(packageName)}")
 
-            execute("pm install -r -d --user 0 \"${stockApp.absolutePath}\"")
+            execute("pm install -r -d --user 0 $stockPath")
                 .assertSuccess("Failed to install stock app")
 
             stockApp.delete()
@@ -127,21 +145,9 @@ class RootInstaller(
             }
         }
 
-        listOf(
-            "service.sh",
-            "module.prop",
-        ).forEach { file ->
-            assets.open("root/$file").use { inputStream ->
-                remoteFS.getFile("$modulePath/$file").newOutputStream()
-                    .use { outputStream ->
-                        val content = String(inputStream.readBytes())
-                            .replace("__PKG_NAME__", packageName)
-                            .replace("__VERSION__", version)
-                            .replace("__LABEL__", label)
-                            .toByteArray()
-
-                        outputStream.write(content)
-                    }
+        mapOf("service.sh" to service, "module.prop" to properties).forEach { (file, content) ->
+            remoteFS.getFile("$modulePath/$file").newOutputStream().use {
+                it.write(content.toByteArray(Charsets.UTF_8))
             }
         }
 
@@ -155,25 +161,32 @@ class RootInstaller(
                 }
 
             execute(
-                "chmod 644 $apkPath",
-                "chown system:system $apkPath",
-                "chcon u:object_r:apk_data_file:s0 $apkPath",
-                "chmod +x $modulePath/service.sh"
+                "chmod 644 ${shellLiteral(apkPath)}",
+                "chown system:system ${shellLiteral(apkPath)}",
+                "chcon u:object_r:apk_data_file:s0 ${shellLiteral(apkPath)}",
+                "chmod +x ${shellLiteral("$modulePath/service.sh")}"
             ).assertSuccess("Failed to set file permissions")
         }
     }
 
     suspend fun uninstall(packageName: String) {
+        val modulePath = moduleDirectory(packageName)
         val remoteFS = awaitRemoteFS()
         if (isAppMounted(packageName))
             unmount(packageName)
 
-        remoteFS.getFile("$modulesPath/$packageName-revanced").deleteRecursively()
+        remoteFS.getFile(modulePath).deleteRecursively()
             .also { if (!it) throw Exception("Failed to delete files") }
     }
 
     companion object {
         const val modulesPath = "/data/adb/modules"
+        private val templateTokens = Regex("__PKG_NAME__|__VERSION__|__LABEL__")
+
+        private fun moduleDirectory(packageName: String) = "$modulesPath/${validatedPackageName(packageName)}-revanced"
+
+        private fun renderTemplate(template: String, values: Map<String, String>) =
+            templateTokens.replace(template) { values.getValue(it.value) }
 
         private fun Shell.Result.assertSuccess(errorMessage: String) {
             if (!isSuccess) {

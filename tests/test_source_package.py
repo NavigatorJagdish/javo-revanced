@@ -11,10 +11,12 @@ class SourcePackageTests(unittest.TestCase):
     def test_source_packages_survive_and_generated_files_do_not(self):
         keep=['apps/core/src/main/java/org/microg/tools/Ui.kt',
               'upstream/patcher/src/main/java/com/android/tools/Tool.java',
-              'apps/core/src/main/java/example/build/Builder.java']
+              'apps/core/src/main/java/example/build/Builder.java','evidence/release-alpha11.json']
         drop=['tools/sdk/bin/tool.exe','deliverables/old.zip','apps/core/build/tmp/File.kt',
               'apps/site/dist/index.html','apps/core/.gradle/cache','apps/core/local.properties',
-              'apps/core/secret.jks','inputs/upstream.zip']
+              'apps/core/secret.jks','apps/core/.env.production','apps/core/release.pfx',
+              'inputs/upstream.zip','inputs/MASTER_PROMPT.txt','assets/references/reference.png',
+              'evidence/raw.log','evidence/screenshots/private.png']
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder)
             for name in keep+drop:

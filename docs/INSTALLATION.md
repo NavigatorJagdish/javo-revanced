@@ -1,5 +1,7 @@
 # Javo ReVanced installation aur setup guide
 
+> Alpha.10 APKs ke liye Play Protect reports review mein hain. Install se pehle [security status](../SECURITY.md) dekhein.
+
 Ye guide **v0.1.0-alpha.10** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager aur Core dono alpha.9 ke signing certificates use karte hain.
 
 ## 1. GitHub se files download karein
