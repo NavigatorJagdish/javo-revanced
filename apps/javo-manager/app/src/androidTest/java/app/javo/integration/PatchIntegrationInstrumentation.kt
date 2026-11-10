@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 import org.json.JSONArray
 import java.io.File
-import java.security.MessageDigest
 import app.revanced.manager.domain.repository.DownloaderRepository
 import org.koin.core.context.GlobalContext
 
@@ -64,7 +63,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             report.put("productionBrowserChecks", checkProductionBrowser(this, apkmFixture))
             report.put("downloadRegressions", runBlocking { checkDownloads(targetContext, videoFixture, apkmFixture, folder) })
             report.put("httpsTransfer", runBlocking { checkHttpsDownload(targetContext, apkmFixture, videoFixture, folder, context.assets.open("transfer-test.p12").use { it.readBytes() }) })
-            report.put("bundleSha256", MessageDigest.getInstance("SHA-256").digest(bundle.readBytes()).joinToString("") { "%02x".format(it) })
+            report.put("bundleSha256", UpdateSecurity.sha256(bundle))
             val official = JSONObject().put("patchExecution", "not-tested")
             report.put("officialCatalog", official)
             try {
@@ -73,7 +72,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 val metadata = PatchBundle.Loader.metadata(listOf(source)).getValue(source).getOrThrow()
                 check(metadata.isNotEmpty())
                 official.put("metadataLoadedOnAndroid",true).put("patchCount",metadata.size)
-                    .put("sha256",MessageDigest.getInstance("SHA-256").digest(file.readBytes()).joinToString("") { "%02x".format(it) })
+                    .put("sha256",UpdateSecurity.sha256(file))
             } catch (error: Throwable) {
                 official.put("metadataLoadedOnAndroid",false).put("failure",error.stackTraceToString())
             }
@@ -169,7 +168,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             products.put(JSONObject().put("id",id).put("packageName",packageName).put("sourceApkSha256",UpdateSecurity.sha256(fixture))
                 .put("brandingLabelVerified", true).put("mandatorySettingsAndIconVerified", true)
                 .put("videoHeaderVerified", id == "video").put("signedOutput", true)
-                .put("signedApkSha256",MessageDigest.getInstance("SHA-256").digest(signed.readBytes()).joinToString("") { "%02x".format(it) })
+                .put("signedApkSha256",UpdateSecurity.sha256(signed))
                 .put("success",true))
             key.delete()
             }
