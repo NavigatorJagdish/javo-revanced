@@ -1,18 +1,20 @@
-# JAVO REVANCED
+# Javo ReVanced for Android
 
-[**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Release assets and checksums**][release-download]
+[**Public Javo website**][website] · [**Download Javo Manager APK**][manager-download] · [**Download Javo Core APK**][core-download] · [**Release assets and checksums**][release-download]
 
 Follow the [installation and setup guide (Hinglish)](docs/INSTALLATION.md) to install the APKs, set up Core, and troubleshoot patching.
 
 **Patch. Manage. Customize. Control.**
 
-Independent Android ecosystem regenerated from the owner's master prompt and four design references. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
+Javo ReVanced is an independent Android APK patching project based on ReVanced Manager and GmsCore. Use Javo Manager to customize compatible YouTube and YouTube Music APKs locally. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.9 requires Android confirmation for Manager installs, reduces Core's permissions, and improves APK download and preparation status. Core uses a new release certificate; see the migration steps before replacing an installed Core. Google Play Protect's verdict remains unverified. See the [release notes](docs/RELEASE_ALPHA9.md) and [APK checksums and test evidence](evidence/release-alpha9.json).
+Alpha.10 gives Manager 20 minutes after preparation to patch and write the APK. Javo Core now verifies downloaded legacy DroidGuard APKs and their signer before loading code. The [release notes](docs/RELEASE_ALPHA10.md) describe the changes and [test evidence](evidence/release-alpha10.json) records the checks.
 
-[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-manager-0.1.0-alpha.9-development.apk
-[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-core-0.3.13.2.250932-javo.3-production.apk
-[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.9
+[website]: https://navigatorjagdish.github.io/javo-revanced/
+
+[manager-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-manager-0.1.0-alpha.10-development.apk
+[core-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-core-0.3.13.2.250932-javo.4-production.apk
+[release-download]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.10
 
 ## Included
 
@@ -34,7 +36,7 @@ node apps/javo-website/build.mjs
 node apps/javo-website/server.mjs
 ```
 
-Open http://127.0.0.1:4173 locally. The source package includes the static build under `website/`; serve that directory with any static HTTP server. No external font, analytics or tracking service is used. A real deployment origin can be supplied as `SITE_ORIGIN` when building to emit an absolute sitemap. No site has been published.
+Open http://127.0.0.1:4173 locally. The source package includes the static build under `website/`; serve that directory with any static HTTP server. No external font, analytics or tracking service is used. A real deployment origin can be supplied as `SITE_ORIGIN` when building to emit an absolute sitemap. The public site is published through GitHub Pages. Its sitemap is available at the website link above.
 
 ## Android
 

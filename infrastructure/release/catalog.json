@@ -1,22 +1,22 @@
 {
   "schemaVersion": 1,
   "status": "functional-alpha",
-  "generatedAt": "2026-11-03",
+  "generatedAt": "2026-11-10",
   "artifacts": [
     {
       "id": "manager",
       "displayName": "Javo Manager",
       "applicationId": "app.javo.manager",
-      "version": "0.1.0-alpha.9",
-      "versionCode": 100009,
+      "version": "0.1.0-alpha.10",
+      "versionCode": 100010,
       "minSdk": 26,
       "channel": "development",
       "signing": "development",
       "verification": "signature-and-package-verified",
-      "sha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4",
+      "sha256": "a9c320ef5ee80a90407c856661faac55e231df4ab10fc64892e093df75762f8b",
       "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
       "size": 51239373,
-      "path": "/downloads/files/javo-manager-0.1.0-alpha.9-development.apk",
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.10-development.apk",
       "runtimeVerified": false,
       "architectures": [
         "arm64-v8a",
@@ -36,24 +36,24 @@
         "architecture": "x86_64",
         "bootCompleted": true,
         "inPlaceUpgradeVerified": true,
-        "installedApkSha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4"
+        "installedApkSha256": "a9c320ef5ee80a90407c856661faac55e231df4ab10fc64892e093df75762f8b"
       },
-      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-manager-0.1.0-alpha.9-development.apk"
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-manager-0.1.0-alpha.10-development.apk"
     },
     {
       "id": "core",
       "displayName": "Javo Core",
       "applicationId": "app.revanced.android.gms",
-      "version": "0.3.13.2.250932-javo.3",
-      "versionCode": 250932006,
+      "version": "0.3.13.2.250932-javo.4",
+      "versionCode": 250932007,
       "minSdk": 19,
       "channel": "development",
       "signing": "production",
       "verification": "signature-and-package-verified",
-      "sha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd",
+      "sha256": "7b75ef8d2010d1c4d5f3d4b96096f15261742bced780b6ce387cd16b7a41a527",
       "signerSha256": "47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873",
-      "size": 92206574,
-      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.3-production.apk",
+      "size": 92362222,
+      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.4-production.apk",
       "runtimeVerified": false,
       "architectures": [
         "arm64-v8a",
@@ -73,10 +73,10 @@
         "androidApi": 29,
         "architecture": "x86_64",
         "bootCompleted": true,
-        "inPlaceUpgradeVerified": false,
-        "installedApkSha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd"
+        "inPlaceUpgradeVerified": true,
+        "installedApkSha256": "7b75ef8d2010d1c4d5f3d4b96096f15261742bced780b6ce387cd16b7a41a527"
       },
-      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-core-0.3.13.2.250932-javo.3-production.apk"
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-core-0.3.13.2.250932-javo.4-production.apk"
     }
   ],
   "limitations": [

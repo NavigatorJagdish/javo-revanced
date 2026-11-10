@@ -1,6 +1,6 @@
 # Javo ReVanced installation aur setup guide
 
-Ye guide **v0.1.0-alpha.9** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager apna pehle wala development certificate use karta hai. Core ka naya build alag release certificate use karta hai.
+Ye guide **v0.1.0-alpha.10** ke liye hai. Manager ke liye Android 8.0 ya naya version chahiye. Root ki zaroorat nahi hai. Manager aur Core dono alpha.9 ke signing certificates use karte hain.
 
 ## 1. GitHub se files download karein
 
@@ -16,7 +16,7 @@ Agar direct link nahi khule, [GitHub Release][release] ke **Assets** section se 
 
 ## Manager update
 
-Alpha.8 Manager ko alpha.9 APK se seedha update karein. Alpha.5 ya purani build se signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
+Alpha.9 Manager ko alpha.10 APK se seedha update karein. Alpha.5 ya purani build se signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
 
 ## 2. Manager install karein
 
@@ -27,11 +27,11 @@ Alpha.8 Manager ko alpha.9 APK se seedha update karein. Alpha.5 ya purani build 
 ## 3. Core install karein, agar setup mein zaroorat ho
 
 1. Core APK kholein, **Install** tap karein aur phir **Javo Core Settings** ek baar launch karein.
-2. Alpha.9 ka Core pehle wale test certificate ke upar install nahi hoga. Agar purana Core replace karna chahte hain, uski settings aur account setup note kar lein; uninstall karne se uska local data hat jayega. Agar pehle se ReVanced GmsCore ya koi aur build `app.revanced.android.gms` ke saath installed hai, Android update ke liye matching signature maangega. **App not installed** aaye to existing Core ko turant remove na karein. Pehle check karein ki selected patch us Core ke saath compatible hai, aur Core badalne se pehle zaroori settings aur account setup ka backup plan rakhein.
+2. Alpha.9 ka release-signed Core alpha.10 ke saath seedha update ho sakta hai. Naya Core purane test-signed Core ke upar seedha install nahi hoga. Agar purana Core replace karna chahte hain, uski settings aur account setup note kar lein; uninstall karne se uska local data hat jayega. Agar pehle se ReVanced GmsCore ya koi aur build `app.revanced.android.gms` ke saath installed hai, Android update ke liye matching signature maangega. **App not installed** aaye to existing Core ko turant remove na karein. Pehle check karein ki selected patch us Core ke saath compatible hai, aur Core badalne se pehle zaroori settings aur account setup ka backup plan rakhein.
 3. Patched app agar Core ke battery-optimization prompt par ruke, **Continue** se Core ki battery setting kholein aur optimization exemption allow karein. Android 10 test mein ye setup zaroori tha.
 4. Agar patched YouTube launch hote hi band ho aur logs mein **missing google package permission or GET_ACCOUNTS** aaye, patched app ki **App info → Permissions → Contacts** setting check karein. Account discovery ki ye permission dene ke baad emulator par main navigation khula. Menu ka naam phone ke hisaab se badal sakta hai.
 
-Play Protect scan maange to scan complete hone dein. Scan safe result de aur Android **Install** dikhaye, tab installation complete karein. Agar completed scan exact GitHub release APK ko harmful batakar block kare, install rok dein aur Play Protect enabled rakhein. Warning ka exact text, APK filename aur Android version note karein. Release checksum verify karein aur owner Google se review maang sakta hai. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en) · [App verification appeal](https://support.google.com/googleplay/android-developer/answer/2992033?hl=en)
+**App Scan Recommended** aaye to Play Protect enabled rakh kar scan complete hone dein. Agar warning mein sirf **Cancel** ya **Install anyway** aaye, warning ka title note karein aur **Cancel** choose karein jab tak wajah clear ho. Scan safe result de aur Android **Install** dikhaye, tab installation complete karein. Agar completed scan exact GitHub release APK ko harmful batakar block kare, install rok dein aur Play Protect enabled rakhein. Warning ka exact text, APK filename aur Android version note karein. Release checksum verify karein aur owner Google se review maang sakta hai. [Google Play Protect help](https://support.google.com/googleplay/answer/2812853?hl=en) · [App verification appeal](https://support.google.com/googleplay/android-developer/answer/2992033?hl=en)
 
 ## 4. APK patch karein
 
@@ -40,7 +40,7 @@ Play Protect scan maange to scan complete hone dein. Scan safe result de aur And
 3. **Patch** tap karein. Manager YouTube output mein **Javo Video** aur Music output mein **Javo Music** branding khud lagata hai. Alag branding bundle import karne ki zaroorat nahi hai.
 4. Signing complete hone par **Install** tap karein. Non-root install ke liye **Default** choose karein. APK ki copy rakhne ke liye **Save APK** use karein.
 
-APK download ke baad **Merging split APKs**, **Preparing the downloaded APK** aur **Checking APK package and version** dikh sakte hain. Split files ko process karne ke liye phone mein kuch extra free storage chahiye. Agar preparation timeout aaye, pehle space check karein, phir suggested standalone APK se retry karein. Problem repeat ho to **Save logs** use karein.
+APK download ke baad **Merging split APKs**, **Preparing the downloaded APK** aur **Checking APK package and version** dikh sakte hain. Split files ko process karne ke liye phone mein kuch extra free storage chahiye. Preparation ke baad patch aur APK writing ke liye Manager 20 minute deta hai. Agar preparation timeout aaye, pehle space check karein, phir suggested standalone APK se retry karein. Problem repeat ho to **Save logs** use karein.
 
 ## Video ya audio phone par save karein
 
@@ -69,15 +69,15 @@ Manager mein recommended YouTube version ko **GmsCore support** aur **Spoof vide
 Windows PowerShell mein downloaded files wale folder se ye command chalayein. Output ke hashes release ki `SHA256SUMS` file se match karein. [Download SHA256SUMS][checksums]
 
 ```powershell
-Get-FileHash .\javo-manager-0.1.0-alpha.9-development.apk, .\javo-core-0.3.13.2.250932-javo.3-production.apk -Algorithm SHA256
+Get-FileHash .\javo-manager-0.1.0-alpha.10-development.apk, .\javo-core-0.3.13.2.250932-javo.4-production.apk -Algorithm SHA256
 ```
 
 Baad mein APK updates isi GitHub Releases page se check karein. Alpha mein production auto-update feed configure nahi hai. [GitHub Release][release]
 
-[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.9
-[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-manager-0.1.0-alpha.9-development.apk
-[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-core-0.3.13.2.250932-javo.3-production.apk
-[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/SHA256SUMS
+[release]: https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.10
+[manager]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-manager-0.1.0-alpha.10-development.apk
+[core]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-core-0.3.13.2.250932-javo.4-production.apk
+[checksums]: https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/SHA256SUMS
 
 
 ## Alpha 2 ke changes

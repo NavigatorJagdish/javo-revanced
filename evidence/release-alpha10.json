@@ -1,0 +1,51 @@
+{
+  "tag": "v0.1.0-alpha.10",
+  "release": "https://github.com/NavigatorJagdish/javo-revanced/releases/tag/v0.1.0-alpha.10",
+  "sourceCommit": "5e1da6838ddf7be5f1431a818c792421d3e75ab0",
+  "workflowRun": "https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42799230910",
+  "assets": [
+    {
+      "name": "javo-manager-0.1.0-alpha.10-development.apk",
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-manager-0.1.0-alpha.10-development.apk",
+      "size": 51239373,
+      "sha256": "a9c320ef5ee80a90407c856661faac55e231df4ab10fc64892e093df75762f8b",
+      "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+      "androidSmokeApi": 29,
+      "inPlaceUpgradeVerified": true
+    },
+    {
+      "name": "javo-core-0.3.13.2.250932-javo.4-production.apk",
+      "url": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.10/javo-core-0.3.13.2.250932-javo.4-production.apk",
+      "size": 92362222,
+      "sha256": "7b75ef8d2010d1c4d5f3d4b96096f15261742bced780b6ce387cd16b7a41a527",
+      "signerSha256": "47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873",
+      "androidSmokeApi": 29,
+      "inPlaceUpgradeVerified": true
+    }
+  ],
+  "managerPostPreparationTimeoutMinutes": 20,
+  "managerPatchFixtureIntegration": {
+    "passed": true,
+    "androidApi": 29,
+    "products": [
+      "video",
+      "music"
+    ]
+  },
+  "coreDroidGuardSignatureVerification": {
+    "expectedTestSignerAccepted": true,
+    "unsignedTamperedAndWrongSignerRejected": true,
+    "androidRuntimeApi": 29,
+    "hostSignatureRuleApis": [
+      19,
+      29,
+      35
+    ]
+  },
+  "publicWebsite": "https://navigatorjagdish.github.io/javo-revanced/",
+  "limits": [
+    "Play Protect classification on a Google Play enabled device has not been verified",
+    "Live DroidGuard and real account sign-in have not been verified",
+    "No physical slow-phone test ran for the full 20-minute window"
+  ]
+}

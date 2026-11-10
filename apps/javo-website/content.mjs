@@ -22,7 +22,7 @@ export const pages = {
     ['GitHub Packages authentication', 'Manager’s pinned dependencies may require a GitHub identity with read:packages. Use local environment variables or CI secrets. Never commit a token. See the packaged build evidence for the exact observed failure.'],
     ['Installation conflict', 'A package with the same identity but a different signature cannot update the existing app. Back up needed data and review the signing identities before choosing a clean installation.'],
     ['Patching memory or source error', 'Check available storage, use a supported full APK and compatible patches, and export the actual logs. Failed patching must never be treated as a successful output.'],
-    ['What if Google Play Protect flags Javo Core?', 'Let the scan finish with Play Protect enabled. If installation is blocked, record the exact message, Core version and Android version. Compare the APK hash to the release evidence before reporting it.']
+    ['Why does Google Play Protect recommend scanning Javo Core?', 'Play Protect may recommend a scan before installing an APK downloaded from the internet. Keep it enabled and let the scan finish. If Google blocks installation after the scan, record the exact message, Core version and Android version, and compare the APK hash to the release evidence.']
   ]],
   '/faq/': ['Frequently asked questions', 'Straight answers before you install.', [
     ['Is this an official ReVanced project?', 'No. Javo is an independent branded fork. It is not affiliated with Google, YouTube, ReVanced or microG. Upstream credits and licenses remain in the source.'],
