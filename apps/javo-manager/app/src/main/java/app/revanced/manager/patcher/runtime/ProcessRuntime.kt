@@ -216,15 +216,16 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
             throw failure
         }
         try {
-            withTimeout(12 * 60 * 1000L) { patching.await() }
+            withTimeout(PATCH_MINUTES * 60 * 1000L) { patching.await() }
         } catch (error: TimeoutCancellationException) {
             currentCoroutineContext().ensureActive()
-            throw IOException("Patching did not finish within 12 minutes after preparation. Save the logs before retrying.", error)
+            throw IOException("Patching or writing the APK did not finish within $PATCH_MINUTES minutes after preparation. Save the logs before retrying.", error)
         }
     }
 
     companion object : LibraryResolver() {
         private const val APP_PROCESS_BIN_PATH = "/system/bin/app_process"
+        private const val PATCH_MINUTES = 20
 
         const val CONNECT_TO_APP_ACTION = "CONNECT_TO_APP_ACTION"
         const val INTENT_BUNDLE_KEY = "BUNDLE"

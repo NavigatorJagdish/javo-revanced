@@ -124,20 +124,20 @@ class PatcherWorker(
             Log.d(tag, "Failed to set foreground info:", e)
         }
 
+        val args = workerRepository.claimInput(this)
         val wakeLock: PowerManager.WakeLock =
             (applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager)
                 .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "$tag::Patcher")
                 .apply {
-                    acquire(10 * 60 * 1000L)
+                    // Allow for transfer, preparation, patching, and final signing.
+                    acquire(45 * 60 * 1000L)
                     Log.d(tag, "Acquired wakelock.")
                 }
-
-        val args = workerRepository.claimInput(this)
 
         return try {
             runPatcher(args)
         } finally {
-            wakeLock.release()
+            if (wakeLock.isHeld) wakeLock.release()
         }
     }
 

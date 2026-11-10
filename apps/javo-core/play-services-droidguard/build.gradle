@@ -46,4 +46,5 @@ dependencies {
     api project(':play-services-base')
 
     implementation "androidx.annotation:annotation:$annotationVersion"
+    implementation 'com.android.tools.build:apksig:8.2.2'
 }

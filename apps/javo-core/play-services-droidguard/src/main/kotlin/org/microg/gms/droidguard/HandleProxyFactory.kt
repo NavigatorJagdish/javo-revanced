@@ -6,6 +6,7 @@
 package org.microg.gms.droidguard
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.os.Parcelable
@@ -13,8 +14,6 @@ import androidx.annotation.GuardedBy
 import dalvik.system.DexClassLoader
 import java.io.File
 import java.io.IOException
-import java.security.MessageDigest
-import java.security.cert.Certificate
 import java.util.*
 
 open class HandleProxyFactory(private val context: Context) {
@@ -27,18 +26,29 @@ open class HandleProxyFactory(private val context: Context) {
     }
 
     private fun fetchFromFileDescriptor(pfd: ParcelFileDescriptor, vmKey: String) {
-        if (!isValidCache(vmKey)) {
-            val auIs = ParcelFileDescriptor.AutoCloseInputStream(pfd)
-            val temp = File(getCacheDir(), "${UUID.randomUUID()}.apk")
-            temp.parentFile!!.mkdirs()
-            temp.writeBytes(auIs.readBytes())
-            auIs.close()
-            getOptDir(vmKey).mkdirs()
-            temp.renameTo(getTheApkFile(vmKey))
-            updateCacheTimestamp(vmKey)
-            if (!isValidCache(vmKey)) {
-                getCacheDir(vmKey).deleteRecursively()
-                throw IllegalStateException("Error ")
+        ParcelFileDescriptor.AutoCloseInputStream(pfd).use { input ->
+            synchronized(CLASS_LOCK) {
+                if (isValidCache(vmKey)) return
+                val temp = File.createTempFile("droidguard-", ".apk", getCacheDir())
+                try {
+                    temp.outputStream().use { output ->
+                        val buffer = ByteArray(32 * 1024)
+                        var total = 0L
+                        while (true) {
+                            val read = input.read(buffer)
+                            if (read < 0) break
+                            total += read
+                            if (total > DroidGuardApkVerifier.MAX_APK_BYTES) throw IOException("DroidGuard APK is too large")
+                            output.write(buffer, 0, read)
+                        }
+                    }
+                    if (!verifyApkSignature(temp)) throw SecurityException("DroidGuard APK signature verification failed")
+                    getOptDir(vmKey).mkdirs()
+                    if (!temp.renameTo(getTheApkFile(vmKey))) throw IOException("Could not store DroidGuard APK")
+                    updateCacheTimestamp(vmKey)
+                } finally {
+                    temp.delete()
+                }
             }
         }
     }
@@ -53,7 +63,10 @@ open class HandleProxyFactory(private val context: Context) {
 
     fun getTheApkFile(vmKey: String) = File(getCacheDir(vmKey), "the.apk")
     protected fun getCacheDir() = context.getDir(CACHE_FOLDER_NAME, Context.MODE_PRIVATE)
-    protected fun getCacheDir(vmKey: String) = File(getCacheDir(), vmKey)
+    protected fun getCacheDir(vmKey: String): File {
+        require(VM_KEY.matches(vmKey)) { "Invalid DroidGuard VM key" }
+        return File(getCacheDir(), vmKey)
+    }
     protected fun getOptDir(vmKey: String) = File(getCacheDir(vmKey), "opt")
     protected fun isValidCache(vmKey: String) = getTheApkFile(vmKey).isFile && getOptDir(vmKey).isDirectory
 
@@ -71,12 +84,8 @@ open class HandleProxyFactory(private val context: Context) {
         }
     }
 
-    private fun verifyApkSignature(apk: File): Boolean {
-        return true
-        val certificates: Array<Certificate> = TODO()
-        if (certificates.size != 1) return false
-        return Arrays.equals(MessageDigest.getInstance("SHA-256").digest(certificates[0].encoded), PROD_CERT_HASH)
-    }
+    private fun verifyApkSignature(apk: File) =
+        DroidGuardApkVerifier.isTrusted(apk, Build.VERSION.SDK_INT)
 
     protected fun loadClass(vmKey: String, bytes: ByteArray = ByteArray(0)): Class<*> {
         synchronized(CLASS_LOCK) {
@@ -109,9 +118,9 @@ open class HandleProxyFactory(private val context: Context) {
     companion object {
         const val CLASS_NAME = "com.google.ccc.abuse.droidguard.DroidGuard"
         const val CACHE_FOLDER_NAME = "cache_dg"
+        private val VM_KEY = Regex("[A-Za-z0-9_-]{1,128}")
         val CLASS_LOCK = Object()
         @GuardedBy("CLASS_LOCK")
         val weakClassMap = WeakHashMap<String, Class<*>>()
-        val PROD_CERT_HASH = byteArrayOf(61, 122, 18, 35, 1, -102, -93, -99, -98, -96, -29, 67, 106, -73, -64, -119, 107, -5, 79, -74, 121, -12, -34, 95, -25, -62, 63, 50, 108, -113, -103, 74)
     }
 }
