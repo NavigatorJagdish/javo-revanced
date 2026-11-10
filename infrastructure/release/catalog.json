@@ -37,7 +37,8 @@
         "bootCompleted": true,
         "inPlaceUpgradeVerified": true,
         "installedApkSha256": "ce95e44632a21826a1bc9c89c47dac2da27bde562861559c6a68f05831a2bce4"
-      }
+      },
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-manager-0.1.0-alpha.9-development.apk"
     },
     {
       "id": "core",
@@ -74,7 +75,8 @@
         "bootCompleted": true,
         "inPlaceUpgradeVerified": false,
         "installedApkSha256": "6767648ed159e08123cbdc1f346ef3fff5366e93780652fbc13c98f214c073fd"
-      }
+      },
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/v0.1.0-alpha.9/javo-core-0.3.13.2.250932-javo.3-production.apk"
     }
   ],
   "limitations": [

@@ -21,11 +21,13 @@ export const pages = {
     ['Patch catalog unavailable', 'GitHub blocks the original patch repository, while the official ReVanced API still serves patch bundle 6.2.1 and links to GitLab sources. Its detached signature was checked. This does not establish that patch execution or playback works in Javo.'],
     ['GitHub Packages authentication', 'Manager’s pinned dependencies may require a GitHub identity with read:packages. Use local environment variables or CI secrets. Never commit a token. See the packaged build evidence for the exact observed failure.'],
     ['Installation conflict', 'A package with the same identity but a different signature cannot update the existing app. Back up needed data and review the signing identities before choosing a clean installation.'],
-    ['Patching memory or source error', 'Check available storage, use a supported full APK and compatible patches, and export the actual logs. Failed patching must never be treated as a successful output.']
+    ['Patching memory or source error', 'Check available storage, use a supported full APK and compatible patches, and export the actual logs. Failed patching must never be treated as a successful output.'],
+    ['What if Google Play Protect flags Javo Core?', 'Let the scan finish with Play Protect enabled. If installation is blocked, record the exact message, Core version and Android version. Compare the APK hash to the release evidence before reporting it.']
   ]],
   '/faq/': ['Frequently asked questions', 'Straight answers before you install.', [
     ['Is this an official ReVanced project?', 'No. Javo is an independent branded fork. It is not affiliated with Google, YouTube, ReVanced or microG. Upstream credits and licenses remain in the source.'],
     ['Are Video and Music APKs included?', 'No. Proprietary applications are not redistributed. You supply a compatible APK and create your own patched result when a compatible trusted patch bundle is available.'],
+    ['Looking for a YouTube mod APK or GB YouTube?', 'Javo is a ReVanced-based patch manager. The downloads page offers Javo Manager and Javo Core. To customize YouTube, supply a compatible APK and apply a trusted patch bundle on your device.'],
     ['Is sign-in verified?', 'Core installation and launch were checked on an Android 10 emulator. Account authentication, playback and push delivery were not tested. A settings screen is not proof of a working account workflow.'],
     ['Can I install a production release?', 'Only artifacts with actual build, checksum and signing evidence may appear in Downloads. The current project status is a functional alpha.']
   ]],

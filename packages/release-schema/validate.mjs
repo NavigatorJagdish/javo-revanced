@@ -35,6 +35,14 @@ export function validateCatalog(catalog) {
     if(ids.has(a.id))throw Error('Duplicate artifact');ids.add(a.id);
     if(!a.displayName||!a.version||!['debug','test','development','production'].includes(a.signing)||!['signature-and-package-verified'].includes(a.verification))throw Error('Artifact is not verified');
     if(!/^\/downloads\/files\/[a-zA-Z0-9._-]+\.apk$/.test(a.path)||!/^[a-f0-9]{64}$/.test(a.sha256)||!Number.isInteger(a.minSdk))throw Error('Invalid artifact path or integrity');
+    if (a.downloadUrl) {
+      const url = httpsUrl(a.downloadUrl);
+      if (url.hostname !== 'github.com' || url.search ||
+          !/^\/NavigatorJagdish\/javo-revanced\/releases\/download\/[^/]+\//.test(url.pathname) ||
+          url.pathname.split('/').at(-1) !== a.path.split('/').at(-1)) {
+        throw Error('Download URL must identify the verified Javo GitHub release asset');
+      }
+    }
   }
   return catalog;
 }

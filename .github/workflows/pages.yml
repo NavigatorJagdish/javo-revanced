@@ -1,0 +1,47 @@
+name: Publish Javo website
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/pages.yml
+      - apps/javo-website/**
+      - assets/logos/**
+      - evidence/screenshots/**
+      - infrastructure/release/catalog.json
+      - packages/design-tokens/**
+      - packages/release-schema/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: javo-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/configure-pages@v5
+        id: pages
+      - name: Build the public website
+        run: node apps/javo-website/build.mjs
+        env:
+          SITE_ORIGIN: ${{ steps.pages.outputs.base_url }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/javo-website/dist
+      - uses: actions/deploy-pages@v4
+        id: deployment
