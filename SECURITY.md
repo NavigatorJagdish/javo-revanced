@@ -2,7 +2,7 @@
 
 ## APK distribution under review
 
-Users reported Play Protect warnings for both alpha.10 APKs. The current download page and README pause recommendations to install these builds. Keep Play Protect enabled. Use the official Google review process if a verified APK is blocked. [Google Play Protect warning guide](https://developers.google.com/android/play-protect/warning-dev-guidance)
+A physical-device report confirms that Google Play Protect showed **Harmful app blocked** for alpha.10 Javo Manager. The APK from that device matches the GitHub release's SHA-256. Play Protect warnings have also been reported for alpha.10 Javo Core and are under review. Keep Play Protect enabled and stop the installation if the block appears. [Google Play Protect warning guide](https://developers.google.com/android/play-protect/warning-dev-guidance)
 
 A release requires signed APK integrity checks, a matching source revision, dependency and permission review, clean install and update tests, application workflow tests, and a verified Play Protect result for the exact final APKs. Record the Android version, install source, artifact SHA-256 and outcome for each file. A successful emulator build or Windows antivirus scan does not answer the Play Protect question.
 
