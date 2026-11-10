@@ -16,10 +16,15 @@
 
 apply plugin: "com.android.library"
 
+configurations.configureEach {
+    exclude group: 'com.caverock', module: 'androidsvg'
+}
+
 dependencies {
     implementation project(":play-services-maps")
 
     implementation "org.microg:vtm-android:0.9.1-mod"
+    implementation 'com.caverock:androidsvg-aar:1.4'
     implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi"
     implementation "org.microg:vtm-android:0.9.1-mod:natives-armeabi-v7a"
     implementation "org.microg:vtm-android:0.9.1-mod:natives-arm64-v8a"
@@ -28,6 +33,10 @@ dependencies {
     implementation "org.microg:vtm-extras:0.9.1-mod"
     implementation "org.microg:vtm-jts:0.9.1-mod"
     implementation project(":play-services-maps-core-vtm-microg-theme")
+    constraints {
+        implementation 'com.fasterxml.jackson.core:jackson-core:2.21.7'
+        implementation 'com.google.protobuf:protobuf-java:3.25.5'
+    }
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
 }
