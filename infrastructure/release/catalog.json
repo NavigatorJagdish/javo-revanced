@@ -4,9 +4,9 @@
   "generatedAt": "2026-11-10",
   "artifacts": [],
   "limitations": [
-    "Manager uses a debug development certificate. Core uses release runtime flags and a test certificate.",
-    "CI browser, HTTPS transfer and first-party patch/sign/install pass on Android 10 and 15. A separate local YouTube check tested three named patches; see its exact build hash.",
-    "Playback, account login and physical-device compatibility remain unverified.",
-    "Owner-managed production signing and a published signed update feed remain unconfigured."
+    "Published alpha.10 Manager uses its development signing certificate. Published alpha.10 Core uses a dedicated release signing certificate. CI uses separate test identities.",
+    "CI checks first-party browser, download, patch, signing and installation fixtures on Android 10 and 15.",
+    "Play Protect clearance, live playback, account login and physical-device compatibility are pending for the next release.",
+    "The production signed update feed is not configured."
   ]
 }

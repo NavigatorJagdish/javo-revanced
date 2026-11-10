@@ -11,10 +11,10 @@ export const pages = {
     ['Use compatible inputs', 'Import a full APK using Android’s file picker. Split packages need a supported bundle workflow. A trusted compatible patch bundle must be present before patching. Never download proprietary APKs from unverified sources.'],
     ['Keep your signing identity', 'The Manager retains upstream signing and keystore management. Keep a secure backup of your personal patch signing identity. Android will refuse an update signed by a different identity.']
   ]],
-  '/docs/installation/': ['Installation guide', 'Install with Android’s supported approval flow.', [
-    ['1. Check the artifact', 'Only use a real APK listed in the package’s artifact inventory. Check its SHA-256 and APK signature report. Development builds are not production releases.'],
+  '/docs/installation/': ['Javo Manager and Core installation guide', 'Check the Downloads page for the current release status before installing Javo Manager or Core.', [
+    ['1. Check the release status', 'Continue when the Downloads page lists an approved release. Match the APK filename and SHA-256 to its release inventory. Keep Play Protect enabled and stop if Android reports a harmful app.'],
     ['2. Install Manager and Core', 'Open the APK and approve Android’s installation prompt. Allow installation from the chosen app only when needed. Core shares the upstream package identity: a differently signed existing GmsCore cannot be updated in place.'],
-    ['3. Patch a source APK', 'Choose a lawfully obtained full source APK, load a trusted compatible patch bundle, inspect version requirements and options, then patch. Save the signed result or use Android’s installer. This end-to-end flow is not claimed verified until documented evidence exists.'],
+    ['3. Patch a source APK', 'Choose a compatible source APK. Use the APKMirror screen to download or select a downloaded APK or APKM from storage. Choose trusted, compatible patches, then save the signed result or use Android’s installer.'],
     ['4. Protect account data', 'Use Core’s own account flow. Never provide account passwords to Javo support or paste them into build scripts. Authentication is unverified in this package.']
   ]],
   '/docs/troubleshooting/': ['Troubleshooting', 'Failures should tell you what actually happened.', [
@@ -27,7 +27,7 @@ export const pages = {
   '/faq/': ['Frequently asked questions', 'Straight answers before you install.', [
     ['Is this an official ReVanced project?', 'No. Javo is an independent branded fork. It is not affiliated with Google, YouTube, ReVanced or microG. Upstream credits and licenses remain in the source.'],
     ['Are Video and Music APKs included?', 'No. Proprietary applications are not redistributed. You supply a compatible APK and create your own patched result when a compatible trusted patch bundle is available.'],
-    ['Looking for a YouTube mod APK or GB YouTube?', 'Javo is a ReVanced-based patch manager. The downloads page offers Javo Manager and Javo Core. To customize YouTube, supply a compatible APK and apply a trusted patch bundle on your device.'],
+    ['Can Javo Manager patch YouTube or YouTube Music?', 'Javo is an independent ReVanced-based Android APK patcher. Supply a compatible APK and use a trusted patch bundle on your device. See Downloads for the current Manager and Core availability.'],
     ['Is sign-in verified?', 'Core installation and launch were checked on an Android 10 emulator. Account authentication, playback and push delivery were not tested. A settings screen is not proof of a working account workflow.'],
     ['Can I install a production release?', 'Only artifacts with actual build, checksum and signing evidence may appear in Downloads. The current project status is a functional alpha.']
   ]],
