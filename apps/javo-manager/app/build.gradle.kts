@@ -297,6 +297,9 @@ android {
 
     packaging {
         resources {
+            // The Bouncy Castle modules ship byte-identical copies of this license.
+            pickFirsts += "/META-INF/LICENSE.md"
+
             // Useless files
             excludes += "/XPP3_*_VERSION"
             excludes += "/font-awesome-license.txt"
