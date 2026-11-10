@@ -6,7 +6,10 @@ public final class RootArgumentsTest {
         String shell = args.length == 0 ? "sh" : args[0];
         String metadata = "1.2 \"$(printf unexpected)\" `printf unexpected` 'quoted'\nnext";
         String command = "version=" + RootArguments.shellLiteral(metadata) + "\nprintf '%s' \"$version\"";
-        Process shellProcess = new ProcessBuilder(shell, "-c", command).start();
+        Process shellProcess = new ProcessBuilder(shell).start();
+        try (var input = shellProcess.getOutputStream()) {
+            input.write(command.getBytes(StandardCharsets.UTF_8));
+        }
         String actual = new String(shellProcess.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         if (shellProcess.waitFor() != 0 || !metadata.equals(actual)) {
             throw new AssertionError("APK version metadata was interpreted by the shell");
