@@ -6,6 +6,8 @@ A physical-device report confirms that Google Play Protect showed **Harmful app 
 
 The same warning was reported for the checksum-verified alpha.11 Manager review build. That build is held from public distribution while its classification is reviewed.
 
+On November 11, 2026, the exact alpha.11 Manager APK was submitted to VirusTotal and Google Play Protect review. VirusTotal reported 66 undetected results, two timeouts and seven unsupported file-type results. Google's appeal form confirmed receipt. Device-level Play Protect clearance remains pending. [VirusTotal report](https://www.virustotal.com/gui/file/86d04a37709528a986c79b09df7ff03a3622b7061b37b20394af3f9737f563a2)
+
 A release requires signed APK integrity checks, a matching source revision, dependency and permission review, clean install and update tests, application workflow tests, and a verified Play Protect result for the exact final APKs. Record the Android version, install source, artifact SHA-256 and outcome for each file. A successful emulator build or Windows antivirus scan does not answer the Play Protect question.
 
 Publish corresponding licensed source, changelogs, approved screenshots and sanitized test summaries. Keep the project brief, original reference files, raw logs, test account data, local settings, tokens and signing material in private storage. Deleting a file from the current branch does not remove copies in older tags, release archives, forks or clones.
