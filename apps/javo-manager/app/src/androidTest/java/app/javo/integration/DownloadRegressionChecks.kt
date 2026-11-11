@@ -1,6 +1,7 @@
 package app.javo.integration
 
 import android.content.Context
+import app.javo.security.UpdateSecurity
 import app.revanced.manager.R
 import app.revanced.manager.domain.repository.DownloadedAppRepository
 import app.revanced.manager.downloader.Downloader
@@ -36,20 +37,25 @@ internal suspend fun checkDownloads(context: Context, fixture: File, bundle: Fil
         }.build(scope, context, context.resources)
         return LoadedDownloader(context.packageName, "fixture.Download", "Test", scope, plugin)
     }
-    val payload = fixture.readBytes()
     var finalProgress: Pair<Long, Long?>? = null
     val downloaded = repository.download(
         fake { _, output ->
-            val buffer = ByteArray(payload.size + 7)
-            payload.copyInto(buffer, destinationOffset = 7)
-            output.write(buffer, 7, payload.size)
+            val offset = 7
+            val buffer = ByteArray(64 * 1024 + offset)
+            fixture.inputStream().use { input ->
+                while (true) {
+                    val count = input.read(buffer, offset, buffer.size - offset)
+                    if (count == -1) break
+                    output.write(buffer, offset, count)
+                }
+            }
         },
         Package("com.google.android.youtube", "fixture-1"),
         "com.google.android.youtube", "fixture-1", true, true,
         onDownload = { finalProgress = it }
     )
-    check(downloaded.readBytes().contentEquals(payload))
-    check(finalProgress == (payload.size.toLong() to null))
+    check(UpdateSecurity.sha256(downloaded) == UpdateSecurity.sha256(fixture))
+    check(finalProgress == (fixture.length() to null))
     checks.put("unknown size and nonzero buffer offset complete with exact byte count")
 
     try {
@@ -92,7 +98,7 @@ internal suspend fun checkDownloads(context: Context, fixture: File, bundle: Fil
     val malicious = File(folder, "unsafe.apkm")
     ZipOutputStream(malicious.outputStream()).use {
         it.putNextEntry(ZipEntry("../escaped.apk"))
-        it.write(payload)
+        fixture.inputStream().use { input -> input.copyTo(it) }
         it.closeEntry()
     }
     try {

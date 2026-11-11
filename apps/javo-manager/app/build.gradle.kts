@@ -31,6 +31,18 @@ val arsclibAndroid by tasks.registering(Jar::class) {
 }
 
 dependencies {
+    // Keep the APK's transitive parsing and verification libraries on patched releases.
+    implementation(platform("io.grpc:grpc-bom:1.75.0"))
+    constraints {
+        implementation("com.google.guava:guava:33.7.2-jre")
+        implementation("dev.sigstore:sigstore-java:2.1.0")
+        implementation("org.apache.commons:commons-lang3:3.18.0")
+        implementation("org.bouncycastle:bcpg-jdk18on:1.85")
+        implementation("org.bouncycastle:bcpkix-jdk18on:1.85")
+        implementation("org.bouncycastle:bcprov-jdk18on:1.85")
+        implementation("org.jsoup:jsoup:1.23.2")
+    }
+
     // Required by NewPipe Extractor on Android versions below API 33.
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs_nio:2.1.5")
     implementation("com.github.TeamNewPipe:NewPipeExtractor:v0.26.5") {
@@ -285,6 +297,9 @@ android {
 
     packaging {
         resources {
+            // The Bouncy Castle modules ship byte-identical copies of this license.
+            pickFirsts += "/META-INF/LICENSE.md"
+
             // Useless files
             excludes += "/XPP3_*_VERSION"
             excludes += "/font-awesome-license.txt"
