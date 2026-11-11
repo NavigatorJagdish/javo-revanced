@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-11",
+  "removed": [
+    {
+      "tag": "v0.1.0-alpha.10",
+      "id": 731027662,
+      "name": "javo-core-0.3.13.2.250932-javo.4-production.apk",
+      "sha256": "7b75ef8d2010d1c4d5f3d4b96096f15261742bced780b6ce387cd16b7a41a527",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.10",
+      "id": 731022430,
+      "name": "javo-manager-0.1.0-alpha.10-development.apk",
+      "sha256": "a9c320ef5ee80a90407c856661faac55e231df4ab10fc64892e093df75762f8b",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.8",
+      "id": 723562088,
+      "name": "javo-revanced-development.zip",
+      "sha256": "c5a035858447de6006ed6e9e20e56095fd70d3b05fff4c937204349572b7e643",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.7",
+      "id": 720267560,
+      "name": "javo-revanced-development.zip",
+      "sha256": "fdf71654e6511c62fd5db40276c00d2f2a9008abd2f731537f9f3faca4d6080b",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.6",
+      "id": 715683891,
+      "name": "javo-revanced-development.zip",
+      "sha256": "1060cbf9da78676ac9fe4e72106ec69cc8372707f30f7f14c7aa996e90c4a25d",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.5",
+      "id": 715429378,
+      "name": "javo-revanced-development.zip",
+      "sha256": "620a86bc0512f13e52e73ea6ddde07359e944731ed0b67c57d28f1b0db1a3691",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.4",
+      "id": 714523699,
+      "name": "javo-revanced-development.zip",
+      "sha256": "5fdcfabf78338228d304d4b441d2190378d6554d99c80db7056ebfd902476e6f",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.3",
+      "id": 714436971,
+      "name": "javo-revanced-development.zip",
+      "sha256": "a0e538872a68d4e01542ca3be593d784a6e4565f498e02c75aadca7872ff0d30",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.2",
+      "id": 712940715,
+      "name": "javo-revanced-development.zip",
+      "sha256": "258b44552a485fb2792b2f53571781affe27f4a0e89576b4e12a4b23722aca25",
+      "removed": true
+    },
+    {
+      "tag": "v0.1.0-alpha.1",
+      "id": 709907705,
+      "name": "javo-revanced-development.zip",
+      "sha256": "804bb6dc4673664162513a051c9233d8671374538caee9d9c78a4f2a184a338b",
+      "removed": true
+    }
+  ],
+  "removedCount": 10,
+  "currentCoreReleaseUnchanged": true,
+  "otherReleaseAssetsUnchanged": true,
+  "backups": "Eight ZIPs and two APKs rehashed locally before deletion",
+  "limits": "Historical Git snapshots, auto-generated tag archives, forks and external copies are not erased."
+}

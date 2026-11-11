@@ -12,7 +12,7 @@ Manager distribution is held. The owner reports Core javo.6 safe on one phone, n
 | Media | Controlled MP4/M4A Downloads save, audio resume and separate-track mux passed on Android 10/15 for CI alpha.13. Actual YouTube playback, login, real downloads and physical-phone stalls remain unverified. Proprietary APKs stay private. |
 | Google review | Exact alpha.13 uploaded: VirusTotal 65 undetected, three timeouts (including Google), seven unsupported and no malicious flags observed. Google confirmed receipt of the alpha.13 appeal. The owner phone block is not cleared. See issue #1. |
 | Packaging | The corrected full workflow 43028279298 passed application, host and source packaging jobs at df2621b2bfcc8c43d6a4fb1412665f56aafa88be. The 20,896,900-byte published source ZIP passed ZIP integrity, entry hashes and private-input/key exclusion checks. |
-| Privacy | Current packages exclude original inputs/references, raw logs, local settings and keys. Historical public ZIPs/snapshots and older commit emails still need cleanup. Clones cannot be erased by deleting current files. |
+| Privacy | Current packages exclude original inputs/references, raw logs, local settings and keys. The eight alpha.1–alpha.8 uploaded source ZIPs and both alpha.10 APK assets were removed with owner approval and verified absent. Historical Git snapshots, automatic tag archives and older commit emails still need cleanup; forks and outside copies are not erased. |
 | Search | Source shortcut removed, metadata/sitemap deployed. Google ownership verified and homepage indexing requested. Sitemap fetch and ranking unconfirmed. |
 | Other | XERJ clarification sent; no scope confirmation received. Source and original-reference Drive backups passed exact download/hash checks; keys stay local. Obsolete emulator cleanup freed 27.77 GiB. The separate binary recovery archive is blocked on Drive and is not a verified backup; originals remain local. |
 
@@ -22,4 +22,5 @@ Offline Core javo.6: c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b
 [Application verification run](https://github.com/NavigatorJagdish/javo-revanced/actions/runs/42996215236). Keep Play Protect enabled and stop if an APK is blocked.
 
 [Current exact-file review](https://github.com/NavigatorJagdish/javo-revanced/issues/1). [Full passing workflow](https://github.com/NavigatorJagdish/javo-revanced/actions/runs/43028279298).
+
 
