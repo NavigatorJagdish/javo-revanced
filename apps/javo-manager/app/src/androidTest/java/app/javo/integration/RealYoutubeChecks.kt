@@ -117,7 +117,8 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         target.getExternalFilesDir(null)?.let { signed.copyTo(File(it, "local-javo-video-test.apk"), overwrite = true) }
         key.delete()
     } catch(error:Throwable) {
-        report.put("failure",error.stackTraceToString())
+        val remote = (error as? ProcessRuntime.RemoteFailureException)?.originalStackTrace
+        report.put("failure",remote ?: error.stackTraceToString())
         android.util.Log.e("JavoRealIntegration","Real APK check failed",error)
     }
     report.put("elapsedSeconds",(System.currentTimeMillis()-started)/1000)

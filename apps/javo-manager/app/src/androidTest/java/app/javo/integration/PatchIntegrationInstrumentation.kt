@@ -187,7 +187,8 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             File(folder,"result.json").writeText(report.toString(2))
             finish(Activity.RESULT_OK, Bundle().apply { putString("result",report.toString()) })
         } catch (error: Throwable) {
-            report.put("success",false).put("failure",error.stackTraceToString())
+            val remote = (error as? app.revanced.manager.patcher.runtime.ProcessRuntime.RemoteFailureException)?.originalStackTrace
+            report.put("success",false).put("failure",remote ?: error.stackTraceToString())
             File(folder,"result.json").writeText(report.toString(2))
             android.util.Log.e("JavoIntegration","Integration check failed",error)
             finish(Activity.RESULT_CANCELED, Bundle().apply { putString("result",report.toString()) })

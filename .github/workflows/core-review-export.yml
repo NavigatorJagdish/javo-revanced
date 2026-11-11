@@ -36,9 +36,9 @@ jobs:
           with apks[0].open('rb') as stream: digest=hashlib.file_digest(stream,'sha256').hexdigest()
           audit=json.loads(Path('evidence/core-security-audit.json').read_text())
           assert audit['apkSha256']==digest and audit['privateSecurityBoundariesVerified']==8
-          for api in [29,35]:
-              r=json.loads(Path(f'evidence/core-api{api}-runtime-smoke.json').read_text())
-              assert r['installedApkSha256']==digest and r['installedArtifactMatchesDeliverable'] and r['processRunning'] and not r['crashObserved']
+          for api,filename in [(29,'core-api29-runtime-smoke.json'),(35,'core-runtime-smoke.json')]:
+              r=json.loads((Path('evidence')/filename).read_text())
+              assert r['androidApi']==api and r['installedApkSha256']==digest and r['installedArtifactMatchesDeliverable'] and r['processRunning'] and not r['crashObserved']
           Path('evidence/core-export-provenance.json').write_text(json.dumps({'sourceCommit':'95cfdc6ad93b48a71aa542116c39c4f5f720e6e0','sourceRun':42985486750,'apkSha256':digest,'androidApiLaunchChecks':[29,35],'privateBoundariesVerified':8,'signing':'disposable CI identity; offline release signing and device classification pending'},indent=2))
           PY
       - uses: actions/upload-artifact@v4
@@ -49,6 +49,6 @@ jobs:
             evidence/core-export-provenance.json
             evidence/core-security-audit.json
             evidence/core-api29-runtime-smoke.json
-            evidence/core-api35-runtime-smoke.json
+            evidence/core-runtime-smoke.json
           retention-days: 1
           if-no-files-found: error

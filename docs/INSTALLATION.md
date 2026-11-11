@@ -18,6 +18,8 @@ Download status open hone par phone setup ke liye approved release se individual
 
 Matching signature wala naya Manager purani install ko update kar sakta hai. Signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
 
+Naya Core-download link aur branding lagane ke liye updated Manager se supported original APK dobara patch karein. Manager update karne se pehle se installed Javo Video/Music APK ka code khud nahi badalta. Naye patched output mein Core missing hone par Javo ke official Core download section ka link hota hai; review hold ho to us page par status dikhega.
+
 ## 2. Manager install karein
 
 1. Phone ke **Files → Downloads** mein Manager APK kholein aur **Install** tap karein.
