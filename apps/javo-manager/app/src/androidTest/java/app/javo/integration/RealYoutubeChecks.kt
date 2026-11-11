@@ -77,7 +77,7 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
             val dex = checkNotNull(dexContainer.getEntry(entryName)).dexFile
             for (definition in dex.classes) {
                 if (!definition.type.startsWith("Lapp/revanced/extension/shared/GmsCoreSupport")) continue
-                for (method in definition.methods) for (instruction in method.implementation?.instructions.orEmpty()) {
+                for (method in definition.methods) for (instruction in (method.implementation?.instructions ?: emptyList())) {
                     val text = ((instruction as? ReferenceInstruction)?.reference as? StringReference)?.string ?: continue
                     javoCoreLink = javoCoreLink || text == "https://navigatorjagdish.github.io/javo-revanced/downloads/#core"
                     upstreamCoreLink = upstreamCoreLink || text.equals("https://github.com/revanced/gmscore/releases/latest", ignoreCase = true)
