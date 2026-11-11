@@ -70,6 +70,7 @@ function searchMetadata(title, description, route) {
     };
   }
   return [
+    ...(route === '/' ? ['<meta name="google-site-verification" content="qCCOz6yJWe6uQb7NbwdPed01EMd47sy8tV6iI8g6eWQ">'] : []),
     `<link rel="canonical" href="${escapeHtml(url)}">`,
     `<meta property="og:url" content="${escapeHtml(url)}">`,
     '<meta property="og:type" content="website">',
