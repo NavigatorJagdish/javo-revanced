@@ -54,7 +54,7 @@ def package():
         if digest!=a['sha256']:raise ValueError('Verified APK changed after validation')
         files.append((p,'apks/'+p.name))
     bundle=ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp'
-    if bundle.exists():
+    if bundle.exists() and catalog['status'] != 'release-review':
         integration=json.loads((ROOT/'evidence/manager-patch-integration.json').read_text())
         verify_branding_evidence(bundle,integration,catalog)
         files.append((bundle,'bundles/'+bundle.name))
