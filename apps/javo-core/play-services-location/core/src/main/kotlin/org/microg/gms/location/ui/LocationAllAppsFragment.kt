@@ -21,6 +21,7 @@ import org.microg.gms.ui.AppIconPreference
 import org.microg.gms.ui.getApplicationInfoIfExists
 import org.microg.gms.ui.navigate
 import org.microg.gms.location.core.R
+import java.util.Locale
 
 class LocationAllAppsFragment : PreferenceFragmentCompat() {
     private lateinit var progress: Preference
@@ -67,7 +68,7 @@ class LocationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.key = "pref_location_app_" + app.first
                     pref
                 }.sortedBy {
-                    it.title.toString().toLowerCase()
+                    it.title.toString().lowercase(Locale.getDefault())
                 }.mapIndexed { idx, pair ->
                     pair.order = idx
                     pair

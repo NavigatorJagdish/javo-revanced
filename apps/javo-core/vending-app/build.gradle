@@ -5,6 +5,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
 apply plugin: 'com.squareup.wire'
 
 android {
@@ -15,7 +16,8 @@ android {
     defaultConfig {
         versionName vendingAppVersionName
         versionCode vendingAppVersionCode
-        minSdkVersion androidMinSdk
+        // The bundled Compose UI requires Android 5.0 or newer.
+        minSdkVersion Math.max(androidMinSdk, 21)
         targetSdkVersion androidTargetSdk
 
         multiDexEnabled true
@@ -85,9 +87,6 @@ android {
 
     kotlinOptions {
         jvmTarget = 1.8
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.10'
     }
 }
 

@@ -1,0 +1,19 @@
+// AIDL 35 writes Windows command paths into Java comments. Paths containing
+// a backslash followed by "u" are interpreted by javac as Unicode escapes.
+if (System.getProperty('os.name').startsWith('Windows')) {
+    gradle.projectsEvaluated {
+        rootProject.allprojects { project ->
+            project.tasks.matching { it.name ==~ /compile.*Aidl/ }.configureEach { task ->
+                task.doLast {
+                    project.fileTree(task.sourceOutputDir.get().asFile).matching {
+                        include '**/*.java'
+                    }.each { generated ->
+                        def source = generated.getText('UTF-8')
+                        def sanitized = source.replaceFirst(/(?m)^[ \t]*\* Using:[^\r\n]*\r?\n/, '')
+                        if (source != sanitized) generated.setText(sanitized, 'UTF-8')
+                    }
+                }
+            }
+        }
+    }
+}
