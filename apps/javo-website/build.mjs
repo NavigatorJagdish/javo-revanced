@@ -44,8 +44,31 @@ function searchMetadata(title, description, route) {
     description,
     url,
     inLanguage: 'en',
+    '@id': url + '#page',
     ...(route === '/' ? {sameAs: projectUrl} : {isPartOf: {'@type': 'WebSite', name: 'Javo ReVanced', url: site.href}}),
   };
+  const product = products.find(p => route === `/apps/${p.id}/`);
+  if (product && ['manager', 'core'].includes(product.id)) {
+    data.mainEntity = {
+      '@type': 'SoftwareApplication',
+      '@id': url + '#application',
+      name: product.name,
+      description: product.details,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: product.id === 'manager' ? 'Android 8.0 or later' : 'Android 5.0 or later',
+      url,
+      license: product.id === 'manager' ? 'https://www.gnu.org/licenses/gpl-3.0.html' : 'https://www.apache.org/licenses/LICENSE-2.0',
+    };
+  }
+  if (route !== '/') {
+    data.breadcrumb = {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {'@type': 'ListItem', position: 1, name: 'Javo ReVanced', item: site.href},
+        {'@type': 'ListItem', position: 2, name: title, item: url},
+      ],
+    };
+  }
   return [
     `<link rel="canonical" href="${escapeHtml(url)}">`,
     `<meta property="og:url" content="${escapeHtml(url)}">`,

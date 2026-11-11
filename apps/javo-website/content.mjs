@@ -41,6 +41,8 @@ export const pages = {
     ['Brand assets', 'Javo vector artwork is recreated from the owner-supplied concept images. Original references are preserved separately. No concept image is labeled as an actual application screenshot.']
   ]],
   '/security/': ['Verify before you install.', 'Trust is a chain of checks, not a badge.', [
+    ['Current installation status · 11 November 2026', 'APK distribution is paused. A phone reported Play Protect blocking Manager alpha.11 after scanning. The exact APK was submitted to VirusTotal: 66 engines reported undetected, two timed out and seven could not process the file type. Google received a Play Protect appeal. Neither result confirms that the device block is cleared. Keep Play Protect enabled.'],
+    ['Check the exact file', 'The reviewed Manager alpha.11 SHA-256 is 86d04a37709528a986c79b09df7ff03a3622b7061b37b20394af3f9737f563a2. A different APK is a different review target. Build, dependency and controlled emulator checks do not establish that an APK is free of all vulnerabilities.'],
     ['Artifact integrity', 'Compare an APK’s SHA-256 with the packaged inventory and inspect its Android signing certificate. A checksum alone does not establish the identity of the publisher.'],
     ['Signed update design', 'Javo’s Manager update source is isolated from upstream Manager releases. Configured feeds require an ECDSA-signed manifest, correct package and newer version, unexpired metadata, compatible Android/ABI, SHA-256 and the installed signing identity. The production feed is not configured.'],
     ['Report a concern', 'Do not send passwords, account tokens or private signing keys. Use the private security process of your own source repository when configured. No Javo contact address has been invented.']
