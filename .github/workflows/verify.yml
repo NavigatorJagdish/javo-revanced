@@ -231,7 +231,9 @@ jobs:
           disk-size: 2048M
           ram-size: 2048M
           disable-animations: true
-          script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+          script: |
+            python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+            python infrastructure/scripts/android-core-boundaries.py deliverables/apks/javo-core-*.apk
       - name: Preserve Android 10 Core evidence
         run: |
           cp evidence/core-runtime-smoke.json evidence/core-api29-runtime-smoke.json
@@ -246,6 +248,15 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+      - name: Preserve tested Core input for offline maintainer signing
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: core-ci-verification-build-not-a-public-release
+          path: apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/release/*.apk
+          retention-days: 1
+          if-no-files-found: error
+          # This contains a disposable CI signature, never the offline release key.
       - uses: actions/cache/save@v4
         with:
           key: ${{ format('javo-verify-core-{0}-{1}', github.run_id, github.run_attempt) }}

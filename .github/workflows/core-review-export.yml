@@ -1,0 +1,54 @@
+name: Export previously verified Core build
+on:
+  push:
+    branches: [dependency-security-review]
+    paths: [.github/workflows/core-review-export.yml]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require the exact previously tested Core source tree
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin 95cfdc6ad93b48a71aa542116c39c4f5f720e6e0
+          test "$(git rev-parse HEAD:apps/javo-core)" = "$(git rev-parse FETCH_HEAD:apps/javo-core)"
+      - uses: actions/cache/restore@v4
+        with:
+          key: javo-verify-core-42985486750-1
+          fail-on-cache-miss: true
+          path: |
+            deliverables/apks/javo-core-*.apk
+            evidence/core*
+            evidence/screenshots/core*
+            apps/javo-core/play-services-core/build/reports
+      - name: Reconcile APK identity with the successful audit and both emulator checks
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          apks=list(Path('deliverables/apks').glob('javo-core-*.apk'))
+          assert len(apks)==1
+          with apks[0].open('rb') as stream: digest=hashlib.file_digest(stream,'sha256').hexdigest()
+          audit=json.loads(Path('evidence/core-security-audit.json').read_text())
+          assert audit['apkSha256']==digest and audit['privateSecurityBoundariesVerified']==8
+          for api in [29,35]:
+              r=json.loads(Path(f'evidence/core-api{api}-runtime-smoke.json').read_text())
+              assert r['installedApkSha256']==digest and r['installedArtifactMatchesDeliverable'] and r['processRunning'] and not r['crashObserved']
+          Path('evidence/core-export-provenance.json').write_text(json.dumps({'sourceCommit':'95cfdc6ad93b48a71aa542116c39c4f5f720e6e0','sourceRun':42985486750,'apkSha256':digest,'androidApiLaunchChecks':[29,35],'privateBoundariesVerified':8,'signing':'disposable CI identity; offline release signing and device classification pending'},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-core-ci-input-offline-signing-required
+          path: |
+            deliverables/apks/javo-core-*.apk
+            evidence/core-export-provenance.json
+            evidence/core-security-audit.json
+            evidence/core-api29-runtime-smoke.json
+            evidence/core-api35-runtime-smoke.json
+          retention-days: 1
+          if-no-files-found: error
