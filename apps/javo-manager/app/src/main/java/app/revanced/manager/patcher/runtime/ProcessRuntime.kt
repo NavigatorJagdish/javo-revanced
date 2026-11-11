@@ -64,12 +64,13 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
         }, ContextCompat.RECEIVER_NOT_EXPORTED)
 
         return try {
-            withTimeout(10000L) {
+            // Starting ART and loading the Manager dex can take longer on slow devices.
+            withTimeout(STARTUP_SECONDS * 1000L) {
                 binderFuture.await()
             }
         } catch (error: TimeoutCancellationException) {
             currentCoroutineContext().ensureActive()
-            throw IOException("Patcher process did not connect within 10 seconds. Export the logs and check the runtime setting.", error)
+            throw IOException("Patcher process did not connect within $STARTUP_SECONDS seconds. Export the logs and check the runtime setting.", error)
         } finally {
             context.unregisterReceiver(receiver)
         }
@@ -226,6 +227,7 @@ class ProcessRuntime(private val context: Context) : Runtime(context) {
     companion object : LibraryResolver() {
         private const val APP_PROCESS_BIN_PATH = "/system/bin/app_process"
         private const val PATCH_MINUTES = 20
+        private const val STARTUP_SECONDS = 60
 
         const val CONNECT_TO_APP_ACTION = "CONNECT_TO_APP_ACTION"
         const val INTENT_BUNDLE_KEY = "BUNDLE"
