@@ -23,6 +23,9 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import app.javo.branding.BrandingResources
+import app.javo.security.FrameworkCache
+import brut.androlib.Config
+import brut.androlib.res.Framework
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -94,6 +97,12 @@ class Session(
         val patcher = runStep(StepId.ReadAPK, onEvent) {
             withPatcherActivity(StepId.ReadAPK, "Preparing APK", onEvent) {
                 prepareLogger.withJavaLogging {
+                    // Apktool's lazy first-use copy can race parallel resource decoding.
+                    // Bootstrap through a validated, atomic publication before starting it.
+                    FrameworkCache.prepare(File(frameworkDir)) { staging ->
+                        val config = Config.getDefaultConfig().apply { frameworkDirectory = staging.absolutePath }
+                        Framework(config).getFrameworkApk(1, null)
+                    }
                     patcher(
                         apkFile = input,
                         temporaryFilesPath = tempDir,

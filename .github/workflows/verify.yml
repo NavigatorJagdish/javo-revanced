@@ -49,6 +49,8 @@ jobs:
           java -cp tools/java-tests UpdateSecurityTest | tee evidence/java-security-tests.log
           javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/RootArguments.java tests/RootArgumentsTest.java
           java -cp tools/java-tests RootArgumentsTest
+          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/FrameworkCache.java tests/FrameworkCacheTest.java
+          java -cp tools/java-tests FrameworkCacheTest | tee evidence/framework-cache-tests.log
           java -cp tools/java-tests BrandingResourcesTest | tee evidence/java-branding-tests.log
           java -cp tools/java-tests DownloadConnectionTest | tee evidence/java-download-tests.log
           java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log
@@ -64,6 +66,7 @@ jobs:
             evidence/java-download-tests.log
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
+            evidence/framework-cache-tests.log
   publication-audit:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
     permissions:
@@ -176,6 +179,19 @@ jobs:
           script: |
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
+      - name: Preserve tested Manager and instrumentation inputs
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: manager-ci-verification-input-not-a-public-release
+          path: |
+            deliverables/apks/javo-manager-*.apk
+            apps/javo-manager/app/build/outputs/apk/androidTest/release/*.apk
+            evidence/manager-security-audit.json
+            evidence/manager-patch-integration.json
+            evidence/manager-api35-patch-integration.json
+          retention-days: 1
+          if-no-files-found: error
       - uses: actions/cache/save@v4
         with:
           key: ${{ format('javo-verify-manager-{0}-{1}', github.run_id, github.run_attempt) }}

@@ -6,6 +6,7 @@ ROOT=Path(__file__).resolve().parents[2]
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--manager-apk',type=Path)
+    parser.add_argument('--test-apk',type=Path)
     args=parser.parse_args()
     adb=shutil.which('adb') or str(ROOT/'tools/android-sdk/platform-tools/adb.exe')
     def invoke(*parts):
@@ -18,7 +19,7 @@ def main():
     evidence=ROOT/'evidence';evidence.mkdir(exist_ok=True)
     path=evidence/'manager-patch-integration.json'
     path.write_text(json.dumps({'success':False,'status':'started'})+'\n')
-    test_apks=list((ROOT/'apps/javo-manager/app/build/outputs/apk/androidTest/release').glob('*.apk'))
+    test_apks=[args.test_apk] if args.test_apk else list((ROOT/'apps/javo-manager/app/build/outputs/apk/androidTest/release').glob('*.apk'))
     if len(test_apks)!=1:raise RuntimeError('Expected one Android instrumentation APK')
     run('install','-t','-r',test_apks[0])
     output_id=uuid.uuid4().hex
