@@ -211,7 +211,7 @@ jobs:
           set -euo pipefail
           chmod +x gradlew
           mkdir -p ../../evidence
-          ./gradlew :play-services-core-proto:test :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
+          ./gradlew :play-services-core-proto:test :play-services-auth-blockstore-core:testReleaseUnitTest :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
       - name: Verify Core APK
         run: |
           set -euo pipefail

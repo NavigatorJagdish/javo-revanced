@@ -16,6 +16,10 @@ import kotlinx.coroutines.withTimeout
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import com.android.tools.smali.dexlib2.DexFileFactory
+import com.android.tools.smali.dexlib2.Opcodes
+import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 /** Optional local check. The proprietary input and patched output are never release assets. */
 fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
@@ -66,6 +70,22 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         val signed=File(folder,"youtube-signed.apk")
         val key=File(folder,"local-test.keystore")
         ApkUtils.signApk(unsigned,signed,"Javo local integration",ApkUtils.KeyStoreDetails(key,alias="local",password="local-test"))
+        val dexContainer = DexFileFactory.loadDexContainer(signed, Opcodes.getDefault())
+        var javoCoreLink = false
+        var upstreamCoreLink = false
+        for (entryName in dexContainer.dexEntryNames) {
+            val dex = checkNotNull(dexContainer.getEntry(entryName)).dexFile
+            for (definition in dex.classes) {
+                if (!definition.type.startsWith("Lapp/revanced/extension/shared/GmsCoreSupport")) continue
+                for (method in definition.methods) for (instruction in method.implementation?.instructions.orEmpty()) {
+                    val text = ((instruction as? ReferenceInstruction)?.reference as? StringReference)?.string ?: continue
+                    javoCoreLink = javoCoreLink || text == "https://navigatorjagdish.github.io/javo-revanced/downloads/#core"
+                    upstreamCoreLink = upstreamCoreLink || text.equals("https://github.com/revanced/gmscore/releases/latest", ignoreCase = true)
+                }
+            }
+        }
+        check(javoCoreLink && !upstreamCoreLink) { "Patched output does not contain the required Javo Core download destination" }
+        report.put("javoCoreRedirectVerified", true)
         @Suppress("DEPRECATION")
         val info=checkNotNull(target.packageManager.getPackageArchiveInfo(signed.path,PackageManager.GET_SIGNATURES))
         check(info.packageName=="app.revanced.android.youtube")

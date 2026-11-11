@@ -1,0 +1,24 @@
+{
+  "repository": "microg/GmsCore",
+  "reviewedRelease": "v0.3.16.1.252432",
+  "commits": [
+    {"sha":"8abbc6ae0730240b8b20ef6961935ac3e45ff4a5","scope":"Block Store ownership delimiter; regression helper added"},
+    {"sha":"305dcde8df784e6bc5d2fdfc6f1e5bbd9c0503dc","scope":"Remove check-in callback intent"},
+    {"sha":"b41309ba20170cbd67dca406ccd1a53d4aafa23b","scope":"Validate assisted sign-in caller"},
+    {"sha":"9ee9026660e8456e96afdb4123d7cf540e78597b","scope":"Unexport location providers"},
+    {"sha":"241ae974186dd0e01c62ba5b78991002cf0ea606","scope":"Separate internal location intents from public service"},
+    {"sha":"a5f074ab4afb9ab52c276ad81e4ef5a28ef585d8","scope":"Unexport consent activities and wrap immutable recovery intent; adapted imports"},
+    {"sha":"3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2","scope":"Use regular caller-aware work authenticator; adapted nullable creation API and removed token logging"},
+    {"sha":"89c7f4f58efecb7a0f9a6140ce5bb5e6e63153dd","scope":"GServices access control and android_id restriction; removed value logging"},
+    {"sha":"7df7e922e7c733db38e682e7cdf2a6ebb4bd36f6","scope":"Explicit MCS TLS handshake and hostname verification"},
+    {"sha":"c897b2b1d46f5f517cf10c24a4b29b2e7b16704c","scope":"Caller-package validation only; deprecated attestation removal not imported"},
+    {"sha":"faff99a12f34be0d5f671ce979f1f6c507377cff","scope":"Remove duplicate Huawei location declarations"},
+    {"sha":"0347b71d80ad58948ee3583fc085253ef6de614f","scope":"Opaque FIDO consent UI adapted to legacy implementation; newer hybrid activity absent"}
+  ],
+  "removedUpstreamFiles": {
+    "apps/javo-core/play-services-auth-workaccount/core/src/main/kotlin/com/google/android/gms/auth/account/authenticator/WorkAccountAuthenticator.kt": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2",
+    "apps/javo-core/play-services-auth-workaccount/core/src/main/kotlin/com/google/android/gms/auth/account/authenticator/WorkAccountAuthenticatorService.kt": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2",
+    "apps/javo-core/play-services-auth-workaccount/core/src/main/res/xml/auth_work_authenticator.xml": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2"
+  },
+  "limits": "Source backports require build and runtime validation. Vending-only advisories were reviewed but not imported and no Vending APK is distributed. This manifest is provenance, not proof of exploit resistance or Play Protect clearance."
+}

@@ -44,9 +44,33 @@ function searchMetadata(title, description, route) {
     description,
     url,
     inLanguage: 'en',
+    '@id': url + '#page',
     ...(route === '/' ? {sameAs: projectUrl} : {isPartOf: {'@type': 'WebSite', name: 'Javo ReVanced', url: site.href}}),
   };
+  const product = products.find(p => route === `/apps/${p.id}/`);
+  if (product && ['manager', 'core'].includes(product.id)) {
+    data.mainEntity = {
+      '@type': 'SoftwareApplication',
+      '@id': url + '#application',
+      name: product.name,
+      description: product.details,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: product.id === 'manager' ? 'Android 8.0 or later' : 'Android 5.0 or later',
+      url,
+      license: product.id === 'manager' ? 'https://www.gnu.org/licenses/gpl-3.0.html' : 'https://www.apache.org/licenses/LICENSE-2.0',
+    };
+  }
+  if (route !== '/') {
+    data.breadcrumb = {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {'@type': 'ListItem', position: 1, name: 'Javo ReVanced', item: site.href},
+        {'@type': 'ListItem', position: 2, name: title, item: url},
+      ],
+    };
+  }
   return [
+    ...(route === '/' ? ['<meta name="google-site-verification" content="qCCOz6yJWe6uQb7NbwdPed01EMd47sy8tV6iI8g6eWQ">'] : []),
     `<link rel="canonical" href="${escapeHtml(url)}">`,
     `<meta property="og:url" content="${escapeHtml(url)}">`,
     '<meta property="og:type" content="website">',
@@ -66,8 +90,8 @@ const routes = new Map([['/', ['Android APK patcher and downloads', 'Javo Manage
 for (const p of products) routes.set(`/apps/${p.id}/`, [p.name,p.text,`<section class="product-hero ${p.color}">${icon(p.id)}<p class="eyebrow">${p.eyebrow}</p><h1>${p.name}</h1><p class="lead">${p.text}</p><div class="actions">${button('/downloads/','View build status')}${link('/docs/','Documentation →','secondary-button')}</div></section><section class="article"><h2>Built on real foundations.</h2><p>${p.details}</p><aside>Current status: functional alpha. See the packaged build and test evidence before relying on a capability.</aside><h2>Designed to belong.</h2><p>Distinct ${p.id==='core'?'cyan and green':p.id==='video'?'orange and red':'purple, pink and blue'} vector artwork. Near-black surfaces. Clear controls, readable text and a consistent Javo identity.</p>${link('/security/','Read the verification policy ↗','text-link')}</section>`]);
 for(const [route,[title,desc,sections]] of Object.entries(pages)) routes.set(route,[title,desc,`<section class="page-head"><p class="eyebrow">JAVO / RESOURCES</p><h1>${title}</h1><p class="lead">${desc}</p></section><section class="article">${sections.map(([h,p])=>`<section><h2>${h}</h2><p>${p}</p></section>`).join('')}${route==='/licenses/'?`<div class="actions">${link('https://github.com/ReVanced/revanced-manager','ReVanced Manager ↗','secondary-button')}${link('https://github.com/ReVanced/GmsCore','ReVanced GmsCore ↗','secondary-button')}${link('https://github.com/microg/GmsCore','microG ↗','secondary-button')}</div>`:''}</section>`]);
 const releaseReview = catalog.status === 'release-review';
-const downloads = releaseReview ? `<aside class="download-card"><h2>APK downloads are under review</h2><p>Google Play Protect blocked the published alpha.10 Manager APK on a reported Android device. Alpha.10 Core warnings are also under review. Keep Play Protect enabled and wait for the security review before installing.</p>${link(projectUrl + '/blob/main/SECURITY.md','Read the security status ↗','text-link')}</aside>`
-  : catalog.artifacts.length ? catalog.artifacts.map(a=>`<article class="download-card"><h2>${escapeHtml(a.displayName)}</h2><p>${escapeHtml(a.version)} · ${escapeHtml(a.channel)} · Android API ${a.minSdk}+</p><p>${escapeHtml(a.signing)} signed · Signature and package checked</p><code>${a.sha256}</code>${button(site ? (a.downloadUrl ?? projectUrl + '/releases') : a.path,'Download '+escapeHtml(a.displayName))}</article>`).join('') : `<div class="empty"><span class="empty-symbol">◇</span><h2>No verified APKs published yet.</h2><p>Source code and build evidence are being prepared. Download buttons appear only when a real artifact passes the packaging checks.</p>${link('/docs/','Read the build documentation ↗','text-link')}</div>`;
+const downloads = releaseReview ? `<aside id="core" class="download-card"><h2>APK downloads are under review</h2><p>This is the official Javo Core download destination. Manager alpha.10 and alpha.11 were reported blocked by Google Play Protect. Core warnings and additional security fixes are under review. Keep Play Protect enabled and wait for the security review before installing.</p>${link('/security/','Read the security status ↗','text-link')}</aside>`
+  : catalog.artifacts.length ? catalog.artifacts.map(a=>`<article id="${escapeHtml(a.id)}" class="download-card"><h2>${escapeHtml(a.displayName)}</h2><p>${escapeHtml(a.version)} · ${escapeHtml(a.channel)} · Android API ${a.minSdk}+</p><p>${escapeHtml(a.signing)} signed · Signature and package checked</p><code>${a.sha256}</code>${button(site ? (a.downloadUrl ?? projectUrl + '/releases') : a.path,'Download '+escapeHtml(a.displayName))}</article>`).join('') : `<div class="empty"><span class="empty-symbol">◇</span><h2>No verified APKs published yet.</h2><p>Source code and build evidence are being prepared. Download buttons appear only when a real artifact passes the packaging checks.</p>${link('/docs/','Read the build documentation ↗','text-link')}</div>`;
 routes.set('/downloads/',['Download Javo Manager and Core APKs','Check Javo Manager and Javo Core release availability, Android compatibility, signatures and SHA-256 before installing.',`<section class="page-head"><p class="eyebrow">JAVO / DOWNLOADS</p><h1>Know what<br><span>you install.</span></h1><p class="lead">Verified artifact details, checksums and honest build status.</p></section><section class="article">${downloads}<h2>Current verification limits</h2><ul>${catalog.limitations.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul><p>Javo Video and Music are created from user-supplied APKs. Proprietary APKs are not redistributed.</p></section>`]);
 routes.set('/404.html',['Page not found','This page does not exist.',`<section class="page-head"><p class="eyebrow">404</p><h1>Off the path.</h1><p class="lead">This page does not exist.</p>${button('/','Back to Javo')}</section>`]);
 for (const [route, [title, description, content]] of routes) {

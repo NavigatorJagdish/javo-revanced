@@ -2,7 +2,7 @@
 
 > **APK downloads abhi review mein hain.** Alpha.10 ke Manager aur Core dono ke liye Play Protect warnings report hui hain. Installation resume karne se pehle [download status](https://navigatorjagdish.github.io/javo-revanced/downloads/) check karein.
 
-Ye guide reviewed release available hone ke baad use karein. Manager ke liye Android 8.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
+Ye guide reviewed release available hone ke baad use karein. Manager ke liye Android 8.0 ya naya version chahiye; updated Core candidate ke liye Android 5.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
 
 ## 1. GitHub se files download karein
 

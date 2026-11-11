@@ -127,7 +127,8 @@ class Session(
                                 indices[patch]?.let { onEvent(ProgressEvent.Completed(StepId.ExecutePatch(it))) }
                             }
                             val defaults = if (product == "Video") videoDefaults(selectedPatches, patchingLogger) else null
-                            setOfNotNull(branding, defaults) + selectedPatches.filterNot { it.name in conflicting }
+                            val coreLink = if (selectedPatches.any { it.name == "GmsCore support" }) coreDownloadLink(patchingLogger) else null
+                            setOfNotNull(branding, defaults, coreLink) + selectedPatches.filterNot { it.name in conflicting }
                         }
                     }
                 }
@@ -156,6 +157,29 @@ class Session(
                     }
                 }
             }
+        }
+    }
+
+    private fun coreDownloadLink(log: Logger): Patch = bytecodePatch {
+        afterDependents {
+            var replaced = 0
+            for (type in listOf("Lapp/revanced/extension/shared/GmsCoreSupport;", "Lapp/revanced/extension/shared/GmsCoreSupport\$GmsCore;")) {
+                val original = classDefs[type] ?: continue
+                val mutable = classDefs.getOrReplaceMutable(original)
+                for (method in mutable.methods) {
+                    val instructions = method.implementation?.instructions ?: continue
+                    for (index in instructions.indices) {
+                        val instruction = instructions[index]
+                        val value = ((instruction as? ReferenceInstruction)?.reference as? StringReference)?.string ?: continue
+                        if (!value.equals("https://github.com/revanced/gmscore/releases/latest", ignoreCase = true)) continue
+                        val register = (instruction as? OneRegisterInstruction)?.registerA ?: continue
+                        method.replaceInstruction(index, "const-string v$register, \"https://navigatorjagdish.github.io/javo-revanced/downloads/#core\"")
+                        replaced++
+                    }
+                }
+            }
+            check(replaced > 0) { "Cannot configure the Javo Core download link in this GmsCore patch version. Use a supported trusted bundle." }
+            log.info("Configured Javo Core download page ($replaced link references)")
         }
     }
 

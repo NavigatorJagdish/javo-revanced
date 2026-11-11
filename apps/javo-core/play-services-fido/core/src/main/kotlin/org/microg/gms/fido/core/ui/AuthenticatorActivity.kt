@@ -6,6 +6,7 @@
 package org.microg.gms.fido.core.ui
 
 import android.content.Intent
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build.VERSION.SDK_INT
@@ -122,6 +123,20 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
         }
     }
 
+    private fun makeOpaque() {
+        if (SDK_INT >= 30) {
+            setTranslucent(false)
+        } else {
+            try {
+                val method = Activity::class.java.getDeclaredMethod("convertFromTranslucent")
+                method.isAccessible = true
+                method.invoke(this)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to make opaque", e)
+            }
+        }
+    }
+
     @RequiresApi(24)
     suspend fun handleRequest(options: RequestOptions, allowInstant: Boolean = true) {
         try {
@@ -144,6 +159,7 @@ class AuthenticatorActivity : AppCompatActivity(), TransportHandlerCallback {
                 }
             }
 
+            makeOpaque()
             val arguments = AuthenticatorActivityFragmentData().apply {
                 this.appName = appName
                 this.isFirst = true

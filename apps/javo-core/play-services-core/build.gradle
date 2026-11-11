@@ -122,8 +122,8 @@ android {
     defaultConfig {
         applicationId = "app.revanced.android.gms"
 
-        versionName "${version}-javo.5"
-        versionCode appVersionCode + 4
+        versionName "${version}-javo.6"
+        versionCode appVersionCode + 5
 
         // The bundled Compose UI requires Android 5.0 or newer.
         minSdkVersion Math.max(androidMinSdk, 21)
