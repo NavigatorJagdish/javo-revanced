@@ -34,6 +34,9 @@ export function validateCatalog(catalog) {
   const ids=new Set();
   for(const a of catalog.artifacts){
     if(ids.has(a.id))throw Error('Duplicate artifact');ids.add(a.id);
+    if ((catalog.status==='experimental-review' && a.id==='manager') || a.securityReview?.playProtect==='harmful-reported') {
+      if(catalog.status!=='experimental-review' || a.securityReview?.playProtect!=='harmful-reported' || a.securityReview?.distribution!=='review-only')throw Error('Blocked Manager requires explicit experimental review disclosure');
+    }
     if(!a.displayName||!a.version||!['debug','test','development','production'].includes(a.signing)||!['signature-and-package-verified'].includes(a.verification))throw Error('Artifact is not verified');
     if(!/^\/downloads\/files\/[a-zA-Z0-9._-]+\.apk$/.test(a.path)||!/^[a-f0-9]{64}$/.test(a.sha256)||!Number.isInteger(a.minSdk))throw Error('Invalid artifact path or integrity');
     if (a.downloadUrl) {

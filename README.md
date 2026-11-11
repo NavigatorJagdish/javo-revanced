@@ -4,7 +4,7 @@
 
 **[Download Core javo.6](https://github.com/NavigatorJagdish/javo-revanced/releases/download/core-v0.3.13.2.250932-javo.6/javo-core-0.3.13.2.250932-javo.6-production.apk)** · [Setup guide (Hinglish)](docs/INSTALLATION.md) · [Verification limits](docs/VERIFICATION-STATUS.md)
 
-Manager alpha.13 remains withheld after a harmful Play Protect indication on the owner's phone. The owner reported Core javo.6 safe on that phone; this is not clearance for every device. Keep Play Protect enabled. Three advisory matches in two legacy Core libraries remain open; see the [dependency review](docs/DEPENDENCY-REVIEW.md).
+**[Manager alpha.13 review APK](https://github.com/NavigatorJagdish/javo-revanced/releases/download/manager-v0.1.0-alpha.13-review/javo-manager-0.1.0-alpha.13-development.apk)** is available at the owner request. Its harmful Play Protect indication remains unresolved; do not treat this review download as clearance or bypass the block. The owner reported Core javo.6 safe on that phone; this is not clearance for every device. Keep Play Protect enabled. Three advisory matches in two legacy Core libraries remain open; see the [dependency review](docs/DEPENDENCY-REVIEW.md).
 
 **Patch. Manage. Customize. Control.**
 

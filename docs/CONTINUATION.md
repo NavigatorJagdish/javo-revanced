@@ -25,3 +25,7 @@ Source and original-reference private Drive backups were downloaded and checksum
 ## Approved release-asset cleanup completed
 
 Owner approved permanent removal of eight alpha.1–alpha.8 uploaded source ZIPs and both alpha.10 APKs. All ten were deleted and verified absent using fresh GitHub release metadata. The local backups were rehashed before deletion. New Core javo.6, source ZIP and guide/report assets, and all unselected release assets, retain their original IDs and digests. Historical Git snapshots, auto-generated tag archives, older emails and external copies remain outside this cleanup. See evidence/public-asset-removal.json.
+
+## Explicit review publication request
+
+The owner requested Manager publication after being informed of its unresolved Play Protect indication. The exact tested alpha.13 APK is therefore available only as an experimental review download with prominent warning metadata. This does not establish clearance or resume blocked installation. Keep protection enabled and stop if blocked. See RELEASE_MANAGER13_REVIEW.md and GitHub issue #1.

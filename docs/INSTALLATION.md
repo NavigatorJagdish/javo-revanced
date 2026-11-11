@@ -1,8 +1,11 @@
 # Javo ReVanced installation aur setup guide
 
-> **Manager download abhi hold par hai.** Owner ke phone ne Manager alpha.13 ko bhi harmful indicate kiya. Core javo.6 ke liye owner ne safe result report kiya; ye har phone ki guarantee nahi hai. Sirf [official download status](https://navigatorjagdish.github.io/javo-revanced/downloads/#core) par listed Core file lein. Play Protect ON rakhein; harmful block aaye to installation rok dein.
+> **Manager alpha.13 sirf experimental review APK hai.** Owner ke phone ne Manager alpha.13 ko bhi harmful indicate kiya. Core javo.6 ke liye owner ne safe result report kiya; ye har phone ki guarantee nahi hai. Sirf [official download status](https://navigatorjagdish.github.io/javo-revanced/downloads/#core) par listed Core file lein. Play Protect ON rakhein; harmful block aaye to installation rok dein.
 
-Manager ke neeche diye steps uski reviewed release available hone ke baad use karein. Manager ke liye Android 8.0 ya naya version chahiye; Core javo.6 ke liye Android 5.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
+Manager ki ordinary installation abhi recommended nahi hai. Review file download karna Play Protect clearance nahi hai. Neeche ke normal installation steps sirf tab continue karein jab protection ON hote hue Android installation allow kare; block aaye to OK dabakar ruk jaayein. Protection band ya Install anyway ka use na karein. Manager ke liye Android 8.0 ya naya version chahiye; Core javo.6 ke liye Android 5.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
+
+Manager review file: `javo-manager-0.1.0-alpha.13-development.apk`.
+SHA-256: `b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a`.
 
 Core javo.6 file: `javo-core-0.3.13.2.250932-javo.6-production.apk`.
 SHA-256: `c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311`.

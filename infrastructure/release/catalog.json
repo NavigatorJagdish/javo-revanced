@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "core-alpha-manager-review",
+  "status": "experimental-review",
   "generatedAt": "2026-11-11",
   "artifacts": [
     {
@@ -40,10 +40,53 @@
         "installedApkSha256": "c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311"
       },
       "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/core-v0.3.13.2.250932-javo.6/javo-core-0.3.13.2.250932-javo.6-production.apk"
+    },
+    {
+      "id": "manager",
+      "displayName": "Javo Manager",
+      "applicationId": "app.javo.manager",
+      "version": "0.1.0-alpha.13",
+      "versionCode": 100013,
+      "minSdk": 26,
+      "channel": "development",
+      "signing": "development",
+      "verification": "signature-and-package-verified",
+      "sha256": "b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a",
+      "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
+      "size": 52275747,
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.13-development.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5564",
+        "package": "app.javo.manager",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "inPlaceUpgradeVerified": true,
+        "installedApkSha256": "b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a"
+      },
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/manager-v0.1.0-alpha.13-review/javo-manager-0.1.0-alpha.13-development.apk",
+      "securityReview": {
+        "issueUrl": "https://github.com/NavigatorJagdish/javo-revanced/issues/1",
+        "distribution": "review-only",
+        "playProtect": "harmful-reported",
+        "appeal": "submitted-pending"
+      }
     }
   ],
   "limitations": [
-    "Manager alpha.13 remains withheld after the owner reported a harmful Play Protect indication.",
+    "Manager alpha.13 is published only as an experimental review APK at the owner request. A harmful Play Protect indication remains unresolved. Keep protection enabled and stop if blocked.",
     "The owner reported a safe result for this exact Core javo.6 file on one phone. This is not clearance for every device.",
     "Core passed signed integrity, eight private manifest boundaries, five external-start denial probes and Android 10 update/launch. Matching source passed CI on Android 10/15.",
     "Three advisory matches remain in two legacy Core dependencies; see the dependency review.",
