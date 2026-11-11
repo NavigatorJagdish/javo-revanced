@@ -2,12 +2,95 @@
   {
     "file": "apps/javo-core/build.gradle",
     "upstreamSha256": "32125941b3254da24e14ba8002cb2efea369d6a50cec6f70fa8601bc4748400a",
-    "javoSha256": "af196264bc5a265085072124b20fadd44976adb03740afe0609ee05d06df8ed0"
+    "javoSha256": "0574e4c621e5f3448978908b3afaf6d581bdc79643e4830477de27318242d9c6"
+  },
+  {
+    "file": "apps/javo-core/gradle/windows-aidl.gradle",
+    "upstreamSha256": null,
+    "javoSha256": "db7aa52c7777b926fe72365b34fb8051dde4c9f4cef2d0d228fdd916a282b49d"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-blockstore/core/build.gradle",
+    "upstreamSha256": "cc5d4e4215713c8208c2d2eeb6f8e907e9af0e3974e289310dfec5e5f6fc7edf",
+    "javoSha256": "9e861e80d81f969b8df77a73049725a559be2c3f61980b9f00237e4686332aad"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-blockstore/core/src/main/kotlin/org/microg/gms/auth/blockstore/BlockStoreImpl.kt",
+    "upstreamSha256": "1e411ca4999b3bbc594beeb2e0cf9038ff7275cbb79ce0327ce7c7a1aedaf430",
+    "javoSha256": "fa82248b5c02dd63524e3fab63feb8a577ac5d5c339866b7610cf4cdadfca308"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-blockstore/core/src/main/kotlin/org/microg/gms/auth/blockstore/BlockStoreIsolation.kt",
+    "upstreamSha256": null,
+    "javoSha256": "ef09a752cd5962fb2f936803d41f95490c4496d2c0c58e1c159f1f053b984842"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-blockstore/core/src/test/kotlin/org/microg/gms/auth/blockstore/BlockStoreIsolationTest.kt",
+    "upstreamSha256": null,
+    "javoSha256": "e4bef86baf6499a3e0c74a0b1fcab537981fa8a3b3f828f5ca5f4f403df9586f"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-workaccount/core/src/main/AndroidManifest.xml",
+    "upstreamSha256": "090ce1a2f77056bae5ae61911af3902785e01177130cd6fb2feda34b1ac965b0",
+    "javoSha256": "adc5cf068d15e6ec9c4d93f9b88fb583ea5c2c700ed19cb40e0b9bff28512e7c"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-workaccount/core/src/main/kotlin/com/google/android/gms/auth/account/authenticator/WorkAccountAuthenticator.kt",
+    "upstreamSha256": "242ef6ab6a85fc19847105d0d4c6864ae5ee0e51c1471a1c558f2f6817bd2200",
+    "javoSha256": null,
+    "removedByUpstreamSecurityCommit": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-workaccount/core/src/main/kotlin/com/google/android/gms/auth/account/authenticator/WorkAccountAuthenticatorService.kt",
+    "upstreamSha256": "673d1da8b26e5f3fdb0fec253622f578d838cd297f090e37d8eaf8436b157b3a",
+    "javoSha256": null,
+    "removedByUpstreamSecurityCommit": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-workaccount/core/src/main/kotlin/org/microg/gms/auth/workaccount/WorkAccountService.kt",
+    "upstreamSha256": "0e3a434fb8cf09cd9e7c8f2fb8e0d8d225fed63980ec893cce5d67b8720b776c",
+    "javoSha256": "6888a64dc6b1479999723724cbe9a64085cc60e6205f7d6ebcc6aa23793e3f2e"
+  },
+  {
+    "file": "apps/javo-core/play-services-auth-workaccount/core/src/main/res/xml/auth_work_authenticator.xml",
+    "upstreamSha256": "8c5f590f2f9d61c765a47190fd4f5337ac26cf8936e55ef4c50bd1b866e7c66b",
+    "javoSha256": null,
+    "removedByUpstreamSecurityCommit": "3dac24d9266136bcacbb3d4d75ebb4bdf55e8cb2"
+  },
+  {
+    "file": "apps/javo-core/play-services-base/core/build.gradle",
+    "upstreamSha256": "c55873c1c88024b4bd10f1f09bb99b72278e6d17e299af964f037d3d33b44a68",
+    "javoSha256": "c42200e3f2466fe1cf08f3e5b36fc3b0df9161929a60ac2f8473b41c5c8c03c0"
+  },
+  {
+    "file": "apps/javo-core/play-services-base/core/src/main/aidl/org/microg/gms/common/IIntentMessenger.aidl",
+    "upstreamSha256": null,
+    "javoSha256": "80e75c8c6891abfd498a66489ad6c8643d6bb24c0e7aca7f7f5b5a026bc49376"
+  },
+  {
+    "file": "apps/javo-core/play-services-base/core/src/main/kotlin/org/microg/gms/common/InternalIntentMessenger.kt",
+    "upstreamSha256": null,
+    "javoSha256": "9a7623ca4e6d6e966e01a221b9c9ea303168dadd23827505e62b16727ed58f42"
+  },
+  {
+    "file": "apps/javo-core/play-services-base/core/src/main/kotlin/org/microg/gms/profile/ProfileManager.kt",
+    "upstreamSha256": "d86ebc56475ebad6dc77009ff500889a98529bc1b2375b475adc2592920e8c80",
+    "javoSha256": "e5b2f19b0d7c6b709e23aa88f753c26dfb946ec83704e730457acdc8e6a4386d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core-proto/build.gradle",
+    "upstreamSha256": "0bf9f6661fd566a1e9ae92c64ff4dd12ab0f4c8dabddbd68fea6af839701ee85",
+    "javoSha256": "5712c7835e08a7399914553b4eb239a50643e9f469479fff63d336230695d6db"
+  },
+  {
+    "file": "apps/javo-core/play-services-core-proto/src/test/java/org/microg/ProtoReaderSecurityTest.java",
+    "upstreamSha256": null,
+    "javoSha256": "cb87bffb37fb05cb0a77ab408a6964211f82c496c53add2e7f5fccc842207b48"
   },
   {
     "file": "apps/javo-core/play-services-core/build.gradle",
     "upstreamSha256": "c27b6df7682856a14eef6c904a6a2ae7f97482be5fef4433d36536ba6360d0eb",
-    "javoSha256": "b4de41d230cd065067e564105b64d72d01e65ea7e5ef3a62595d46e8a8ab5211"
+    "javoSha256": "4eb6c2304be8d2896a10a182626cc0718a76bcf5e6801caed2f587818345a28d"
   },
   {
     "file": "apps/javo-core/play-services-core/src/default/AndroidManifest.xml",
@@ -17,22 +100,87 @@
   {
     "file": "apps/javo-core/play-services-core/src/main/AndroidManifest.xml",
     "upstreamSha256": "7dbdee0f0beaa5aa57e40327a7bcb8c3d487e0f6c4c3daf2fbdde947e01d7ffa",
-    "javoSha256": "647ba9a60314e9cab3e935b1eb23dc0bcdc9268276afcd1a3006ff1a5cbf47bf"
+    "javoSha256": "7c6c2e911936e3186d75db2557843e2f425f6d71af732012f3f648319a2d5ca1"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/auth/AuthManager.java",
+    "upstreamSha256": "e8445e4f620e0fd0d9d3a2eac3613d49af89bfff175d7a5887f087e31f0c4c48",
+    "javoSha256": "e5db52a997dbead04f3d17121a4ed0247039bf91d2c58c18a219c8bec0d76ccd"
   },
   {
     "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/auth/AuthManagerServiceImpl.java",
     "upstreamSha256": "aa1f802293c88000a5a0357fbe739c6032d18972f6ef396c9b58b448af98bfa0",
-    "javoSha256": "2854036b6332b5b0536adc4118473546f2db3150afd388379bcf0d138e1d6a64"
+    "javoSha256": "2cc0b3a3fb78de629e926a029e061f567a29a15f834d4413c9f8a469b15759de"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/auth/WorkAccountAuthenticatorService.kt",
+    "upstreamSha256": null,
+    "javoSha256": "18700372bf754cf96738952578f6be4b38e59c760f932be5ac3aad048e39bf42"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/auth/loginservice/AccountAuthenticator.java",
+    "upstreamSha256": "f5458e651949e809bf627800b288217926a4b450396a352a1e3a653461770c5c",
+    "javoSha256": "d5c9cac181652ad90d2d2d253a7fd3bd2a5e42987dab889ca3783c4587336307"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/auth/loginservice/GoogleLoginService.java",
+    "upstreamSha256": "c5ff92f7a285dea4277c1e38f097c09beb92a5eb8df848de26b243d3ebcae0c6",
+    "javoSha256": "52a9e81a5e689538ef8f64aeff2741a7749f35875537bb3ac351cb3967a36d5d"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/checkin/CheckinService.java",
+    "upstreamSha256": "cbb41a53330495c427e49a3d65734a399847fdce25054117565041242a02dd61",
+    "javoSha256": "544393f685339deaa9ff9479342f74f8e8cea7fc05f7c4533b02c8260160304f"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/gcm/McsService.java",
+    "upstreamSha256": "de61dfc96710fec3c418b42b2f6fb6153e9da2fccbacc79da66a8cfece4157d7",
+    "javoSha256": "2a5053afc122df9cb0ed754ec04f0b42c2310e24c3c90bd3c08ff7743a9b20d2"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/gservices/GServicesProvider.java",
+    "upstreamSha256": "1f52702ee196e119d205d99ece04d628536a2d6fa8de3948d46769a3796be70a",
+    "javoSha256": "398445bc7efc992ff78648adcb210efad1d9ca417ca919db288ddafdcad3dc1e"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/ui/Conditions.java",
+    "upstreamSha256": "bda1a593f5aa63674b4656666e6d17b9c35ca9e047aabf34299e0c793591863b",
+    "javoSha256": "0c21542ed9f4d28a8e7c7377bf0fa9b47121c18883efbcb850afd7b8f3ea17dd"
   },
   {
     "file": "apps/javo-core/play-services-core/src/main/java/org/microg/gms/ui/SelfCheckFragment.java",
     "upstreamSha256": "079443ed81bec3fc5980c1f7bafb3e525d989d97aab8237e65d4cbf204e75ce0",
-    "javoSha256": "ea8196b50b52bc00b4d42adfef76ed3752272c6f6d36eeee5666f23abf4fbecf"
+    "javoSha256": "36866897270667e1faa7080c8e7bc62a6c4c619b90002cf86ced8463de374847"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/kotlin/com/google/android/gms/locationsharingreporter/service/LocationSharingUpdate.kt",
+    "upstreamSha256": "7e151a1cb16b6e52d582cccc345a43c0aa7a45dcbe16459054b9771250b53139",
+    "javoSha256": "f05e7fa9ca67dd6c4947c4887f6ff805dbc54a65b65166eb99b666f1b739b0a1"
   },
   {
     "file": "apps/javo-core/play-services-core/src/main/kotlin/org/microg/gms/auth/credentials/identity/AuthorizationService.kt",
     "upstreamSha256": "f001155dfb9fce72c5aeb250924896bcd7fe841735ee23c3e087a3fad4b402a8",
     "javoSha256": "c2bb09de5ed02914a08ea2f3542fbe68c3883eab20d60f3ebf029ca7e79abeae"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/kotlin/org/microg/gms/auth/signin/AssistedSignInActivity.kt",
+    "upstreamSha256": "2fd00c3ae57edc2800deb75ed9247f6ae0bec5e76163b526e499b62e56822a4d",
+    "javoSha256": "d346bc3ce477928234f4bc1c1937cb3397ed964d8e2199a78ff43baa4e86f6f3"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/kotlin/org/microg/gms/chimera/ServiceProvider.kt",
+    "upstreamSha256": "13a4ca1a502603e143bc74a36c9c8aa7c9ef571038f58ee1e8128f22eb594b9e",
+    "javoSha256": "06d25566928eb851833ffa7c3770a7c7e9f42d0664097931166f06352b22142f"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/kotlin/org/microg/gms/ui/PushNotificationAllAppsFragment.kt",
+    "upstreamSha256": "f41b98bf698220b7baa103c6cddf6d68f6b91a1c6a510c7121cbf25fe20d7b42",
+    "javoSha256": "898fb43e67d61a405668192e2071663216bd17770aca1df37f4709da46c5ca7b"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/kotlin/org/microg/gms/ui/UnpackingRedirectActivity.kt",
+    "upstreamSha256": null,
+    "javoSha256": "ccaae86103ae3c2a405fd45c48c6d67aac6c67f0d08ee9e51e88ea5182461403"
   },
   {
     "file": "apps/javo-core/play-services-core/src/main/res/drawable/javo_core.xml",
@@ -335,6 +483,96 @@
     "javoSha256": "68490d0e539ffb06d3d7cbd3b5dd52fd3e74f9d462aee8a356e3412730c204c4"
   },
   {
+    "file": "apps/javo-core/play-services-core/src/main/res/xml/auth_work_authenticator.xml",
+    "upstreamSha256": null,
+    "javoSha256": "995b42348d54c68b12b4b6c8c187e2b563e2632d4e75a035f46190e90267a1ff"
+  },
+  {
+    "file": "apps/javo-core/play-services-core/src/main/res/xml/network_security_config.xml",
+    "upstreamSha256": "ca9b170dabac2135a4d1c4be2ebee22a55e9b262a3b79ab648a7f9ce9d26507b",
+    "javoSha256": "520f4f3b439b0248e19f0b66a9643645e904edd8f8375749de11be614bd59fa0"
+  },
+  {
+    "file": "apps/javo-core/play-services-droidguard/build.gradle",
+    "upstreamSha256": "06447829441a0cd3fd41913b3324cef16930cca1cf10834af76b32e78f6b90f9",
+    "javoSha256": "24f791d09e7f436b111cbbfd82c8b2a73dfbb7a4b9ce14b2fcae9dbcc49140ef"
+  },
+  {
+    "file": "apps/javo-core/play-services-droidguard/src/main/java/org/microg/gms/droidguard/DroidGuardApkVerifier.java",
+    "upstreamSha256": null,
+    "javoSha256": "f5e947399705599dd30c65b4ed9eb95e8ce1e049f3b64b09d65a33f91af94d8d"
+  },
+  {
+    "file": "apps/javo-core/play-services-droidguard/src/main/kotlin/org/microg/gms/droidguard/HandleProxyFactory.kt",
+    "upstreamSha256": "0b4aca8313642baada664caede4adc12e0eac8a9fc8cce49317a58beda817ad7",
+    "javoSha256": "87392a713a95ed8defa76d917bf788ff54621e03a6822e8a6f295e68b7af5417"
+  },
+  {
+    "file": "apps/javo-core/play-services-fido/core/build.gradle",
+    "upstreamSha256": "e7534bf9ca35970cb4bd64e0c8bd5f115984ff695ea2fa025fdfb9695571852d",
+    "javoSha256": "18f246c81ac1b74538552d1ed8d2314d93d5c94e94d34b894822159600ee656e"
+  },
+  {
+    "file": "apps/javo-core/play-services-fido/core/src/main/kotlin/org/microg/gms/fido/core/ui/AuthenticatorActivity.kt",
+    "upstreamSha256": "ae261d96a8ed65babcc43605ca5b8e0a9e6ba212c7ea2b495eb8c9143f6be72c",
+    "javoSha256": "5b40df01e225abbf5652bb5e1591a441cce91946114205e661f74947a0c0ee80"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/provider/src/main/AndroidManifest.xml",
+    "upstreamSha256": "786beafc635157d478934602cdfad5011bfeab116f01e3acec1557ad65e4f68f",
+    "javoSha256": "f23536af7db650248bfa9b3169160b69fe1f76a50cc2151c10d2007b4a960df3"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/provider/src/main/kotlin/org/microg/gms/location/provider/IntentLocationProviderService.kt",
+    "upstreamSha256": "6ab2717e89d4a0130bcc65ac8fdc8731d0a57890d3421700c6b7abc262d84067",
+    "javoSha256": "bcc80d9b1bb851edb9614a1a432e9861e96340a49a1b0a9e2223abb45b9b9203"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/src/huawei/AndroidManifest.xml",
+    "upstreamSha256": "052a03536ee28165b35319c5f4808133b9a436b63875d74c325ebc96b9ee973d",
+    "javoSha256": "43859c122051a8e29e3bdf06a4034af8265532afdc0c569c8a727f8f8921a335"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/src/main/AndroidManifest.xml",
+    "upstreamSha256": "f92e3910b11b99b732adc0f5f989ddd127e43b556816ff6b5e28b3be28f31fe4",
+    "javoSha256": "e0dfbe2e95266088b05f7770628fd7478cbb12657d0debe5bd044421016fbb95"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/src/main/kotlin/org/microg/gms/location/manager/GoogleLocationManagerService.kt",
+    "upstreamSha256": null,
+    "javoSha256": "6f5ad73cef95e96f13543893c998c025b0bb5eb9a86fbbfcec541ec54d3a4521"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/src/main/kotlin/org/microg/gms/location/manager/LocationManagerService.kt",
+    "upstreamSha256": "863a9ae14a90dd42be8403eb09ba43873179863b0f19ba5e8caec865564886d4",
+    "javoSha256": "ffa9c38f32837721c85d51ef14ecd5fa66225bfe7c263c41f40ad51b43322157"
+  },
+  {
+    "file": "apps/javo-core/play-services-location/core/src/main/kotlin/org/microg/gms/location/ui/LocationAllAppsFragment.kt",
+    "upstreamSha256": "d7ebe53da36eed27fcb13ed0e43db3f3658b674622c8b6c56d96c13ff1cda34c",
+    "javoSha256": "bb65d59eee2cf8ad26615400575bab74382eb481f79b551895acf153e0298e0c"
+  },
+  {
+    "file": "apps/javo-core/play-services-maps/core/vtm/build.gradle",
+    "upstreamSha256": "f926742b92abadc69cd9aae99e657f85771fe83c5f26471032d2d0905a5c7ff3",
+    "javoSha256": "de460ae3af87736a53083d5fa30de9c4db88cd5ff85f39bcdbeb6e01190bb732"
+  },
+  {
+    "file": "apps/javo-core/play-services-safetynet/core/src/main/kotlin/org/microg/gms/safetynet/SafetyNetClientService.kt",
+    "upstreamSha256": "73d8aa71fc1b6566accd0142712a7a7ed80e9ef056943a478f9d463b26b90456",
+    "javoSha256": "1b62435089053441f3f31df99d92308f4b81bc3355820335aa93b2b4b389e4c9"
+  },
+  {
+    "file": "apps/javo-core/vending-app/build.gradle",
+    "upstreamSha256": "eb9a8a0bd7f1163e8819232be245f107524b2eb7cbd36d1fe9917e2d7a3a9c50",
+    "javoSha256": "4b268d334536f58ccdd8e1b6c6796ccb0f210fd4ecb645810854684996ce863a"
+  },
+  {
+    "file": "apps/javo-core/vending-app/src/main/AndroidManifest.xml",
+    "upstreamSha256": "40baea3a32771337aaef630238bf0224f64315b621a6d3a18c739d0fb8d338a0",
+    "javoSha256": "bb2e064dd7aad00fecd0ed4c1bf876fcd3905188ca8fe7983b1e37913853e0bf"
+  },
+  {
     "file": "apps/javo-manager/api/src/main/java/app/revanced/manager/downloader/DownloadConnection.java",
     "upstreamSha256": null,
     "javoSha256": "eb024f301d6cf972b26dcc5b47cf3f0e0ba6a380a5f3a5855965087c75522908"
@@ -357,37 +595,72 @@
   {
     "file": "apps/javo-manager/api/src/main/kotlin/app/revanced/manager/downloader/webview/WebViewFragment.kt",
     "upstreamSha256": "bbe5117c09a089728581ae3b9669af49bc6a114db33f02fafdea8b924131871c",
-    "javoSha256": "ab2b26f15eb7d7c251224f42e155a57491b6d1d6a86d564851fe552bc93794a3"
+    "javoSha256": "2d283eeb51e13a84eb8940d97d600e5cdc555e7c388868f7ca7645451bf4b745"
+  },
+  {
+    "file": "apps/javo-manager/api/src/main/res/layout/webview_fragment.xml",
+    "upstreamSha256": "0b8ff26e5eb9e2828775573f132c14fb105f6ac7d6e62a04082ae0c3454c87ef",
+    "javoSha256": "f29f44c2d9500a69cbe36f0bdc4948f548717ed53c19721730e52e9ae46eabdf"
   },
   {
     "file": "apps/javo-manager/app/build.gradle.kts",
     "upstreamSha256": "dc3cc9640d2fd2ce9103b0bedbadfa532ad718de5fd0437ccfafdc37ff93b990",
-    "javoSha256": "f339409ed04fc2182d446cc884e737ae9b54b5fdb73bf9dbf6ae26eaad7b05e7"
+    "javoSha256": "dea98a33da8df88c6021ef762f37fce6c55d7a113146541d884cf80d957ee00a"
   },
   {
     "file": "apps/javo-manager/app/gradle.properties",
     "upstreamSha256": "83454e6fb50fc952b5f3f7e7cdea09604994f2f3378bb991fe83d0057a30c6c6",
-    "javoSha256": "ca986401a918a8e3e93c07f321bba8f8ea651e9c9bf836f49fa8dd1ca9c40dab"
+    "javoSha256": "d9241ebc51714c37ef5d519ff6ca49e2397f4638af7719f972b856dc4f3fb5b6"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/BrowserChecks.kt",
     "upstreamSha256": null,
-    "javoSha256": "5cf58864540b21d6d4ef508147a1cd5cc3849888556fd6c1901e61c9f876dcbb"
+    "javoSha256": "09bac258d1040eae044da36fbe5ef91a4769dae66699be335d1030a72636d896"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/DownloadRegressionChecks.kt",
     "upstreamSha256": null,
-    "javoSha256": "eaaa7995161d87499bc728e85af03058cdcb6b6925200cba19b30d16ac18e19e"
+    "javoSha256": "ebd5f877d36d6586717c32227cafb25fa0714ae28d64f083289e18a8fd8a8e1d"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/HttpsDownloadChecks.kt",
     "upstreamSha256": null,
-    "javoSha256": "042a5ffcf4119c9b2de96f2fbf934c7e73bc2211036461c60f50ef48ffa4d7bd"
+    "javoSha256": "2ed6156ab6544358230df3007193d11349d86ae909ab7d68a0a5f7a2208961b0"
+  },
+  {
+    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/LiveMirrorDiagnostic.kt",
+    "upstreamSha256": null,
+    "javoSha256": "12774480ae9ec952fd44095c659ca1496746b6ca381acacf8cab38208dc37173"
+  },
+  {
+    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/MediaSaveChecks.kt",
+    "upstreamSha256": null,
+    "javoSha256": "3b54a172b7ca69d754a284c8e26c81524cc56835a9dededf6618f84322b7472e"
   },
   {
     "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/PatchIntegrationInstrumentation.kt",
     "upstreamSha256": null,
-    "javoSha256": "c81c9f00549d939ae42e7e8ca066405de0e8433582909dc3eb8a8447b288e3c6"
+    "javoSha256": "0df2f8844264f52441d0555bc7e6d6c9b6eab25723270f8024ac094e09fb0508"
+  },
+  {
+    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/ProductionBrowserChecks.kt",
+    "upstreamSha256": null,
+    "javoSha256": "25868cd491a1a4e30f7a70a296b4036761835f6520a9fff4e62219f47461a997"
+  },
+  {
+    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/RealYoutubeChecks.kt",
+    "upstreamSha256": null,
+    "javoSha256": "dda794f59b1a819fc5e29df10e7ae26efea86c552e168fdc2a02b4c3457f2c3b"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/AndroidManifest.xml",
+    "upstreamSha256": "0f0e0407678a5da422966c0e24ac65cbcd74507abdf8b3b710527960c3b39909",
+    "javoSha256": "045963387404906a80f8d11c868bf1935e48c6ff4dcfd090e498faefb692aa8c"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/assets/root/service.sh",
+    "upstreamSha256": "035a813f2f22cd23240edccbc8efab4c87091b709f690ae2f5079ce632003389",
+    "javoSha256": "d0df790e87e7905670eb7f61786a0be859942559b64d2bc4ff1099e5fb519203"
   },
   {
     "file": "apps/javo-manager/app/src/main/assets/third_party/ARSCLib-LICENSE.txt",
@@ -410,14 +683,49 @@
     "javoSha256": "54105ec66ae157772921e2ac0bea1e8f314bcd6659a1f9de02542fad0bfd17f3"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/javo/security/FrameworkCache.java",
+    "upstreamSha256": null,
+    "javoSha256": "2813e44961be9b738b57414ab4c8b557579d1fdfffb8ae4920497383a9b9dc31"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/javo/security/RootArguments.java",
+    "upstreamSha256": null,
+    "javoSha256": "3a5c0c62fbcf1e7016c4e9b27d84e3b78b5823aa11307bedea3da9674d2ee797"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/javo/security/UpdateSecurity.java",
     "upstreamSha256": null,
     "javoSha256": "0a9bd50f9d35c29631c9d3e03f0b00a4faefb84fde9f577843f0537d95595977"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/DownloaderActivity.kt",
+    "upstreamSha256": "1c6f62225c6238c188c82354bcdf4af8eb89d9281f5753a73e14a7026adb58d7",
+    "javoSha256": "118f81dc76244cddd514c1adc3e3a01dbe26ca31dcdf2f4076713af5730ac4ab"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/MainActivity.kt",
+    "upstreamSha256": "638817a3be6d3696e995fb6efb0f076251a9df2508f47d6764b18331b5e1cfb5",
+    "javoSha256": "936e3fe09e1561367cffcc2d22a6fbe84a1854b57809f4e75c228834c48da07f"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ManagerApplication.kt",
+    "upstreamSha256": "004731437247cddd3429e5957eb702bfaa5f9a9b23d350d4bde84f48c1e02e30",
+    "javoSha256": "848ae5353cee2848f9bb3f8e132fc0010731f6cb681ac42cfcc62b01f0e29f8d"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/data/platform/Filesystem.kt",
+    "upstreamSha256": "d8eeb22fe65e53ab7e1ecf95abc42345fd8fa6234993eec0dd77fc7e934fa822",
+    "javoSha256": "5cdbcd0866a1697f9eee124dc863d5710dcb874d15fabf152184b4e79e89d0a6"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/installer/RootInstaller.kt",
+    "upstreamSha256": "9c41acbf9c409a6a2b2246e76e4140438e1b93dea2add2246b4d6dc0fce8d6b2",
+    "javoSha256": "4dabb9eb46b00d375ae96dd71ab4016f332fd17176c5835f91d1135b5d55fcb8"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/manager/PreferencesManager.kt",
     "upstreamSha256": "9ebee34b76b0f46ae920b3b5c19f1fa49217364195f61503250bfb8be7bd7726",
-    "javoSha256": "3f27f095d9e375c29f6dd05aac579389fce2565541096476136998fc7db52290"
+    "javoSha256": "c2aaa356e23cb984499cf94ed435f25cbb73e1546d93f946645336cbc14574b2"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/ChangelogsRepository.kt",
@@ -427,7 +735,12 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/DownloadedAppRepository.kt",
     "upstreamSha256": "d79a56c8f6eaf081275cf61bab0461f3557706165571eb5021e2ea5b498a9920",
-    "javoSha256": "fbfb4419d02fd6055ca8652e2919b76b60de5811e715af034a268f7033b8a2e4"
+    "javoSha256": "3398f433207e8bb388308a299da4c931003c800125f5a54a3321cb521c10f3cd"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/DownloaderRepository.kt",
+    "upstreamSha256": "b73a32412f0d9c6a11e385f342e372e9bf97c2bcfbcc17091cd9d91ff3f661d3",
+    "javoSha256": "125d43d6b31521b39a524aa24958d9be7f91ffa766e665b67707254966a370bd"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/JavoRelease.kt",
@@ -440,9 +753,29 @@
     "javoSha256": "9638ff3dba50ad4a7fa2d2bbb014c303221b49d5be7905842e0b8a3094e4a556"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/repository/PatchBundleRepository.kt",
+    "upstreamSha256": "17cee1b143f09a35393db453eb6fe3fd9483943940bf398c2b22d0487b81774f",
+    "javoSha256": "f98084ee884a30694d1f83d2fbd9bcf414a58ab9f0bdb5d97874b0dbcef46379"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/sources/RemoteSource.kt",
+    "upstreamSha256": "1d06aa4785cdcd210d8675db52877d7443331f0b4922fef38370b7cd151b4948",
+    "javoSha256": "a3d9bd21cfcec48a36adc3eade3ba692b5681f743dc30391a4fd9c8936368aaa"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/domain/sources/Source.kt",
+    "upstreamSha256": "032254a097fe57dbe145e468bbb2f20e2ac986d01dd9d8f2ab9ffae0d917b681",
+    "javoSha256": "c1075fe8473bec0d0d1e4d0f15011948e18745458a055f97bf11bce155666952"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/network/downloader/ApkMirrorTransfer.kt",
     "upstreamSha256": null,
-    "javoSha256": "893388ffdc7b8e4cf4929b6e6a4f03d175aa19b619781fef324e5e5e7495bd41"
+    "javoSha256": "8376b38ace5525bb48823f142025220506da72ba12b9bde877d6bce769e9fc03"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/network/downloader/DownloaderPackage.kt",
+    "upstreamSha256": "26e3cb63784822cae69b1d21770dee4104309ae4857cceb1f4486905e812f12e",
+    "javoSha256": "e7c2dc7b17022ba0d655fc788f3e0e82735a4585408c7064192a9a4e656467fa"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/PatcherActivity.kt",
@@ -452,7 +785,7 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/Session.kt",
     "upstreamSha256": "c9e067f8980c0a505171ae5df8b10e720de6d37370b4db74c7f6b6a934d78f3d",
-    "javoSha256": "470b52e0319e06b8370789ea001104eece8ac7a8befe58a32658cfb515151e1c"
+    "javoSha256": "9913c1ec5801d580a2a0db66ebe55dfdb090369e0a2ad774832dfc5846626b15"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/logger/Logger.kt",
@@ -472,7 +805,12 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/ProcessRuntime.kt",
     "upstreamSha256": "e8a13207eeda37e8dd6fb2fe31792cc9e6d9c2c2817373fd99ea458640594433",
-    "javoSha256": "6b8331a91faf4bc7b19d66350973963023667f1f506b8a14aed94a96dc284f9f"
+    "javoSha256": "6f902d25376a8a6772be15f97339bddd7d0db9dafb5d50872faaa13c5790654c"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/Runtime.kt",
+    "upstreamSha256": "9eb17d721e8357fbf1121a39994de23a0b8a5f4ffbe81cd24a83b511d34e0d55",
+    "javoSha256": "558ec5e1cd83c1cce1f24eca2eb2153f24848be4afe542ed4fef5abeb6cbc362"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/runtime/process/PatcherProcess.kt",
@@ -482,7 +820,12 @@
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/patcher/worker/PatcherWorker.kt",
     "upstreamSha256": "8df8d36daa3822c63d30174c60ec4fc6bb36cc1f6997ecde8ee6b69c89277c9c",
-    "javoSha256": "5df418d07e64df374f20a314025f7c03880fa16fd74af2b89bae119c16406495"
+    "javoSha256": "7912510b66caf8269540622d1f3bbaa33b8de65a038f2dcf4ff672dcee0af85e"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/component/patches/OptionFields.kt",
+    "upstreamSha256": "ff50df4ec37d421da7d9d662a32f7331b35727c649b9db2ec292c7201ab249cb",
+    "javoSha256": "fa0b7ff26b78199e50155373dfea7283b3f1025b6412eb844c58cca71a95e4ec"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/DashboardScreen.kt",
@@ -490,14 +833,34 @@
     "javoSha256": "fbf3558e6579eeaaf9497d7de2958bef89be6797af5f7ffeab2c9ae6e75a9f4b"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/OnboardingScreen.kt",
+    "upstreamSha256": "ca4822ac186bdc74769f506a4abe324f6a388fe9ea22e3e97ea4665751c4bca2",
+    "javoSha256": "2aba734094e177eda28b2483e906572aab5884f5075db471c944ef9730cb6855"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/PatcherScreen.kt",
     "upstreamSha256": "aaf676ec138c2e4c7258d016eab39e3f990ef65cbf115ba1a5028a89b8d23df1",
     "javoSha256": "3ff6d8ddca1e8583bc9bd5c373168fb8c3c921abbe3b250b476d6cbe90705d50"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/SettingsScreen.kt",
+    "upstreamSha256": "bbccb08bf05f692a9f3a5de63991e029dc624ed082428ca35f561198ca4d1885",
+    "javoSha256": "6885b6d059d25b8f12c3bdd7746d83ae87aba570bc013040caf61453cd9b47b4"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/onboarding/UpdatesStepContent.kt",
+    "upstreamSha256": "0c013e9c001dc3b9044416ff7c5f433adcc0a750ce81563fef075eb5b34caccd",
+    "javoSha256": "263df7bcd2f0e33c8b00a0b8638e690418675e22924daf41ebf27df6f1be9abd"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/settings/AdvancedSettingsScreen.kt",
     "upstreamSha256": "4dd554d25fff0e8893022d39b7a4769afdd9171efe3ab867d9eebeb4caf21f5a",
     "javoSha256": "b955479b3cbb31932713041d5fa03d5f66f09fcd89d3eef6e085a6acce1273b9"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/settings/DownloadsSettingsScreen.kt",
+    "upstreamSha256": "12be0ea45879ebbe3bc36a8a6924fe9f2cc0ae21b5dacf27e2cb9cf7a5c43347",
+    "javoSha256": "d814f50937dae1131c094e390b7d28d5e1be8899825dfcd83faf36dcfea312c1"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/screen/settings/GeneralSettingsScreen.kt",
@@ -510,14 +873,40 @@
     "javoSha256": "177e079222466be4d2ee7bea6528bd3455e8ccbbada7a291c2e31f3209813064"
   },
   {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/viewmodel/OnboardingViewModel.kt",
+    "upstreamSha256": "71d5f1548e83c9cc6dc8fb0cdc57eb220d0aafe2722423b1245c58d57d48791c",
+    "javoSha256": "fbde06a5887b7eed92054f65348cad4b4b5d6a9a940573a8b9e625f9bc1b982a"
+  },
+  {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/viewmodel/PatcherViewModel.kt",
     "upstreamSha256": "791bbab17698eca397fe944e8c4533c97385b5b12a9bc143125733c362fc6b5c",
-    "javoSha256": "ad00f1927017fe04ee514ea6786606d2e7e1a7b1845a4efdc98dac0d955e2757"
+    "javoSha256": "3c8db45a51521874c4cf05c96a7ef3e09e9d0e2ca73e52bce8618d1b6cd126cd"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/viewmodel/SelectedAppInfoViewModel.kt",
+    "upstreamSha256": "52f9dbebf67dc9a1adccb4527ec9c528a2fc70482e97f75627eb1ba4aadc8e84",
+    "javoSha256": "369b89778352d10ee63a066f8adcd9a1aaef3cb49ee245d1c4c757257764a15d"
   },
   {
     "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/ui/viewmodel/UpdateViewModel.kt",
     "upstreamSha256": "3256c31280de6319d8ca61a41520c8d9d63b18da6505113445f24ac5dd600fc1",
-    "javoSha256": "b699fa29de43e868826cf1e25fbb8b109aa1f118f889e22259fd993787757c6a"
+    "javoSha256": "424fe730113b4c5d4475856ed648c7b83ab7d62e59a4fa78e8d957047d67f8ff"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/util/RequestManageStorageContract.kt",
+    "upstreamSha256": "75689af3c4002952bb67c69ab591af08a969e16db12ff2133eafad8dad7ae194",
+    "javoSha256": null,
+    "javoRemovalReason": "Removed obsolete all-files-access settings contract with the broad-storage permission; Manager uses scoped storage and Android's document picker. No remaining source references."
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/video/VideoDownload.kt",
+    "upstreamSha256": null,
+    "javoSha256": "9e94e79df455ea885cb05565f5f80a943ab1ccc7a27f5e82491b46eeae08f453"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/java/app/revanced/manager/video/VideoDownloadActivity.kt",
+    "upstreamSha256": null,
+    "javoSha256": "74000d5edacfb2ba839889bea2d3564d51ae1952b7fd252245540437011bfa6e"
   },
   {
     "file": "apps/javo-manager/app/src/main/res/drawable/ic_launcher_foreground.xml",
@@ -927,36 +1316,31 @@
   {
     "file": "apps/javo-manager/app/src/main/res/values/javo.xml",
     "upstreamSha256": null,
-    "javoSha256": "091132a99b8394354e78cf2c115a55d021913d2e648c3afb592b9f48fc27dea2"
+    "javoSha256": "d448f26e676518c651b3e1dc1dcd79782954c3dcbedaffc48cc98cde39797e2b"
   },
   {
     "file": "apps/javo-manager/app/src/main/res/values/strings.xml",
     "upstreamSha256": "dd87bcd9d51b0ef1ef3426fb970049228c34ecd51fe4abb710f1e2fc0961f2ad",
-    "javoSha256": "5d89d584257cef32adcf9870b84a98c1a85f6a2f44e24412797398e03b2dc225"
+    "javoSha256": "28db63b03dab9bec85349adcce88d5e126298c4343bc32f660e9d0fa1b9d62c5"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/xml/backup_rules.xml",
+    "upstreamSha256": "9f7e4c84c8fd2c81478d15962383f47cc6ff55d62abcd40c8ffa6fc08a8c35b7",
+    "javoSha256": "a9920060d1f795daae1c869e9238ced38e045ba27549471c36022b7dc3d26fd4"
+  },
+  {
+    "file": "apps/javo-manager/app/src/main/res/xml/data_extraction_rules.xml",
+    "upstreamSha256": "cb1fc47ab4a984530ed60e0e6ee638929c3038290e7e7e0b4b03a3a30fbe7381",
+    "javoSha256": "3f20c7105c244c4ee328332d2b08573bed3a76ed561c7a41f029d7174fec023c"
   },
   {
     "file": "apps/javo-manager/gradle.properties",
     "upstreamSha256": "01b63136d3fca9f60cf86b9af39476e4368d174d092aa8e487b7ce96d10f726a",
-    "javoSha256": "aaaf68735cea79f75b63a180c068997778147fdf14777baede91d919d997e5d2"
+    "javoSha256": "c336d85e6c5d1f3b54d60ae9f6f9cf54aa48e19d8f4e3eeecac0ae123f06016c"
   },
   {
     "file": "apps/javo-manager/settings.gradle.kts",
     "upstreamSha256": "6d8b59699b88aed4776b1fd8203435ef9aef47458f5f8e665a607a853ff99a31",
-    "javoSha256": "fc9fc9932f875abd78b9c81a11c571b24f77a2404e911715cbbfbd7f1f3e4414"
-  },
-  {
-    "file": "apps/javo-manager/api/src/main/res/layout/webview_fragment.xml",
-    "upstreamSha256": null,
-    "javoSha256": "1874c4fa00814c5f80fc4bb3396af1a37ece66ca35f284c9fc44e96b5cd105b5"
-  },
-  {
-    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/ProductionBrowserChecks.kt",
-    "upstreamSha256": null,
-    "javoSha256": "4c632ab7eccf399400199005676ee0500f418d0b59b1a9cf51e3cec6b7a41f34"
-  },
-  {
-    "file": "apps/javo-manager/app/src/androidTest/java/app/javo/integration/LiveMirrorDiagnostic.kt",
-    "upstreamSha256": null,
-    "javoSha256": "12774480ae9ec952fd44095c659ca1496746b6ca381acacf8cab38208dc37173"
+    "javoSha256": "d5b284b672d01b2a5ffee49fab3da7dfa75f84ded0b18045b7087d94d5ce9589"
   }
 ]

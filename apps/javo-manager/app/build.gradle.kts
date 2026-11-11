@@ -96,6 +96,8 @@ dependencies {
 
     // ReVanced
     implementation(libs.revanced.patcher)
+    // The same pinned Apktool runtime supplies the atomic framework bootstrap.
+    implementation("app.revanced:apktool-lib:2.10.1.1")
     // Match Patcher's runtime dexlib2; Session also uses its public bytecode interfaces.
     implementation("com.android.tools.smali:smali-dexlib2:3.0.9")
     implementation(libs.revanced.library)

@@ -2,13 +2,15 @@
 
 [**Public Javo website**][website] · [**Security and release status**](SECURITY.md)
 
-APK downloads are under review after Play Protect warnings were reported for Manager and Core. The [installation guide (Hinglish)](docs/INSTALLATION.md) explains how to identify and report the warning.
+**[Download Core javo.6](https://github.com/NavigatorJagdish/javo-revanced/releases/download/core-v0.3.13.2.250932-javo.6/javo-core-0.3.13.2.250932-javo.6-production.apk)** · [Setup guide (Hinglish)](docs/INSTALLATION.md) · [Verification limits](docs/VERIFICATION-STATUS.md)
+
+Manager alpha.13 remains withheld after a harmful Play Protect indication on the owner's phone. The owner reported Core javo.6 safe on that phone; this is not clearance for every device. Keep Play Protect enabled. Three advisory matches in two legacy Core libraries remain open; see the [dependency review](docs/DEPENDENCY-REVIEW.md).
 
 **Patch. Manage. Customize. Control.**
 
 Javo ReVanced is an independent Android APK patching project based on ReVanced Manager and GmsCore. Use Javo Manager to customize compatible YouTube and YouTube Music APKs locally. This is a **functional alpha**. See [the installation guide](docs/INSTALLATION.md) for the current release and [the implementation report](docs/FINAL_REPORT.md) for test scope.
 
-Alpha.10 gives Manager 20 minutes after preparation to patch and write the APK. Javo Core now verifies downloaded legacy DroidGuard APKs and their signer before loading code. The [release notes](docs/RELEASE_ALPHA10.md) describe the changes and [test evidence](evidence/release-alpha10.json) records the checks.
+Alpha.13 repairs interrupted framework caches before parallel APK decoding and retains a 20-minute patch/save window after preparation. Core javo.6 includes tracked upstream security backports and updated runtime dependencies. Read the [Core release notes](docs/RELEASE_CORE6.md) and current verification limits before installing.
 
 [website]: https://navigatorjagdish.github.io/javo-revanced/
 
@@ -17,11 +19,11 @@ Alpha.10 gives Manager 20 minutes after preparation to patch and write the APK. 
 
 - `apps/javo-manager`: complete pinned real ReVanced Manager source, Javo identity, neon dark palette, and isolated signed-update verification source. The upstream patch/sign/install architecture is retained. Private CI compiled and linted Manager. The workflow checks the packaged APK through browser, HTTPS transfer and first-party patch/sign/install integration. See the generated final report for each release's verified outcomes.
 - `apps/javo-core`: complete real ReVanced GmsCore source with Javo branding while retaining `app.revanced.android.gms` and service contracts. See evidence for the actual build result.
-- `patches/javo-branding`: opt-in Video/Music label and icon resource patch source. The Kotlin bundle and DEX archive compile. Resource transformations and external-entity rejection were checked on Android; both first-party fixtures passed patching, signing, installation and launch.
+- `patches/javo-branding`: Video/Music label, icon and interface resource transformations. Javo Manager applies its built-in Javo branding automatically for those targets; the standalone bundle is for external patchers. Both first-party fixtures passed patch/sign/install/launch on Android 10/15.
 - `apps/javo-website`: 17 static pages, responsive navigation, persisted theme, honest artifact inventory, documentation and security information. No installation dependencies are required.
-- `assets`: all four original reference images, scalable Javo logos and Android vector/monochrome icons.
+- `assets`: scalable Javo logos and Android vector/monochrome icons. Original project references are kept privately and excluded from public source packaging.
 - `infrastructure`: real APK verification, release envelope signing, artifact packaging, CI and smoke-test scripts.
-- `evidence`: actual logs, test results, screenshots and source provenance. Concept references are never presented as screenshots of a running app.
+- `evidence`: sanitized release summaries and source provenance. Raw private logs, device screenshots and original inputs are excluded from public source packaging.
 
 ## Website
 

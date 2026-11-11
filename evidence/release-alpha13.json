@@ -1,0 +1,39 @@
+{
+  "limits": [
+    "No universal Play Protect clearance",
+    "Actual YouTube downloads and playback unverified",
+    "Historical public privacy cleanup incomplete"
+  ],
+  "workflowRun": 42996215236,
+  "sourceCommit": "bf324721e415562a0ee7910deb703b77babada37",
+  "manager": {
+    "corruptFrameworkRecovery": true,
+    "offlineUpdateLaunchPass": true,
+    "offlineSha256": "b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a",
+    "nonSignatureEntriesIdentical": 634,
+    "realReferenceInstalled": true,
+    "realReferencePatchingSeconds": 204,
+    "playback": "not-tested",
+    "ciSha256": "7296f013152661ea24524612787897f2ede4cbf98ff8c058f8ccc26d81e6d70a",
+    "api35FixturePass": true,
+    "ownerPhoneResult": "harmful indication; withheld",
+    "api29FixturePass": true
+  },
+  "runtimeDependencies": {
+    "managerVersions": 385,
+    "distinctVersions": 536,
+    "coreVersions": 191,
+    "coreAffectedVersions": 2,
+    "coreOpenDistinctAdvisories": 3,
+    "managerAdvisoryMatches": 0
+  },
+  "date": "2026-11-11",
+  "core": {
+    "privateManifestBoundaries": 8,
+    "accountIntegration": "not-tested",
+    "ownerPhoneResult": "reported safe on one phone",
+    "offlineSha256": "c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311",
+    "offlineUpdateLaunchPass": true,
+    "externalStartProbesDenied": 5
+  }
+}

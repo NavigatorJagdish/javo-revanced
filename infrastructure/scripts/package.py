@@ -1,6 +1,6 @@
 """Build a source/evidence/website archive, excluding caches and signing secrets."""
 from pathlib import Path
-import zipfile,hashlib,json,os,re
+import zipfile,hashlib,json,os,re,argparse
 
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'deliverables';OUT.mkdir(exist_ok=True)
@@ -38,7 +38,7 @@ def verify_branding_evidence(bundle,integration,catalog):
         p.get('fixtureProcessRunning') is not True or p.get('fixtureCrashObserved') is not False for p in products
     ):raise ValueError('Both patched fixtures must pass installation and launch')
 
-def package():
+def package(source_only=False):
     files=list(source_files())
     catalog=json.loads((ROOT/'infrastructure/release/catalog.json').read_text())
     dist=ROOT/'apps/javo-website/dist'
@@ -46,15 +46,16 @@ def package():
     for p in sorted(dist.rglob('*')):
         if not p.is_file() or p.is_symlink():continue
         relative=p.relative_to(dist).as_posix()
-        if relative.startswith('downloads/files/') and relative not in approved_downloads:continue
+        if relative.startswith('downloads/files/') and (source_only or relative not in approved_downloads):continue
         files.append((p,'website/'+relative))
     for a in catalog['artifacts']:
+        if source_only:continue
         p=OUT/'apks'/Path(a['path']).name
         digest=hashlib.sha256(p.read_bytes()).hexdigest()
         if digest!=a['sha256']:raise ValueError('Verified APK changed after validation')
         files.append((p,'apks/'+p.name))
     bundle=ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp'
-    if bundle.exists():
+    if not source_only and bundle.exists() and catalog['status'] != 'release-review' and any(a['id']=='manager' for a in catalog['artifacts']):
         integration=json.loads((ROOT/'evidence/manager-patch-integration.json').read_text())
         verify_branding_evidence(bundle,integration,catalog)
         files.append((bundle,'bundles/'+bundle.name))
@@ -71,4 +72,7 @@ def package():
     digest=hashlib.sha256(archive.read_bytes()).hexdigest()
     (OUT/'SHA256SUMS').write_text(f'{digest}  {archive.name}\n')
     print(json.dumps({'archive':str(archive),'size':archive.stat().st_size,'files':len(files),'sha256':digest,'zipIntegrity':'passed'},indent=2))
-if __name__=='__main__':package()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--source-only',action='store_true',help='Package corresponding source and website without installation binaries')
+    package(parser.parse_args().source_only)

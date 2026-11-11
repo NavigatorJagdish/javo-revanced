@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "removedUpstreamFiles": {
+    "apps/javo-manager/app/src/main/java/app/revanced/manager/util/RequestManageStorageContract.kt": "Removed obsolete all-files-access settings contract with the broad-storage permission; Manager uses scoped storage and Android's document picker. No remaining source references."
+  }
+}

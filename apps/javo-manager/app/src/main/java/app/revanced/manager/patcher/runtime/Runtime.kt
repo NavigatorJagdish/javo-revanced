@@ -5,6 +5,7 @@ import app.revanced.manager.data.platform.Filesystem
 import app.revanced.manager.domain.manager.PreferencesManager
 import app.revanced.manager.domain.repository.PatchBundleRepository
 import app.revanced.manager.patcher.ProgressEvent
+import app.revanced.manager.BuildConfig
 import app.revanced.manager.patcher.aapt.Aapt
 import app.revanced.manager.patcher.logger.Logger
 import app.revanced.manager.util.Options
@@ -23,7 +24,7 @@ sealed class Runtime(context: Context) : KoinComponent {
     protected val aaptPath = Aapt.binary(context)?.absolutePath
         ?: throw FileNotFoundException("Could not resolve aapt.")
     protected val frameworkPath: String =
-        context.cacheDir.resolve("framework").also { it.mkdirs() }.absolutePath
+        context.cacheDir.resolve("framework-${BuildConfig.VERSION_CODE}").also { it.mkdirs() }.absolutePath
 
     protected suspend fun bundles() = patchBundlesRepo.bundles.first()
 

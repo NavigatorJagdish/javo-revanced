@@ -46,6 +46,9 @@ class PatchIntegrationInstrumentation : Instrumentation() {
         }
         try {
             report.put("managerApkSha256",UpdateSecurity.sha256(File(targetContext.applicationInfo.sourceDir)))
+            val frameworkCache = File(targetContext.cacheDir, "framework-${app.revanced.manager.BuildConfig.VERSION_CODE}").also { it.mkdirs() }
+            val frameworkApk = frameworkCache.resolve("1.apk")
+            frameworkApk.writeBytes(byteArrayOf(0x50, 0x4b, 0x03))
             val downloader = runBlocking { GlobalContext.get().get<DownloaderRepository>().loadedDownloadersFlow.first().single() }
             check(downloader.packageName == targetContext.packageName && downloader.className == "app.javo.apkmirror.BuiltIn")
             report.put("builtInApkMirror", true)
@@ -139,7 +142,7 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                     report.put("separateProcessPatch", true)
                 }
             } else runBlocking {
-                Session(File(folder,"cache").absolutePath, File(folder,"framework").also { it.mkdirs() }.absolutePath,
+                Session(File(folder,"cache").absolutePath, frameworkCache.absolutePath,
                     checkNotNull(Aapt.binary(targetContext)).absolutePath, logger, fixture, {}, LogLevel.INFO).use {
                     it.run(unsigned, patches.toList())
                 }
@@ -183,11 +186,14 @@ class PatchIntegrationInstrumentation : Instrumentation() {
                 }
                 report.put("fixtureOutputDirectory", output.absolutePath)
             }
+            check(app.javo.security.FrameworkCache.valid(frameworkApk)) { "Interrupted framework cache was not repaired" }
+            report.put("interruptedFrameworkCacheRecovered", true)
             report.put("success",true)
             File(folder,"result.json").writeText(report.toString(2))
             finish(Activity.RESULT_OK, Bundle().apply { putString("result",report.toString()) })
         } catch (error: Throwable) {
-            report.put("success",false).put("failure",error.stackTraceToString())
+            val remote = (error as? app.revanced.manager.patcher.runtime.ProcessRuntime.RemoteFailureException)?.originalStackTrace
+            report.put("success",false).put("failure",remote ?: error.stackTraceToString())
             File(folder,"result.json").writeText(report.toString(2))
             android.util.Log.e("JavoIntegration","Integration check failed",error)
             finish(Activity.RESULT_CANCELED, Bundle().apply { putString("result",report.toString()) })

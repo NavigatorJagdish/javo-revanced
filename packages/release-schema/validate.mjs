@@ -30,6 +30,7 @@ export function verifyChecksum(data, expected) {
 }
 export function validateCatalog(catalog) {
   if(catalog?.schemaVersion!==1||!Array.isArray(catalog.artifacts)||!Array.isArray(catalog.limitations))throw Error('Invalid artifact catalog');
+  if(catalog.status==='core-alpha-manager-review' && catalog.artifacts.some(a=>a.id==='manager'))throw Error('Manager distribution is held during Core-only review release');
   const ids=new Set();
   for(const a of catalog.artifacts){
     if(ids.has(a.id))throw Error('Duplicate artifact');ids.add(a.id);

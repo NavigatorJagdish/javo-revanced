@@ -47,6 +47,7 @@ private const val DEFAULT_API_KEY = "AIzaSyDqVnJBjE5ymo--oBJt3On7HQx9xNm1RHA"
 
 class SafetyNetClientService : BaseService(TAG, GmsService.SAFETY_NET) {
     override fun handleServiceRequest(callback: IGmsCallbacks, request: GetServiceRequest, service: GmsService) {
+        PackageUtils.getAndCheckCallingPackage(this, request.packageName)
         callback.onPostInitComplete(0, SafetyNetClientServiceImpl(this, request.packageName, lifecycle), null)
     }
 }

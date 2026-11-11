@@ -18,6 +18,7 @@ import com.google.android.gms.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.microg.gms.gcm.GcmDatabase
+import java.util.Locale
 
 class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
     private lateinit var database: GcmDatabase
@@ -71,7 +72,7 @@ class PushNotificationAllAppsFragment : PreferenceFragmentCompat() {
                     pref.key = "pref_push_app_" + app.packageName
                     pref to (database.getRegistrationsByApp(app.packageName))
                 }.sortedBy {
-                    it.first.title.toString().toLowerCase()
+                    it.first.title.toString().lowercase(Locale.getDefault())
                 }.mapIndexed { idx, pair ->
                     pair.first.order = idx
                     pair

@@ -1,8 +1,12 @@
 # Javo ReVanced installation aur setup guide
 
-> **APK downloads abhi review mein hain.** Alpha.10 ke Manager aur Core dono ke liye Play Protect warnings report hui hain. Installation resume karne se pehle [download status](https://navigatorjagdish.github.io/javo-revanced/downloads/) check karein.
+> **Manager download abhi hold par hai.** Owner ke phone ne Manager alpha.13 ko bhi harmful indicate kiya. Core javo.6 ke liye owner ne safe result report kiya; ye har phone ki guarantee nahi hai. Sirf [official download status](https://navigatorjagdish.github.io/javo-revanced/downloads/#core) par listed Core file lein. Play Protect ON rakhein; harmful block aaye to installation rok dein.
 
-Ye guide reviewed release available hone ke baad use karein. Manager ke liye Android 8.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
+Manager ke neeche diye steps uski reviewed release available hone ke baad use karein. Manager ke liye Android 8.0 ya naya version chahiye; Core javo.6 ke liye Android 5.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
+
+Core javo.6 file: `javo-core-0.3.13.2.250932-javo.6-production.apk`.
+SHA-256: `c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311`.
+Account login, push delivery aur real video playback ka full verification abhi baaki hai. Core ke do legacy dependencies ki teen advisories ka review `DEPENDENCY-REVIEW.md` mein hai.
 
 ## 1. GitHub se files download karein
 
@@ -17,6 +21,8 @@ Download status open hone par phone setup ke liye approved release se individual
 ## Manager update
 
 Matching signature wala naya Manager purani install ko update kar sakta hai. Signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
+
+Naya Core-download link aur branding lagane ke liye updated Manager se supported original APK dobara patch karein. Manager update karne se pehle se installed Javo Video/Music APK ka code khud nahi badalta. Naye patched output mein Core missing hone par Javo ke official Core download section ka link hota hai; review hold ho to us page par status dikhega.
 
 ## 2. Manager install karein
 

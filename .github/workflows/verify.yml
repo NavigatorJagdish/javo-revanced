@@ -49,6 +49,8 @@ jobs:
           java -cp tools/java-tests UpdateSecurityTest | tee evidence/java-security-tests.log
           javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/RootArguments.java tests/RootArgumentsTest.java
           java -cp tools/java-tests RootArgumentsTest
+          javac -d tools/java-tests apps/javo-manager/app/src/main/java/app/javo/security/FrameworkCache.java tests/FrameworkCacheTest.java
+          java -cp tools/java-tests FrameworkCacheTest | tee evidence/framework-cache-tests.log
           java -cp tools/java-tests BrandingResourcesTest | tee evidence/java-branding-tests.log
           java -cp tools/java-tests DownloadConnectionTest | tee evidence/java-download-tests.log
           java -cp tools/java-tests ApkMirrorPolicyTest | tee evidence/java-browser-tests.log
@@ -64,6 +66,7 @@ jobs:
             evidence/java-download-tests.log
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
+            evidence/framework-cache-tests.log
   publication-audit:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.event.repository.private
     permissions:
@@ -176,6 +179,19 @@ jobs:
           script: |
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
+      - name: Preserve tested Manager and instrumentation inputs
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: manager-ci-verification-input-not-a-public-release
+          path: |
+            deliverables/apks/javo-manager-*.apk
+            apps/javo-manager/app/build/outputs/apk/androidTest/release/*.apk
+            evidence/manager-security-audit.json
+            evidence/manager-patch-integration.json
+            evidence/manager-api35-patch-integration.json
+          retention-days: 1
+          if-no-files-found: error
       - uses: actions/cache/save@v4
         with:
           key: ${{ format('javo-verify-manager-{0}-{1}', github.run_id, github.run_attempt) }}
@@ -211,7 +227,7 @@ jobs:
           set -euo pipefail
           chmod +x gradlew
           mkdir -p ../../evidence
-          ./gradlew :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
+          ./gradlew :play-services-core-proto:test :play-services-auth-blockstore-core:testReleaseUnitTest :play-services-core:assembleVtmDefaultRelease :play-services-core:testVtmDefaultReleaseUnitTest :play-services-core:lintVtmDefaultRelease --no-daemon --no-configuration-cache --max-workers=2 --console=plain 2>&1 | tee ../../evidence/core-build.log
       - name: Verify Core APK
         run: |
           set -euo pipefail
@@ -231,7 +247,9 @@ jobs:
           disk-size: 2048M
           ram-size: 2048M
           disable-animations: true
-          script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+          script: |
+            python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+            python infrastructure/scripts/android-core-boundaries.py deliverables/apks/javo-core-*.apk
       - name: Preserve Android 10 Core evidence
         run: |
           cp evidence/core-runtime-smoke.json evidence/core-api29-runtime-smoke.json
@@ -246,6 +264,15 @@ jobs:
           ram-size: 2048M
           disable-animations: true
           script: python infrastructure/scripts/android-smoke.py app.revanced.android.gms deliverables/apks/javo-core-*.apk
+      - name: Preserve tested Core input for offline maintainer signing
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: core-ci-verification-build-not-a-public-release
+          path: apps/javo-core/play-services-core/build/outputs/apk/vtmDefault/release/*.apk
+          retention-days: 1
+          if-no-files-found: error
+          # This contains a disposable CI signature, never the offline release key.
       - uses: actions/cache/save@v4
         with:
           key: ${{ format('javo-verify-core-{0}-{1}', github.run_id, github.run_attempt) }}
@@ -307,9 +334,11 @@ jobs:
             evidence/java-download-tests.log
             evidence/java-browser-tests.log
             evidence/runtime-evidence-tests.log
+            evidence/framework-cache-tests.log
       - name: Reverify every APK and package corresponding source
         run: |
           set -euo pipefail
+          node --input-type=module -e "import fs from 'node:fs'; const p='infrastructure/release/catalog.json'; const c=JSON.parse(fs.readFileSync(p)); c.status='release-review'; c.artifacts=[]; fs.writeFileSync(p,JSON.stringify(c,null,2));"
           sdkmanager 'build-tools;34.0.0'
           python infrastructure/scripts/verify-apk.py deliverables/apks/javo-manager-*.apk --sdk "$ANDROID_HOME" --product manager --signing development
           python infrastructure/scripts/verify-apk.py deliverables/apks/javo-core-*.apk --sdk "$ANDROID_HOME" --product core --signing test

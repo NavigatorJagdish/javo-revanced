@@ -1,34 +1,15 @@
-# Continuation state
+# Continuation state — 11 November 2026
 
-```json
-{
-  "updatedAt": "2026-11-07",
-  "readiness": "functional-alpha.7",
-  "repo": "NavigatorJagdish/javo-revanced",
-  "verifiedBuildCommit": "9e47507d290319e50ad01be496379ae75e4ee24a",
-  "verificationRun": 42360099255,
-  "privateCi": "all-six-jobs-passed",
-  "hostChecksPassed": 102,
-  "managerAndroidApis": [
-    29,
-    35
-  ],
-  "coreAndroidApis": [
-    29,
-    35
-  ],
-  "browserRegression": "HTTP 503 retry, late source error suppression, trusted URL handoff, and document-picker APKM import on both Android APIs",
-  "release": "v0.1.0-alpha.7",
-  "sourceZipSha256": "fdf71654e6511c62fd5db40276c00d2f2a9008abd2f731537f9f3faca4d6080b",
-  "sourceEntriesVerifiedByWorkflow": 7246,
-  "branding": "Mandatory built-in Video and Music branding checked on both Android APIs",
-  "realYoutubeLocalScope": "Same-source local Manager patched, signed, installed and launched YouTube 20.40.45 with two upstream patches and automatic Javo branding. The online home feed still displayed a YouTube illustration.",
-  "corePlayProtect": "Owner reported a safe scan and successful installation",
-  "productionSigning": "owner-key-required",
-  "productionUpdateFeed": "unconfigured",
-  "playback": "not-tested",
-  "accountLogin": "not-tested"
-}
-```
+Manager alpha.13 and Core javo.6 are the current review sources. Run 42996215236 at bf324721e415562a0ee7910deb703b77babada37 passed both application jobs, build/tests/lint and Android 10/15 checks. Packaging failed on a host cache path mismatch; restore paths now include the framework recovery report.
 
-Release assets include the Manager APK, Core APK, standalone branding RVP for external patchers, complete source ZIP and checksums. INSTALLATION.md covers the alpha.6 in-place update, repatching and APKMirror retry. The release receipt is evidence/release-alpha7.json.
+Offline Manager SHA-256: b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a. Its 634 non-signature ZIP entries equal the cloud-tested input. Android 10 update/launch passed. Owner reports harmful on the phone: public distribution held.
+
+Offline Core SHA-256: c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311. Offline signer, eight private manifest boundaries, five denied external-start probes and Android 10 update/launch passed. Owner reports safe on one phone. Original verified Core source 95cfdc6ad93b48a71aa542116c39c4f5f720e6e0 has the same Core tree as bf324721e415562a0ee7910deb703b77babada37.
+
+Fresh runtime scan: Manager 385 versions, Core 191, 536 distinct pairs. No Manager advisory matches; two legacy Core libraries have three open advisories. See DEPENDENCY-REVIEW.md.
+
+Alpha.11 VirusTotal and submitted Google appeal do not cover alpha.13. Physical playback, account login, actual YouTube audio/video downloads and a slow-phone 20-minute run remain unverified. Proprietary APKs remain private.
+
+Google site ownership verified; homepage indexing requested. Sitemap fetch and ranking unconfirmed. Source shortcuts removed; licensing retained. XERJ clarification sent; broad approval pending a four-file scope. Historical public archives and older unmasked commit emails still need cleanup.
+
+Signing material stays local. A private binary recovery archive was blocked during Drive readback, so it is not a verified backup. Preserve local originals. Drive stores backups; GitHub Actions runs builds.

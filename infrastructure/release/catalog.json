@@ -1,12 +1,52 @@
 {
   "schemaVersion": 1,
-  "status": "release-review",
-  "generatedAt": "2026-11-10",
-  "artifacts": [],
+  "status": "core-alpha-manager-review",
+  "generatedAt": "2026-11-11",
+  "artifacts": [
+    {
+      "id": "core",
+      "displayName": "Javo Core",
+      "applicationId": "app.revanced.android.gms",
+      "version": "0.3.13.2.250932-javo.6",
+      "versionCode": 250932009,
+      "minSdk": 21,
+      "channel": "development",
+      "signing": "production",
+      "verification": "signature-and-package-verified",
+      "sha256": "c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311",
+      "signerSha256": "47aa6be0fa482463dec325dac7864c771e6a75465c973c29587bc5fe6f4d3873",
+      "size": 93385064,
+      "path": "/downloads/files/javo-core-0.3.13.2.250932-javo.6-production.apk",
+      "runtimeVerified": false,
+      "architectures": [
+        "arm64-v8a",
+        "armeabi-v7a",
+        "x86",
+        "x86_64"
+      ],
+      "runtimeSmoke": {
+        "device": "emulator-5564",
+        "package": "app.revanced.android.gms",
+        "processRunning": true,
+        "crashObserved": false,
+        "installedArtifactMatchesDeliverable": true,
+        "authentication": "not-tested",
+        "pushDelivery": "not-tested",
+        "playback": "not-tested",
+        "androidApi": 29,
+        "architecture": "x86_64",
+        "bootCompleted": true,
+        "inPlaceUpgradeVerified": true,
+        "installedApkSha256": "c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311"
+      },
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/core-v0.3.13.2.250932-javo.6/javo-core-0.3.13.2.250932-javo.6-production.apk"
+    }
+  ],
   "limitations": [
-    "Published alpha.10 Manager uses its development signing certificate. Published alpha.10 Core uses a dedicated release signing certificate. CI uses separate test identities.",
-    "CI checks first-party browser, download, patch, signing and installation fixtures on Android 10 and 15.",
-    "Play Protect clearance, live playback, account login and physical-device compatibility are pending for the next release.",
-    "The production signed update feed is not configured."
+    "Manager alpha.13 remains withheld after the owner reported a harmful Play Protect indication.",
+    "The owner reported a safe result for this exact Core javo.6 file on one phone. This is not clearance for every device.",
+    "Core passed signed integrity, eight private manifest boundaries, five external-start denial probes and Android 10 update/launch. Matching source passed CI on Android 10/15.",
+    "Three advisory matches remain in two legacy Core dependencies; see the dependency review.",
+    "Account login, push, real playback and actual YouTube audio/video downloads are unverified. The signed production update feed is not configured."
   ]
 }

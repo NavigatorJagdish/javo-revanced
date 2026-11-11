@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import zipfile
+from core_manifest_policy import enforce_private_components
 
 parser = argparse.ArgumentParser()
 parser.add_argument('apk', type=Path)
@@ -46,6 +47,7 @@ manifest = subprocess.run(
     [str(tool), 'dump', 'xmltree', str(args.apk), '--file', 'AndroidManifest.xml'],
     check=True, capture_output=True, text=True
 ).stdout
+private_boundaries = enforce_private_components(manifest)
 requested = sorted(set(re.findall(r"uses-permission[^\n]*name='([^']+)'", permissions)))
 if not requested:
     raise RuntimeError('Could not inspect APK permissions')
@@ -94,6 +96,7 @@ report = {
     'requestedPermissions': requested,
     'forbiddenPermissionsAbsent': True, 'debuggable': False, 'allowBackup': False,
     'usesCleartextTraffic': False, 'offlineReleaseSignerVerified': args.release,
+    'privateSecurityBoundariesVerified': private_boundaries,
     'playProtectVerdict': 'requires-device-or-Google-classification-check',
 }
 root = Path(__file__).resolve().parents[2]

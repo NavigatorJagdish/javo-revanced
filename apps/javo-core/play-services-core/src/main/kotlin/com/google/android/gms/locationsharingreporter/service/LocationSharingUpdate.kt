@@ -5,10 +5,13 @@
 package com.google.android.gms.locationsharingreporter.service
 
 import android.accounts.Account
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -30,6 +33,11 @@ class LocationSharingUpdate {
 
         fun startUpdateLocation(account: Account, context: Context) {
             Log.d(TAG, "startUpdateLocation: ")
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.w(TAG, "Location sharing requires location permission")
+                return
+            }
             accountInfo = account
             if (locationCallback == null) {
                 locationCallback = createLocationUpdatesCallback(context)
@@ -42,8 +50,19 @@ class LocationSharingUpdate {
                             .setMaxUpdateAgeMillis(5_000)
                             .build()
                     val identity = Binder.clearCallingIdentity()
-                    LocationServices.getFusedLocationProviderClient(context.applicationContext).requestLocationUpdates(locationRequest, it, Looper.getMainLooper())
-                    Binder.restoreCallingIdentity(identity)
+                    try {
+                        LocationServices.getFusedLocationProviderClient(context.applicationContext)
+                            .requestLocationUpdates(locationRequest, it, Looper.getMainLooper())
+                            .addOnFailureListener {
+                                locationCallback = null
+                                Log.w(TAG, "Location update registration failed")
+                            }
+                    } catch (_: SecurityException) {
+                        locationCallback = null
+                        Log.w(TAG, "Location permission was revoked")
+                    } finally {
+                        Binder.restoreCallingIdentity(identity)
+                    }
                 }
             } else {
                 Log.d(TAG, "startUpdateLocation locationCallback is not null")
@@ -65,8 +84,7 @@ class LocationSharingUpdate {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult ?: return
-                    val location = locationResult.lastLocation
-                    Log.d(TAG, "Location update: ${location.latitude}, ${location.longitude}}")
+                    val location = locationResult.lastLocation ?: return
                     if (accountInfo != null && location != null && appContext != null) {
                         val locationSharingEnabled = isLocationSharingEnabled(appContext!!, accountInfo!!.name)
                         if (locationSharingEnabled) {
