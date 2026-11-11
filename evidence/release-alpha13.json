@@ -35,5 +35,16 @@
     "offlineSha256": "c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311",
     "offlineUpdateLaunchPass": true,
     "externalStartProbesDenied": 5
+  },
+  "fullPassingWorkflow": 43028279298,
+  "fullPassingCommit": "df2621b2bfcc8c43d6a4fb1412665f56aafa88be",
+  "managerReview": {
+    "unsupported": 7,
+    "playProtectClearance": false,
+    "timeouts": 3,
+    "googleAppeal": "receipt confirmed",
+    "virusTotalUndetected": 65,
+    "publicIssue": "https://github.com/NavigatorJagdish/javo-revanced/issues/1",
+    "googleVendor": "timeout"
   }
 }

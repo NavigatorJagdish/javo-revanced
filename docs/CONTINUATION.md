@@ -13,3 +13,11 @@ Alpha.11 VirusTotal and submitted Google appeal do not cover alpha.13. Physical 
 Google site ownership verified; homepage indexing requested. Sitemap fetch and ranking unconfirmed. Source shortcuts removed; licensing retained. XERJ clarification sent; broad approval pending a four-file scope. Historical public archives and older unmasked commit emails still need cleanup.
 
 Signing material stays local. A private binary recovery archive was blocked during Drive readback, so it is not a verified backup. Preserve local originals. Drive stores backups; GitHub Actions runs builds.
+
+## Latest receipts
+
+The full corrected workflow 43028279298 passed at df2621b2bfcc8c43d6a4fb1412665f56aafa88be. Core javo.6, corresponding source ZIP, checksums and installation guides are published under core-v0.3.13.2.250932-javo.6. Public APK and source ZIP digests match the verified local files.
+
+Alpha.13 VirusTotal completed with 65 undetected, three timeouts (including Google), seven unsupported and no malicious flags observed. Google confirmed alpha.13 appeal receipt. Manager remains held; exact-file review is tracked at https://github.com/NavigatorJagdish/javo-revanced/issues/1.
+
+Source and original-reference private Drive backups were downloaded and checksum-verified. Stopped obsolete emulator disks were removed, freeing 27.77 GiB. Signing keys, current source, APKs, one emulator and dependencies remain local. The separate binary recovery archive is not a verified backup because Drive blocked its download. See the owner's private recovery guide; do not publish its contents or private backup links.
