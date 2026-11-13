@@ -79,6 +79,9 @@ class PatchIntegrationInstrumentation : Instrumentation() {
             } catch (error: Throwable) {
                 official.put("metadataLoadedOnAndroid",false).put("failure",error.stackTraceToString())
             }
+            // A new stream fix must execute on Android; do not inherit old evidence.
+            report.put("streamFallbackRuntime", checkStreamFallbackFixture(
+                File(folder, "official-inspected.rvp"), folder, targetContext))
             val products = JSONArray()
             report.put("products", products)
             for ((id, packageName, label) in listOf(

@@ -24,6 +24,8 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import app.javo.branding.BrandingResources
 import app.javo.security.FrameworkCache
+import app.javo.patcher.JavoPlaybackPatch
+import app.javo.patcher.JavoUpdateLink
 import brut.androlib.Config
 import brut.androlib.res.Framework
 import kotlinx.coroutines.Dispatchers
@@ -108,7 +110,7 @@ class Session(
                         temporaryFilesPath = tempDir,
                         frameworkFileDirectory = frameworkDir,
                         aaptBinaryPath = File(aaptPath)
-                    ) { packageName, _ ->
+                    ) { packageName, version ->
                         val product = when (packageName) {
                             "com.google.android.youtube" -> "Video"
                             "com.google.android.apps.youtube.music" -> "Music"
@@ -116,6 +118,14 @@ class Session(
                         }
                         if (product == null) selectedPatches.toSet()
                         else {
+                            // Never make newer YouTube versions appear supported by
+                            // silently running patches for a different bytecode layout.
+                            if (product == "Video") selectedPatches.forEach { patch ->
+                                val versions = patch.compatiblePackages?.singleOrNull { it.first == packageName }?.second
+                                require(versions == null || version in versions) {
+                                    "${patch.name} does not support YouTube $version. Update the trusted patch bundle or select a listed supported APK version."
+                                }
+                            }
                             val label = "Javo $product"
                             // The unnamed root sorts first and its finalizer runs last,
                             // after upstream settings and GmsCore have written resources.
@@ -137,7 +147,22 @@ class Session(
                             }
                             val defaults = if (product == "Video") videoDefaults(selectedPatches, patchingLogger) else null
                             val coreLink = if (selectedPatches.any { it.name == "GmsCore support" }) coreDownloadLink(patchingLogger) else null
-                            setOfNotNull(branding, defaults, coreLink) + selectedPatches.filterNot { it.name in conflicting }
+                            val playback = if (product == "Video" && selectedPatches.any { it.name == "Spoof video streams" }) bytecodePatch {
+                                afterDependents {
+                                    JavoPlaybackPatch.apply(classDefs)
+                                    patchingLogger.info("Javo stream fallback rejects formats without playback URLs")
+                                }
+                            } else null
+                            val updateLink = bytecodePatch {
+                                afterDependents {
+                                    val original = classDefs["Lapp/revanced/extension/shared/checks/Check;"]
+                                    if (original != null) {
+                                        JavoUpdateLink.apply(classDefs.getOrReplaceMutable(original))
+                                        patchingLogger.info("Javo update/help destination configured; environment warnings retained")
+                                    }
+                                }
+                            }
+                            setOfNotNull(branding, defaults, coreLink, playback, updateLink) + selectedPatches.filterNot { it.name in conflicting }
                         }
                     }
                 }

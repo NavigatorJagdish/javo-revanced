@@ -63,15 +63,9 @@ def main():
     if not tls.exists():
         run(Path(os.environ['JAVA_HOME'])/'bin'/('keytool'+suffix),'-J-Dkeystore.pkcs12.legacy','-genkeypair','-alias','fixture','-keyalg','RSA','-keysize','2048','-storetype','PKCS12','-keystore',tls,'-storepass','fixture-test','-keypass','fixture-test','-dname','CN=localhost','-ext','SAN=dns:localhost,ip:127.0.0.1','-validity','30','-noprompt')
     shutil.copyfile(tls,out/'transfer-test.p12')
-    # Generated media contains a color field and a tone. No upstream media is packaged.
-    audio=out/'javo-fixture.m4a'
-    run('ffmpeg','-hide_banner','-loglevel','error','-y','-f','lavfi','-i',
-        'sine=frequency=440:duration=1','-c:a','aac',audio)
-    run('ffmpeg','-hide_banner','-loglevel','error','-y','-f','lavfi','-i',
-        'color=c=black:s=160x96:r=24:d=1','-i',audio,'-c:v','libx264','-pix_fmt','yuv420p',
-        '-c:a','copy','-shortest','-movflags','+faststart',out/'javo-fixture.mp4')
-    run('ffmpeg','-hide_banner','-loglevel','error','-y','-i',out/'javo-fixture.mp4',
-        '-map','0:v:0','-c:v','copy','-an','-movflags','+faststart',out/'javo-fixture-video-only.mp4')
+    # Verified synthetic vectors keep media tests independent of apt/FFmpeg.
+    from fixture_media import copy_media
+    copy_media(ROOT/'tests/fixture/media', out)
     if args.fixture_only:
         print('Built first-party Video/Music test fixtures. No patches executed.');return
     shutil.copyfile(ROOT/'patches/javo-branding/build/libs/javo-branding-0.1.0-alpha.1.rvp',out/'javo-branding.rvp')
@@ -89,6 +83,6 @@ def main():
         print('Pinned official snapshot prepared for diagnostic Android metadata loading.')
     except Exception as error:
         (out/'official-inspected.rvp').unlink(missing_ok=True)
-        print('Official snapshot diagnostic unavailable:',error)
+        raise RuntimeError('The pinned stream extension is required for Android regression tests') from error
     print('Prepared first-party fixture and branding bundle for Android integration testing.')
 if __name__=='__main__':main()

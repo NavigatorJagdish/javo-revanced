@@ -65,17 +65,31 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         val patchLog = File(folder,"progress.log").readText()
         check("Javo Manager is the default video saver" in patchLog && "Javo Video download action is enabled" in patchLog)
         check("Javo cellular playback defaults to 480p" in patchLog)
+        check("Javo stream fallback rejects formats without playback URLs" in patchLog)
+        check("Javo update/help destination configured" in patchLog)
         report.put("javoDownloadDefaultPatched",true).put("cellular480pDefaultPatched",true)
         report.put("separateProcessPatch",true)
         val signed=File(folder,"youtube-signed.apk")
         val key=File(folder,"local-test.keystore")
         ApkUtils.signApk(unsigned,signed,"Javo local integration",ApkUtils.KeyStoreDetails(key,alias="local",password="local-test"))
+        // Execute the real injected method from the resulting APK, with real protobufs.
+        val extensionLoader = dalvik.system.DexClassLoader(signed.path, target.codeCacheDir.path, null, target.classLoader)
+        report.put("streamFallbackRuntime", StreamFallbackProbe.runChecks(extensionLoader, target))
         val dexContainer = DexFileFactory.loadDexContainer(signed, Opcodes.getDefault())
         var javoCoreLink = false
         var upstreamCoreLink = false
+        var javoUpdateLink = false
+        var upstreamUpdateLink = false
         for (entryName in dexContainer.dexEntryNames) {
             val dex = checkNotNull(dexContainer.getEntry(entryName)).dexFile
             for (definition in dex.classes) {
+                if (definition.type == "Lapp/revanced/extension/shared/checks/Check;") {
+                    for (method in definition.methods) for (instruction in (method.implementation?.instructions ?: emptyList())) {
+                        val text = ((instruction as? ReferenceInstruction)?.reference as? StringReference)?.string ?: continue
+                        javoUpdateLink = javoUpdateLink || text == "https://navigatorjagdish.github.io/javo-revanced/docs/installation/"
+                        upstreamUpdateLink = upstreamUpdateLink || text == "https://revanced.app"
+                    }
+                }
                 if (!definition.type.startsWith("Lapp/revanced/extension/shared/GmsCoreSupport")) continue
                 for (method in definition.methods) for (instruction in (method.implementation?.instructions ?: emptyList())) {
                     val text = ((instruction as? ReferenceInstruction)?.reference as? StringReference)?.string ?: continue
@@ -86,6 +100,8 @@ fun checkRealYoutube(instrumentation: Instrumentation, input: File) {
         }
         check(javoCoreLink && !upstreamCoreLink) { "Patched output does not contain the required Javo Core download destination" }
         report.put("javoCoreRedirectVerified", true)
+        check(javoUpdateLink && !upstreamUpdateLink) { "Patched update/help action still targets the upstream website" }
+        report.put("javoUpdateHelpRedirectVerified", true)
         @Suppress("DEPRECATION")
         val info=checkNotNull(target.packageManager.getPackageArchiveInfo(signed.path,PackageManager.GET_SIGNATURES))
         check(info.packageName=="app.revanced.android.youtube")

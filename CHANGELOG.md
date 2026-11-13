@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0-alpha.14 — unreleased candidate
+
+- Reject URL-less spoof stream responses so the existing client fallback can run.
+- Route the patched app's environment repair/help action to the Javo guide.
+- Enforce declared YouTube patch compatibility and validate the extension layout.
+- Add Android stream parser regression checks and verified synthetic media fixtures.
+
+See [candidate status](docs/PLAYBACK_ALPHA14_CANDIDATE.md). Real network playback
+and the complete new Manager build have not passed yet; no new APK is published.
+
 ## 0.1.0-alpha.8
 
 - Save supported MP4 video and M4A audio to Downloads from the Android share menu or Manager.

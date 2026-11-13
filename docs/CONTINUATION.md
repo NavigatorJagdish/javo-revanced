@@ -1,5 +1,25 @@
 # Continuation state — 11 November 2026
 
+## 13 November playback work — latest local state
+
+Manager alpha.14 is an unreleased source candidate. See
+[playback candidate status](PLAYBACK_ALPHA14_CANDIDATE.md). Its guarded stream
+fallback and Javo repair/help URI passed ten checks using the real transformed
+extension on API 29. Host checks passed 36 Node tests, 24 Python tests and six
+Java suites. Full Manager compilation stopped because AGP 8.13.2 is no longer
+cached and cannot be downloaded; Comet confirmed DNS_PROBE_FINISHED_BAD_CONFIG.
+GitHub connector requests also failed. No alpha.14 APK exists or was published.
+The source candidate, portable binary-safe source patch and verification receipt
+are stored locally in deliverables/alpha.14-candidate. No proprietary APK, key,
+private input or raw account log is included in the candidate source archive.
+
+The owner reports ordinary-video playback stalls on YouTube 20.40.45. A targeted
+SABR-only response fallback fix is prepared; the owner's real two-minute playback
+problem is not confirmed resolved. New YouTube versions require reviewed bundle
+compatibility and actual patch/playback verification. Keep Play Protect enabled.
+The existing public alpha.13 review download remains known-blocked by the owner;
+none of its test or scan results can be used to certify alpha.14.
+
 Manager alpha.13 and Core javo.6 are the current review sources. Run 42996215236 at bf324721e415562a0ee7910deb703b77babada37 passed both application jobs, build/tests/lint and Android 10/15 checks. Packaging failed on a host cache path mismatch; restore paths now include the framework recovery report.
 
 Offline Manager SHA-256: b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a. Its 634 non-signature ZIP entries equal the cloud-tested input. Android 10 update/launch passed. Owner reports harmful on the phone: public distribution held.
