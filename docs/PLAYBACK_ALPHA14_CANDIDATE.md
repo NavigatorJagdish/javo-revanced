@@ -10,6 +10,9 @@ been confirmed from playback diagnostics.
   adaptive-format response that contains neither a direct URL nor a signature
   cipher in any format. The existing upstream parser then closes its input and
   tries the next client instead of accepting an unusable SABR-only response.
+- Build the preferred stream-client list privately, then publish the completed
+  array with a single volatile write. Concurrent fetches cannot see unfilled
+  slots; repeated preferred-client entries do not leave null entries.
 - Change the environment check dialog's repair/help action to the Javo
   installation guide. Preserve its warnings, checks and upstream attribution.
   This dialog is separate from Google Play Protect.
@@ -32,9 +35,10 @@ certified by this candidate.
 
 The production Kotlin transformations compiled locally against the pinned
 Patcher API. The transformed real extension ran on Android API 29 and passed
-10 checks: empty formats, SABR-only rejection, direct URL, signature cipher,
+12 checks: empty formats, SABR-only rejection, direct URL, signature cipher,
 mixed formats, 1,000 unusable formats, a usable last format, parser rejection
-and input closure, parser acceptance, and the Javo repair/help URI. Duplicate
+and input closure, parser acceptance, atomic client-list publication, repeated
+preferred clients, and the Javo repair/help URI. Duplicate
 application and an unsupported response-parser layout were rejected on the host.
 
 Host verification passed 36 Node tests, 24 Python tests and the Java security,

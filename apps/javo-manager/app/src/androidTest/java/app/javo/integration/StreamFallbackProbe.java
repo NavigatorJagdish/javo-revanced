@@ -52,6 +52,63 @@ public final class StreamFallbackProbe {
         if ((result != null) != usable || !closed[0]) throw new AssertionError("Parser fallback or input close failed");
         System.out.println("PASS parser-" + (usable ? "usable-preserved" : "SABR-fallback-and-close"));
     }
+    private static void checkClientPublication(ClassLoader loader) throws Exception {
+        Class<?> request = guard.getDeclaringClass();
+        Class<?> client = loader.loadClass("app.revanced.extension.shared.spoof.ClientType");
+        Object vr = client.getField("ANDROID_VR_1_43_32").get(null);
+        Object reel = client.getField("ANDROID_REEL").get(null);
+        Object creator = client.getField("ANDROID_CREATOR").get(null);
+        Method setter = request.getMethod("setClientOrderToUse", java.util.List.class, client);
+        java.lang.reflect.Field field = request.getDeclaredField("clientOrderToUse");
+        field.setAccessible(true);
+        setter.invoke(null, java.util.Arrays.asList(vr, reel), vr);
+        Object baseline = field.get(null);
+        final java.util.concurrent.CountDownLatch entered = new java.util.concurrent.CountDownLatch(1);
+        final java.util.concurrent.CountDownLatch resume = new java.util.concurrent.CountDownLatch(1);
+        final java.util.List<Object> values = java.util.Arrays.asList(reel, vr, creator);
+        java.util.List<Object> paused = new java.util.AbstractList<Object>() {
+            public int size() { return values.size(); }
+            public Object get(int index) { return values.get(index); }
+            public boolean contains(Object value) { return values.contains(value); }
+            public java.util.Iterator<Object> iterator() {
+                final java.util.Iterator<Object> iterator = values.iterator();
+                return new java.util.Iterator<Object>() {
+                    boolean first = true;
+                    public boolean hasNext() {
+                        if (first) {
+                            first = false;
+                            entered.countDown();
+                            try {
+                                if (!resume.await(10, java.util.concurrent.TimeUnit.SECONDS)) throw new AssertionError("Client publisher wait timed out");
+                            } catch (InterruptedException error) { throw new RuntimeException(error); }
+                        }
+                        return iterator.hasNext();
+                    }
+                    public Object next() { return iterator.next(); }
+                };
+            }
+        };
+        java.util.concurrent.atomic.AtomicReference<Throwable> failure = new java.util.concurrent.atomic.AtomicReference<>();
+        Thread publisher = new Thread(() -> {
+            try { setter.invoke(null, paused, reel); } catch (Throwable error) { failure.set(error); }
+        });
+        publisher.start();
+        boolean unpublished;
+        try {
+            if (!entered.await(10, java.util.concurrent.TimeUnit.SECONDS)) throw new AssertionError("Client publisher never reached iterator");
+            unpublished = field.get(null) == baseline;
+        } finally { resume.countDown(); }
+        publisher.join(10_000);
+        Object[] result = (Object[]) field.get(null);
+        if (!unpublished || publisher.isAlive() || failure.get() != null ||
+            !java.util.Arrays.equals(result, new Object[]{reel, vr, creator}))
+            throw new AssertionError("Client list was published before it was complete", failure.get());
+        System.out.println("PASS atomic-client-list-publication");
+        setter.invoke(null, java.util.Arrays.asList(vr, vr, reel), vr);
+        if (!java.util.Arrays.equals((Object[]) field.get(null), new Object[]{vr, reel}))
+            throw new AssertionError("Duplicate preferred clients left null entries");
+        System.out.println("PASS duplicate-preferred-client");
+    }
     public static JSONObject runChecks(ClassLoader loader, android.content.Context context) throws Exception {
         java.lang.reflect.Field extensionContext = loader.loadClass("app.revanced.extension.shared.Utils").getDeclaredField("context");
         extensionContext.setAccessible(true);
@@ -77,13 +134,14 @@ public final class StreamFallbackProbe {
         check("last-format-usable", 1000, many);
         checkParser(loader, false);
         checkParser(loader, true);
+        checkClientPublication(loader);
         java.lang.reflect.Field destination = loader.loadClass("app.revanced.extension.shared.checks.Check").getDeclaredField("GOOD_SOURCE");
         destination.setAccessible(true);
         if (!destination.get(null).toString().equals("https://navigatorjagdish.github.io/javo-revanced/docs/installation/"))
             throw new AssertionError("Update/help action does not use the Javo guide");
         System.out.println("PASS Javo-update-help-URI");
         return new JSONObject().put("success", true).put("androidApi", android.os.Build.VERSION.SDK_INT)
-            .put("cases", 10).put("realNetworkPlayback", "not-tested");
+            .put("cases", 12).put("realNetworkPlayback", "not-tested");
     }
     public static void main(String[] args) throws Exception {
         android.os.Looper.prepareMainLooper();

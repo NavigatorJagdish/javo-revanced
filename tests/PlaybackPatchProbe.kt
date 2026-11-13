@@ -1,6 +1,7 @@
 package app.javo.patcher
 
 import app.revanced.com.android.tools.smali.dexlib2.mutable.MutableClassDef.Companion.toMutable
+import app.revanced.com.android.tools.smali.dexlib2.mutable.MutableMethod.Companion.toMutable
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcodes
 import com.android.tools.smali.dexlib2.immutable.ImmutableDexFile
@@ -27,6 +28,13 @@ fun main(args: Array<String>) {
     val help = original.classes.single { it.type == JavoUpdateLink.TYPE }.toMutable()
     JavoUpdateLink.apply(help)
     check(runCatching { JavoUpdateLink.apply(help) }.isFailure)
+    if (args.getOrNull(2) == "original-client-setter") {
+        // Negative control: retain the real old publication race with all other
+        // fixes present, so the Android concurrency test must detect it.
+        val old = original.classes.single { it.type == target.type }.methods.single { it.name == "setClientOrderToUse" }
+        target.methods.removeAll { it.name == "setClientOrderToUse" }
+        target.methods.add(old.toMutable())
+    }
     DexFileFactory.writeDexFile(args[1], ImmutableDexFile(original.opcodes,
         original.classes.filterNot { it.type == target.type || it.type == help.type } + target + help))
     println("Production stream transformation passed on the pinned extension; runtime tests still required.")

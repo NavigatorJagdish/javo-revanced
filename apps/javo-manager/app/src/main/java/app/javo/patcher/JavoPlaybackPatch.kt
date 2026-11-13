@@ -6,8 +6,11 @@ import app.revanced.patcher.patch.BytecodePatchContext
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MethodImplementationBuilder
+import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
 import com.android.tools.smali.dexlib2.builder.instruction.*
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableTypeReference
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableFieldReference
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -100,5 +103,56 @@ object JavoPlaybackPatch {
         target.methods.add(helper)
         method.implementation!!.replaceInstruction(index, BuilderInstruction35c(Opcode.INVOKE_STATIC,
             1, call.registerC, 0, 0, 0, 0, ImmutableMethodReference(REQUEST, GUARD, listOf(STREAM), "I")))
+        patchClientOrderPublication(target)
+    }
+
+    private fun patchClientOrderPublication(target: MutableClassDef) {
+        val client = "Lapp/revanced/extension/shared/spoof/ClientType;"
+        val array = "[$client"
+        check(target.fields.any { it.name == "clientOrderToUse" && it.type == array &&
+            AccessFlags.VOLATILE.isSet(it.accessFlags) && AccessFlags.STATIC.isSet(it.accessFlags) }) {
+            "Unsupported stream client-order field."
+        }
+        val setter = target.methods.singleOrNull { it.name == "setClientOrderToUse" &&
+            it.parameterTypes.map { p -> p.toString() } == listOf("Ljava/util/List;", client) &&
+            it.returnType == "V" && AccessFlags.STATIC.isSet(it.accessFlags) }
+            ?: error("Unsupported stream client-order setter.")
+        val body = MethodImplementationBuilder(6)
+        fun call(op: Opcode, owner: String, name: String, params: List<String>, result: String, vararg r: Int) {
+            body.addInstruction(BuilderInstruction35c(op, r.size, r.getOrElse(0) { 0 },
+                r.getOrElse(1) { 0 }, 0, 0, 0, ImmutableMethodReference(owner, name, params, result)))
+        }
+        val list = "Ljava/util/ArrayList;"
+        val obj = "Ljava/lang/Object;"
+        // p0/v4 = available clients; p1/v5 = preference. Build privately in v0.
+        call(Opcode.INVOKE_STATIC, "Ljava/util/Objects;", "requireNonNull", listOf(obj), obj, 5)
+        body.addInstruction(BuilderInstruction21c(Opcode.NEW_INSTANCE, 0, ImmutableTypeReference(list)))
+        call(Opcode.INVOKE_DIRECT, list, "<init>", emptyList(), "V", 0)
+        call(Opcode.INVOKE_VIRTUAL, list, "add", listOf(obj), "Z", 0, 5)
+        call(Opcode.INVOKE_INTERFACE, "Ljava/util/List;", "iterator", emptyList(), "Ljava/util/Iterator;", 4)
+        body.addInstruction(BuilderInstruction11x(Opcode.MOVE_RESULT_OBJECT, 4))
+        val next = body.addLabel("next")
+        val publish = body.getLabel("publish")
+        call(Opcode.INVOKE_INTERFACE, "Ljava/util/Iterator;", "hasNext", emptyList(), "Z", 4)
+        body.addInstruction(BuilderInstruction11x(Opcode.MOVE_RESULT, 1))
+        body.addInstruction(BuilderInstruction21t(Opcode.IF_EQZ, 1, publish))
+        call(Opcode.INVOKE_INTERFACE, "Ljava/util/Iterator;", "next", emptyList(), obj, 4)
+        body.addInstruction(BuilderInstruction11x(Opcode.MOVE_RESULT_OBJECT, 1))
+        body.addInstruction(BuilderInstruction21c(Opcode.CHECK_CAST, 1, ImmutableTypeReference(client)))
+        body.addInstruction(BuilderInstruction22t(Opcode.IF_EQ, 1, 5, next))
+        call(Opcode.INVOKE_STATIC, "Ljava/util/Objects;", "requireNonNull", listOf(obj), obj, 1)
+        call(Opcode.INVOKE_VIRTUAL, list, "add", listOf(obj), "Z", 0, 1)
+        body.addInstruction(BuilderInstruction10t(Opcode.GOTO, next))
+        body.addLabel("publish")
+        body.addInstruction(BuilderInstruction11n(Opcode.CONST_4, 1, 0))
+        body.addInstruction(BuilderInstruction22c(Opcode.NEW_ARRAY, 1, 1, ImmutableTypeReference(array)))
+        call(Opcode.INVOKE_VIRTUAL, list, "toArray", listOf("[$obj"), "[$obj", 0, 1)
+        body.addInstruction(BuilderInstruction11x(Opcode.MOVE_RESULT_OBJECT, 0))
+        body.addInstruction(BuilderInstruction21c(Opcode.CHECK_CAST, 0, ImmutableTypeReference(array)))
+        // The only volatile write happens after every slot has been filled.
+        body.addInstruction(BuilderInstruction21c(Opcode.SPUT_OBJECT, 0,
+            ImmutableFieldReference(REQUEST, "clientOrderToUse", array)))
+        body.addInstruction(BuilderInstruction10x(Opcode.RETURN_VOID))
+        setter.setImplementation(MutableMethodImplementation(body.methodImplementation))
     }
 }
