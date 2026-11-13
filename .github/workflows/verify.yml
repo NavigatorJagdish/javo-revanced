@@ -179,6 +179,7 @@ jobs:
             python infrastructure/scripts/android-smoke.py app.javo.manager deliverables/apks/javo-manager-*.apk
             python infrastructure/scripts/android-integration.py
       - name: Preserve tested Manager and instrumentation inputs
+        if: always()
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:

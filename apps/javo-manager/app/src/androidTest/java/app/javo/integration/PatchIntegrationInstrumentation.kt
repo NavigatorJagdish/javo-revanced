@@ -35,6 +35,12 @@ class PatchIntegrationInstrumentation : Instrumentation() {
         start()
     }
     override fun onStart() {
+        // Instrumentation.start() races Application.onCreate() on older Android.
+        // A main-thread barrier lets synchronous Koin module registration finish
+        // before tests (including real-APK checks) resolve application services.
+        runOnMainSync {
+            check(targetContext.applicationContext is app.revanced.manager.ManagerApplication)
+        }
         if (liveMirror) { diagnoseLiveMirror(this); return }
         liveMedia?.let { checkLiveMedia(this, it); return }
         realInput?.let { checkRealYoutube(this, File(it)); return }
