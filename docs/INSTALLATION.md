@@ -1,11 +1,11 @@
 # Javo ReVanced installation aur setup guide
 
-> **Manager alpha.13 sirf experimental review APK hai.** Owner ke phone ne Manager alpha.13 ko bhi harmful indicate kiya. Core javo.6 ke liye owner ne safe result report kiya; ye har phone ki guarantee nahi hai. Sirf [official download status](https://navigatorjagdish.github.io/javo-revanced/downloads/#core) par listed Core file lein. Play Protect ON rakhein; harmful block aaye to installation rok dein.
+> **Manager alpha.14 sirf experimental review APK hai.** Purane alpha.13 par harmful block report hua tha; alpha.14 phone par install hui aur owner ne repatching ke baad playback problem solve hone ki confirmation di. Har device ki Play Protect clearance confirm nahi hai. Core javo.6 ke liye owner ne safe result report kiya; ye har phone ki guarantee nahi hai. Sirf [official download status](https://navigatorjagdish.github.io/javo-revanced/downloads/#core) par listed Core file lein. Play Protect ON rakhein; harmful block aaye to installation rok dein.
 
 Manager ki ordinary installation abhi recommended nahi hai. Review file download karna Play Protect clearance nahi hai. Neeche ke normal installation steps sirf tab continue karein jab protection ON hote hue Android installation allow kare; block aaye to OK dabakar ruk jaayein. Protection band ya Install anyway ka use na karein. Manager ke liye Android 8.0 ya naya version chahiye; Core javo.6 ke liye Android 5.0 ya naya version chahiye. Neeche diya default setup bina root ke kaam karta hai.
 
-Manager review file: `javo-manager-0.1.0-alpha.13-development.apk`.
-SHA-256: `b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a`.
+Manager review file: `javo-manager-0.1.0-alpha.14-development.apk`.
+SHA-256: `3ab6564f0c82bfa716afddcfb999e73a9653cc0d7bfbfbd9254cab763ae2b122`.
 
 Core javo.6 file: `javo-core-0.3.13.2.250932-javo.6-production.apk`.
 SHA-256: `c5bb18a75cc2b70a6729a43aa92054f81f3f959b586e6fb4af588ba685b96311`.
@@ -25,7 +25,7 @@ Download status open hone par phone setup ke liye approved release se individual
 
 Matching signature wala naya Manager purani install ko update kar sakta hai. Signature conflict aaye to pehle **Settings → Import & export** se **settings aur patch-signing keystore** export karein. Phir naya Manager install karke dono backups import karein. Patched app update karne ke liye usi patch-signing keystore ka use karein.
 
-Naya Core-download link aur branding lagane ke liye updated Manager se supported original APK dobara patch karein. Manager update karne se pehle se installed Javo Video/Music APK ka code khud nahi badalta. Naye patched output mein Core missing hone par Javo ke official Core download section ka link hota hai; review hold ho to us page par status dikhega.
+Alpha.14 ke playback fallback, client-list race fix, Javo repair link, Core-download link aur branding lagane ke liye updated Manager se supported original APK dobara patch karein. Manager update karne se pehle se installed Javo Video/Music APK ka code khud nahi badalta. Naye patched output mein Core missing hone par Javo ke official Core download section ka link hota hai; review hold ho to us page par status dikhega.
 
 ## 2. Manager install karein
 
@@ -61,7 +61,7 @@ Sirf aisi media save karein jise download karne ki permission ho. Jahan compatib
 
 ## Video chalte waqt ruk jaaye
 
-Manager mein recommended YouTube version ko **GmsCore support** aur **Spoof video streams** ke saath repatch karein. **Settings → Javo Video settings → Miscellaneous → Spoof video streams** mein pehle **Android VR** try karein. Video phir bhi rukta hai to available alternate client try karke app restart karein. Slower mobile data par video quality **480p** try karein. [Upstream playback troubleshooting](https://github.com/ReVanced/revanced-documentation/blob/main/docs/revanced-resources/troubleshooting.md#32-youtube-or-youtube-music-playback-does-not-work)
+Alpha.14 mein YouTube 20.40.45 ka reference patch/sign/install test pass hua hai. Playback fallback aur client-list race fixes shamil hain; final build ka lamba real playback abhi verify nahi hua. Naye YouTube versions par bundle ki declared compatibility zaroor check karein. Manager mein recommended YouTube version ko **GmsCore support** aur **Spoof video streams** ke saath repatch karein. **Settings → Javo Video settings → Miscellaneous → Spoof video streams** mein pehle **Android VR** try karein. Video phir bhi rukta hai to available alternate client try karke app restart karein. Slower mobile data par video quality **480p** try karein. [Upstream playback troubleshooting](https://github.com/ReVanced/revanced-documentation/blob/main/docs/revanced-resources/troubleshooting.md#32-youtube-or-youtube-music-playback-does-not-work)
 
 ## 5. Common errors
 

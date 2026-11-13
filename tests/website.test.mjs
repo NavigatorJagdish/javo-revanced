@@ -7,6 +7,15 @@ const root=path.resolve('apps/javo-website/dist');
 execFileSync(process.execPath,['apps/javo-website/build.mjs'],{stdio:'pipe'});
 async function allFiles(dir){const out=[];for(const f of await readdir(dir,{withFileTypes:true})){const p=path.join(dir,f.name);out.push(...(f.isDirectory()?await allFiles(p):[p]));}return out;}
 const htmlFiles=(await allFiles(root)).filter(x=>x.endsWith('.html'));
+
+test('machine-readable project summary links to official status and preserves release limits',async()=>{
+  const summary=await readFile(path.join(root,'llms.txt'),'utf8');
+  const catalog=JSON.parse(await readFile('infrastructure/release/catalog.json','utf8'));
+  assert.match(summary,/https:\/\/navigatorjagdish\.github\.io\/javo-revanced\/catalog\.json/);
+  assert.match(summary,/Not affiliated with Google/);
+  assert.match(summary,/Keep Play Protect enabled and stop if blocked/);
+  for(const limit of catalog.limitations)assert.ok(summary.includes(limit));
+});
 test('builds all 16 requested pages plus a not-found page',()=>assert.equal(htmlFiles.length,17));
 test('every internal link and asset resolves',async()=>{for(const file of htmlFiles){const html=await readFile(file,'utf8');for(const [,url] of html.matchAll(/(?:href|src)="([^"]+)"/g)){if(!url.startsWith('/'))continue;const out=path.join(root,url.endsWith('/')?url+'index.html':url);assert.ok((await stat(out)).isFile(),`${file}: ${url}`);}}});
 test('every page has accessibility and SEO foundations',async()=>{for(const file of htmlFiles){const html=await readFile(file,'utf8');assert.match(html,/<html lang="en">/);assert.match(html,/<h1>/);assert.match(html,/name="description"/);assert.match(html,/Skip to content/);assert.match(html,/aria-controls="nav"/);}});

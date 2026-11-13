@@ -1,4 +1,7 @@
-# Verification status — 11 November 2026
+# Verification status — 13 November 2026
+
+Alpha.14 supersedes the Manager rows below: full workflow 43381854540 at c9c1dfcc2782c295d47e5d07af9c669ec3bf11bc passed; Android 10/15 each passed 12 extension cases. Final CI input patched/signed/installed YouTube 20.40.45 in 297 seconds. See [alpha.14 evidence](RELEASE_MANAGER14_REVIEW.md). The owner confirmed alpha.14 installed on the phone and later reported playback solved after repatching. Separate Google clearance and controlled final-build sustained playback remain unconfirmed. The following alpha.13 scan/review facts remain historical and do not cover alpha.14.
+
 
 
 

@@ -1,14 +1,16 @@
 # Changelog
 
-## 0.1.0-alpha.14 — unreleased candidate
+## 0.1.0-alpha.14 — experimental review
 
 - Reject URL-less spoof stream responses so the existing client fallback can run.
+- Publish stream-client ordering atomically and handle repeated preferred clients.
 - Route the patched app's environment repair/help action to the Javo guide.
 - Enforce declared YouTube patch compatibility and validate the extension layout.
 - Add Android stream parser regression checks and verified synthetic media fixtures.
 
-See [candidate status](docs/PLAYBACK_ALPHA14_CANDIDATE.md). Real network playback
-and the complete new Manager build have not passed yet; no new APK is published.
+See [release evidence and limits](docs/RELEASE_MANAGER14_REVIEW.md). Full build,
+Android 10/15 regression and real reference patch/sign/install passed. Final-build
+sustained playback and Play Protect clearance remain unverified.
 
 ## 0.1.0-alpha.8
 

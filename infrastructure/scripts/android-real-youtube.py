@@ -27,7 +27,9 @@ manager=args.manager_apk
 run('install','-t','-r',manager)
 test=args.test_apk
 run('install','-t','-r',test)
-run('shell','am','start','-W','-n','app.javo.manager/app.revanced.manager.ui.activity.MainActivity')
+launch=run('shell','am','start','-W','-n','app.javo.manager/app.revanced.manager.MainActivity')
+if b'Error' in launch or b'Status: ok' not in launch:
+ raise RuntimeError('Manager launcher activity did not start: '+launch.decode(errors='replace'))
 source=args.source_apk
 remote_input = '/sdcard/Android/data/app.javo.manager/files/real-input.apk'
 run('shell','mkdir','-p','/sdcard/Android/data/app.javo.manager/files')

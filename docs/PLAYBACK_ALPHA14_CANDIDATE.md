@@ -44,17 +44,14 @@ application and an unsupported response-parser layout were rejected on the host.
 Host verification passed 36 Node tests, 24 Python tests and the Java security,
 branding, download, browser-policy, framework-cache and root-argument suites.
 
-**Not yet verified:** full alpha.14 Manager compilation/lint, Android API 35
-integration, patch/sign/install of the reference YouTube APK using alpha.14,
-real streaming beyond two minutes and after switching videos, and Play Protect
-classification of a new APK. The full build stopped because the Android Gradle
-plugin is absent from the local cache and could not be downloaded. GitHub
-connector calls failed, and the signed-in Comet browser confirmed
-`DNS_PROBE_FINISHED_BAD_CONFIG`. The connection subsequently recovered and a
-fresh cloud build is pending. This was a network failure, not a 2FA issue.
-
-No alpha.14 APK has been built or published. Existing alpha.13 public review
-assets and their harmful-app warning remain accurately labelled.
+**Final verification update — 13 November:** full workflow 43381854540 passed
+Manager compilation, lint, unit tests and Android API 29/35 integration, including
+all twelve runtime cases. The exact final CI input patched/signed/installed the
+reference YouTube 20.40.45 in 297 seconds. Offline signing preserved all 634
+application payload entries. See [current release notes](RELEASE_MANAGER14_REVIEW.md)
+for hashes, installation instructions and test limits. Earlier network failures
+are historical; final-build sustained playback and Play Protect clearance remain
+unverified. Alpha.13's block and appeal are not a verdict on different alpha.14 bytes.
 
 ## Installing the fix after a verified release
 

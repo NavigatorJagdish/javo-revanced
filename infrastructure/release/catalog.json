@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "experimental-review",
-  "generatedAt": "2026-11-11",
+  "generatedAt": "2026-11-13",
   "artifacts": [
     {
       "id": "core",
@@ -45,24 +45,32 @@
       "id": "manager",
       "displayName": "Javo Manager",
       "applicationId": "app.javo.manager",
-      "version": "0.1.0-alpha.13",
-      "versionCode": 100013,
+      "version": "0.1.0-alpha.14",
+      "versionCode": 100014,
       "minSdk": 26,
       "channel": "development",
       "signing": "development",
       "verification": "signature-and-package-verified",
-      "sha256": "b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a",
+      "sha256": "3ab6564f0c82bfa716afddcfb999e73a9653cc0d7bfbfbd9254cab763ae2b122",
       "signerSha256": "c64d91b7be1887155c415da78966a4f3b7475aa976bbf5228b1d0d0e295b7f27",
-      "size": 52275747,
-      "path": "/downloads/files/javo-manager-0.1.0-alpha.13-development.apk",
+      "size": 52279843,
+      "path": "/downloads/files/javo-manager-0.1.0-alpha.14-development.apk",
       "runtimeVerified": false,
       "architectures": [
         "arm64-v8a",
         "armeabi-v7a",
         "x86_64"
       ],
+      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/manager-v0.1.0-alpha.14-review/javo-manager-0.1.0-alpha.14-development.apk",
+      "securityReview": {
+        "issueUrl": "https://github.com/NavigatorJagdish/javo-revanced/issues/1",
+        "distribution": "review-only",
+        "playProtect": "not-cleared",
+        "previousBlockedVersion": "0.1.0-alpha.13",
+        "previousVersionAppeal": "submitted-pending; does not cover alpha.14"
+      },
       "runtimeSmoke": {
-        "device": "emulator-5564",
+        "device": "emulator-5556",
         "package": "app.javo.manager",
         "processRunning": true,
         "crashObserved": false,
@@ -74,22 +82,23 @@
         "architecture": "x86_64",
         "bootCompleted": true,
         "inPlaceUpgradeVerified": true,
-        "installedApkSha256": "b189481494d7f92b025afa93beff5f4866e7ba01d63408cfa1bed4455514075a"
+        "installedApkSha256": "3ab6564f0c82bfa716afddcfb999e73a9653cc0d7bfbfbd9254cab763ae2b122"
       },
-      "downloadUrl": "https://github.com/NavigatorJagdish/javo-revanced/releases/download/manager-v0.1.0-alpha.13-review/javo-manager-0.1.0-alpha.13-development.apk",
-      "securityReview": {
-        "issueUrl": "https://github.com/NavigatorJagdish/javo-revanced/issues/1",
-        "distribution": "review-only",
-        "playProtect": "harmful-reported",
-        "appeal": "submitted-pending"
+      "ownerReport": {
+        "date": "2026-11-13",
+        "installation": "installed on reconnected phone",
+        "playback": "owner reported issue solved after repatching",
+        "googleScanVerdict": "not separately provided",
+        "exactSettingChange": "not recorded",
+        "scope": "one owner report; not independent or universal verification"
       }
     }
   ],
   "limitations": [
-    "Manager alpha.13 is published only as an experimental review APK at the owner request. A harmful Play Protect indication remains unresolved. Keep protection enabled and stop if blocked.",
+    "Manager alpha.14 is an experimental review build. The owner confirmed installation and reported playback solved after repatching. Earlier alpha.13 was blocked; clearance across devices is unconfirmed. Keep Play Protect enabled and stop if blocked.",
     "The owner reported a safe result for this exact Core javo.6 file on one phone. This is not clearance for every device.",
     "Core passed signed integrity, eight private manifest boundaries, five external-start denial probes and Android 10 update/launch. Matching source passed CI on Android 10/15.",
     "Three advisory matches remain in two legacy Core dependencies; see the dependency review.",
-    "Account login, push, real playback and actual YouTube audio/video downloads are unverified. The signed production update feed is not configured."
+    "Final-build sustained playback, account login, push, actual YouTube audio/video downloads, live APKMirror availability and slow physical-phone behavior remain unverified. The signed production update feed is not configured."
   ]
 }

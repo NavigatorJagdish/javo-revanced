@@ -7,6 +7,22 @@ test('Core-only review release refuses a Manager artifact before rendering downl
   assert.doesNotThrow(()=>validateCatalog({schemaVersion:1,status:'core-alpha-manager-review',limitations:[],artifacts:[]}));
 });
 
+test('new review APK retains prior warning without inheriting a verdict for different bytes',()=>{
+  const artifact={id:'manager',displayName:'Javo Manager',version:'next',signing:'development',verification:'signature-and-package-verified',path:'/downloads/files/javo-manager.apk',sha256:'a'.repeat(64),minSdk:26,securityReview:{playProtect:'not-cleared',distribution:'review-only',previousBlockedVersion:'0.1.0-alpha.13'}};
+  const catalog={schemaVersion:1,status:'experimental-review',limitations:[],artifacts:[artifact]};
+  assert.doesNotThrow(()=>validateCatalog(catalog));
+  delete artifact.securityReview.previousBlockedVersion;
+  assert.throws(()=>validateCatalog(catalog),/previously blocked version/);
+  artifact.securityReview.previousBlockedVersion='next';
+  assert.throws(()=>validateCatalog(catalog),/previously blocked version/);
+  artifact.securityReview.previousBlockedVersion='0.1.0-alpha.13';
+  artifact.securityReview.playProtect='safe';
+  assert.throws(()=>validateCatalog(catalog),/experimental review disclosure/);
+  artifact.securityReview.playProtect='not-cleared';
+  catalog.status='stable';
+  assert.throws(()=>validateCatalog(catalog),/experimental review disclosure/);
+});
+
 test('experimental Manager download requires unresolved-warning disclosure',()=>{
   const artifact={id:'manager',displayName:'Javo Manager',version:'test',signing:'development',verification:'signature-and-package-verified',path:'/downloads/files/javo-manager.apk',sha256:'a'.repeat(64),minSdk:26,securityReview:{playProtect:'harmful-reported',distribution:'review-only'}};
   const sample={schemaVersion:1,status:'experimental-review',limitations:[],artifacts:[artifact]};

@@ -1,0 +1,71 @@
+{
+  "release": "0.1.0-alpha.14",
+  "sourceCommit": "c9c1dfcc2782c295d47e5d07af9c669ec3bf11bc",
+  "workflowRun": 43381854540,
+  "apkSha256": "3ab6564f0c82bfa716afddcfb999e73a9653cc0d7bfbfbd9254cab763ae2b122",
+  "ciInputSha256": "be9302976e90fe01c14a6981784a33e785d6c55d392553d0229a24c9197f7a12",
+  "nonSignatureEntriesPreserved": 634,
+  "streamRegressionCasesPerApi": 12,
+  "controlledIntegrationApis": [
+    29,
+    35
+  ],
+  "referencePatch": {
+    "success": true,
+    "sourceApkSha256": "b7659da492a1ebd8bd7cea2909be4ee1f58e00a2586d65a1c91b2e1e5ec6acd1",
+    "selectedPatches": [
+      "GmsCore support",
+      "Spoof video streams",
+      "Downloads",
+      "Video quality"
+    ],
+    "elapsedSeconds": 297,
+    "androidApi": 29,
+    "installed": true,
+    "streamFallbackRuntime": {
+      "success": true,
+      "androidApi": 29,
+      "cases": 12,
+      "realNetworkPlayback": "not-tested"
+    },
+    "javoCoreRedirectVerified": true,
+    "javoUpdateHelpRedirectVerified": true,
+    "brandingLabelVerified": true,
+    "mandatorySettingsAndIconVerified": true,
+    "lightAndDarkHeaderVerified": true,
+    "bundledProductLogoVerified": true
+  },
+  "playProtect": "owner confirmed installation; no separate Google scan verdict; earlier alpha.13 was blocked",
+  "sustainedFinalBuildPlayback": "not-tested",
+  "preliminaryPlayback": "two ordinary clips progressed beyond one minute; different preliminary build",
+  "limitations": [
+    "Manager alpha.14 is an experimental review build. The owner confirmed installation and reported playback solved after repatching. Earlier alpha.13 was blocked; clearance across devices is unconfirmed. Keep Play Protect enabled and stop if blocked.",
+    "The owner reported a safe result for this exact Core javo.6 file on one phone. This is not clearance for every device.",
+    "Core passed signed integrity, eight private manifest boundaries, five external-start denial probes and Android 10 update/launch. Matching source passed CI on Android 10/15.",
+    "Three advisory matches remain in two legacy Core dependencies; see the dependency review.",
+    "Final-build sustained playback, account login, push, actual YouTube audio/video downloads, live APKMirror availability and slow physical-phone behavior remain unverified. The signed production update feed is not configured."
+  ],
+  "distributedApkSmoke": {
+    "device": "emulator-5556",
+    "package": "app.javo.manager",
+    "processRunning": true,
+    "crashObserved": false,
+    "installedArtifactMatchesDeliverable": true,
+    "authentication": "not-tested",
+    "pushDelivery": "not-tested",
+    "playback": "not-tested",
+    "androidApi": 29,
+    "architecture": "x86_64",
+    "bootCompleted": true,
+    "inPlaceUpgradeVerified": true,
+    "installedApkSha256": "3ab6564f0c82bfa716afddcfb999e73a9653cc0d7bfbfbd9254cab763ae2b122"
+  },
+  "ownerReport": {
+    "date": "2026-11-13",
+    "installation": "installed on reconnected phone",
+    "playback": "owner reported issue solved after repatching",
+    "googleScanVerdict": "not separately provided",
+    "exactSettingChange": "not recorded",
+    "scope": "one owner report; not independent or universal verification"
+  }
+}
